@@ -1,6 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
+import Navigation from "./components/Navigation";
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
             </h1>
           </Link>
         </section>
+
+        <Navigation />
       </header>
 
       <main className="flex flex-grow ">
