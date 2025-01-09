@@ -12,8 +12,8 @@ export default {
         secondary: "var(--bg-secondary)",
       },
       bg_opacity: {
-        primary: "rgba(var(--bg-primary-opacity))",
-        secondary: "rgba(var(--bg-secondary-opacity))",
+        primary: "var(--bg-primary-opacity)",
+        secondary: "var(--bg-secondary-opacity)",
       },
       text: {
         primary: "var(--text-primary)",
