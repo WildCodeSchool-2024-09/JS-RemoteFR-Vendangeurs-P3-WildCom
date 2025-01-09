@@ -10,7 +10,7 @@ function App() {
           <Link to={"/"} className="flex items-center gap-4">
             <img
               src="./src/assets/images/logo.png"
-              alt="blablabla"
+              alt=""
               aria-labelledby="wildcom"
               className="w-12 lg:w-12 xl:w-16  2xl:w-20"
             />
