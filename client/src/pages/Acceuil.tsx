@@ -1,9 +1,5 @@
 function Acceuil() {
-  return(
-    <div>
-      Acceuil
-    </div>
-  )
+  return <div>Acceuil</div>;
 }
 
-export default Acceuil
+export default Acceuil;

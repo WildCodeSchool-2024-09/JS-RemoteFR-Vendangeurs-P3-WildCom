@@ -25,10 +25,7 @@ function App() {
           </Link>
         </section>
 
-        
-          <Navigation/>
-
-      
+        <Navigation />
       </header>
 
       <main className="flex flex-grow ">
