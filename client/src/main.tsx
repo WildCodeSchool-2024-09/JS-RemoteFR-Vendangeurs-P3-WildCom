@@ -9,6 +9,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Events from "./pages/Events";
 import Home from "./pages/Home";
+import Profil from "./pages/Profil";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/events",
         element: <Events />,
+      },
+      {
+        path: "/profile",
+        element: <Profil />,
       },
     ],
   },

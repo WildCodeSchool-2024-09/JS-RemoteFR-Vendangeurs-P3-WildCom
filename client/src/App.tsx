@@ -1,9 +1,17 @@
-import { Link, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
 import Navigation from "./components/Navigation";
+import SideNavigation from "./components/SideNavigation";
 
 function App() {
+  const url = useLocation();
+  const [location, setLocation] = useState<string>("");
+
+  useEffect(() => {
+    setLocation(url.pathname);
+  }, [url]);
   return (
     <div className="bg-text-secondary flex min-h-screen">
       <header className="w-full h-20 bg-text-secondary lg:bg-bg_opacity-secondary flex lg:flex-col lg:w-1/5 lg:h-screen z-10">
@@ -28,6 +36,23 @@ function App() {
         <section className="hidden lg:block ">
           <Navigation />
         </section>
+
+        <section className="w-full hidden lg:block">
+          <Link
+            className="flex items-center gap-5 justify-center px-6 "
+            to={"/profile"}
+          >
+            <img
+              className=" "
+              src="./src/assets/images/userprofile.png "
+              alt=""
+              aria-labelledby="username"
+            />
+            <p className="text-text-primary hover:text-accent-primary font-text text-lg">
+              Username
+            </p>
+          </Link>
+        </section>
       </header>
 
       <main className="flex flex-grow ">
@@ -39,7 +64,9 @@ function App() {
       </main>
 
       <footer className="w-1/5  bg-bg_opacity-secondary lg:flex flex-col hidden">
-        <section className="flex flex-grow" />
+        <section className="hidden lg:flex flex-grow">
+          <SideNavigation location={location} />
+        </section>
         <Footer />
       </footer>
     </div>
