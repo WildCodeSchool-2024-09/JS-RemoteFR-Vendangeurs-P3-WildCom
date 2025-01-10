@@ -7,6 +7,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Import the main app component
 import App from "./App";
+import Admin from "./pages/Admin";
 import Events from "./pages/Events";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil";
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profil />,
+      },
+      {
+        path: "/admin",
+        element: <Admin />,
       },
     ],
   },

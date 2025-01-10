@@ -34,6 +34,23 @@ function Navigation() {
             Évènements
           </NavLink>
         </li>
+ 
+
+        <li>
+          <NavLink
+            to={"/admin"}
+            className={({ isActive }) =>
+              `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-2xl hover:text-accent-primary`
+            }
+          >
+            <img
+              src="./src/assets/images/admin.png"
+              alt=""
+              className="size-10"
+            />
+            Administrateur
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );
