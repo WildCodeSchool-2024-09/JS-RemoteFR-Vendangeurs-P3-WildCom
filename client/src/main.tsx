@@ -10,6 +10,7 @@ import App from "./App";
 import Events from "./pages/Events";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil";
+import Admin from "./pages/Admin";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profil />,
+      },
+      {
+        path: "/admin",
+        element: <Admin />,
       },
     ],
   },
