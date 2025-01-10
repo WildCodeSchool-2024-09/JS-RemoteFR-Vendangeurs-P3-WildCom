@@ -25,7 +25,9 @@ function App() {
           </Link>
         </section>
 
-        <Navigation />
+        <section className="hidden lg:block ">
+          <Navigation />
+        </section>
       </header>
 
       <main className="flex flex-grow ">
