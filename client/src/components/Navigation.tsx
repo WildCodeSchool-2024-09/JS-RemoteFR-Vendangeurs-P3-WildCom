@@ -34,7 +34,6 @@ function Navigation() {
             Évènements
           </NavLink>
         </li>
-        ;
       </ul>
     </nav>
   );
