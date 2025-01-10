@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
 import SideNavigation from "./components/SideNavigation";
+import Navigation from "./components/Navigation";
 
 function App() {
   const url = useLocation();
@@ -31,8 +32,12 @@ function App() {
             </h1>
           </Link>
         </section>
+        
+        <section className="hidden lg:block ">
+          <Navigation />
+        </section>
 
-        <section className="w-full">
+        <section className="w-full hidden lg:block">
           <Link
             className="flex items-center gap-5 justify-center px-6 "
             to={"/profile"}
