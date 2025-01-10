@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
-import SideNavigation from "./components/SideNavigation";
 import Navigation from "./components/Navigation";
+import SideNavigation from "./components/SideNavigation";
 
 function App() {
   const url = useLocation();
@@ -32,7 +32,7 @@ function App() {
             </h1>
           </Link>
         </section>
-        
+
         <section className="hidden lg:block ">
           <Navigation />
         </section>
