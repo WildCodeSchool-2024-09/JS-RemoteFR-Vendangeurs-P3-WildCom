@@ -19,6 +19,7 @@ function Navigation() {
             Acceuil
           </NavLink>
         </li>
+
         <li>
           <NavLink
             to={"/events"}
@@ -34,6 +35,7 @@ function Navigation() {
             Évènements
           </NavLink>
         </li>
+
         <li>
           <NavLink
             to={"/admin"}
@@ -49,7 +51,6 @@ function Navigation() {
             Administrateur
           </NavLink>
         </li>
-        ;
       </ul>
     </nav>
   );
