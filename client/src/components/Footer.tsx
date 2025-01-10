@@ -5,15 +5,13 @@ export default function Footer() {
         &copy; 2025{" "}
         <span className="text-accent-primary font-title">&lt;WildCom/&gt;</span>
       </p>
-      <p className="w-32 mx-auto">
-        Made with <span>❤️</span> by <br />
-        <a
-          className="hover:text-accent-primary"
-          href="mailto:creamedoc@gmail.com"
-        >
-          Contactez Nous
-        </a>
-      </p>
+
+      <a
+        className="hover:text-accent-primary"
+        href="mailto:creamedoc@gmail.com"
+      >
+        Contactez Nous
+      </a>
     </section>
   );
 }
