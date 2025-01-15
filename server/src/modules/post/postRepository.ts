@@ -1,0 +1,58 @@
+import databaseClient from "../../../database/client";
+import type { Rows } from "../../../database/client";
+import formattedTimestamp from "../../utils/formattedTimestamp";
+
+type Post = {
+  id: number;
+  category: string;
+  picture: string | null;
+  content: string;
+  timestamp: string;
+};
+
+type User = {
+  id: number;
+  username: string;
+};
+
+type PostWithUser = Omit<Post, "user_id"> & {
+  user: User;
+};
+
+class PostRepository {
+  async readAll() {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+      SELECT 
+        user.id AS user_id, 
+        CONCAT (user.firstname,' ', user.lastname) AS username,
+        user.avatar,
+        post.id AS post_id, 
+        post.category, 
+        post.picture, 
+        post.content, 
+        post.created_at
+      FROM post
+      JOIN user 
+      ON post.user_id = user.id
+      `,
+    );
+
+    const formattedRows: PostWithUser[] = rows.map((row) => ({
+      id: row.post_id,
+      category: row.category,
+      picture: row.picture,
+      content: row.content,
+      timestamp: formattedTimestamp(new Date(row.created_at)),
+      user: {
+        id: row.user_id,
+        username: row.username,
+        avatar: row.avatar,
+      },
+    }));
+
+    return formattedRows;
+  }
+}
+
+export default new PostRepository();
