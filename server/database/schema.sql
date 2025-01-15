@@ -4,6 +4,7 @@ create table user (
   firstname varchar(255) not null,
   lastname varchar(255) not null,
   password varchar(255) not null,
+  avatar varchar(255) null,
   is_admin boolean not null default false
 );
 
@@ -41,12 +42,12 @@ create table comment (
   constraint fk_comment_event foreign key (event_id) references event(id)
 );
 
-insert into user(id, email,firstname, lastname, password, is_admin)
+insert into user(id, email,firstname, lastname, password, avatar, is_admin)
 values
-  (1, "example@mail.com","Admin", "Istrateur", "123", true),
-  (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "111", false),
-  (3, "adrien.morel@mail.com", "Adrien", "Morel", "222", false),
-  (4, "clara.duval@mail.com", "Clara", "Duval", "333", false);
+  (1, "example@mail.com","Admin", "Istrateur", "123", "", true),
+  (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "111", "./src/assets/images/demo/woman1.jpg", false),
+  (3, "adrien.morel@mail.com", "Adrien", "Morel", "222", "./src/assets/images/demo/man.jpg", false),
+  (4, "clara.duval@mail.com", "Clara", "Duval", "333", "./src/assets/images/demo/landscape.jpg", false);
 
 insert into post(id, content, picture, category, user_id)
 values
