@@ -38,20 +38,20 @@ import settings from "../assets/images/settings.svg";
 
 function Home() {
   return (
-    <section className="w-full flex flex-col flex-grow gap-5 lg:gap-10 items-center">
+    <section className="flex flex-col items-center flex-grow w-full gap-5 lg:gap-10">
       {posts.map((post) => (
         <article
           key={post.id}
-          className="h-auto  lg:w-2/3 flex flex-col px-10 py-4 bg-bg_opacity-primary z-10 rounded-xl  border-2 border-bg_opacity-secondary font-text gap-2 text-text-primary font-light "
+          className="z-10 flex flex-col h-auto gap-2 px-10 py-4 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary "
         >
-          <header className="flex justify-between items-center py-2">
+          <header className="flex items-center justify-between py-2">
             <section className="flex items-center gap-4">
               <figure>
                 <img
                   src={post.avatar}
                   alt=""
                   aria-labelledby="username"
-                  className="size-12 rounded-full object-cover"
+                  className="object-cover rounded-full size-12"
                 />
               </figure>
               <h2 id="username">{post.username}</h2>
@@ -62,7 +62,7 @@ function Home() {
                 {post.category}
               </span>
               <button type="button">
-                <figure className="p-1 rounded-md transition-colors bg-accent-secondary hover:bg-accent-primary">
+                <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
                   <img src={settings} alt="" className="size-5" />
                 </figure>
               </button>
@@ -75,15 +75,15 @@ function Home() {
                 <img
                   src={post.image}
                   alt=""
-                  className="rounded-md object-cover"
+                  className="object-cover rounded-md"
                 />
               </figure>
             ) : (
               ""
             )}
-            <p className="text-sm mt-6">{post.content}</p>
-            <hr className="border-accent-primary mt-6 mb-2" />
-            <p className="text-xs flex gap-1">
+            <p className="mt-6 text-sm">{post.content}</p>
+            <hr className="mt-6 mb-2 border-accent-primary" />
+            <p className="flex gap-1 text-xs">
               Le<span>{post.date}</span>à<span>{post.hour}</span>
             </p>
           </main>
