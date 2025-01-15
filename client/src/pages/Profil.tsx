@@ -12,27 +12,82 @@ function Profil() {
       category: "Divers",
     },
   ];
+  const profiles = [
+    {
+      id: 1,
+      avatar: "",
+      biographie:
+        "Je m'apelle Sam Diswar, èléve de la Wild code school depuis le 27/09/2024. Mon formateur est Benoît Vandanjon",
+      username: "Sam Diswar",
+      github: "https://github.com/SamDiswar",
+      linkedin: "www.linkedin/SamDiswar",
+      site: "www.WildCom.com",
+    },
+  ];
 
   return (
     <>
-      <section className="relative z-10 flex gap-16 mx-0 bg-bg_opacity-primary border-bg_opacity-secondary font-text text-text-primary pb-11">
-        <div className="gap-4 pt-4 mx-4">
-          <img
-            className="w-48 mb-6 rounded-full"
-            src="src/assets/images/pictureprofil.webp"
-            alt="profile user"
-          />
-          <p>Biographie :</p>
-        </div>
-        <div className="flex flex-col gap-8 pt-3">
-          <p className="text-2xl font-bold">Sam Diswar</p>
-          <ul className="space-y-4">
-            <li>Github : </li>
-            <li>Linkedin : </li>
-            <li>Sites : </li>
-          </ul>
-        </div>
-      </section>
+      {profiles.map((profile) => (
+        <section
+          key={profile.id}
+          className="relative z-10 flex flex-col gap-6 px-10 py-4 mx-0 rounded-xl bg-bg_opacity-primary border-bg_opacity-secondary font-text text-text-primary"
+        >
+          <div className="flex flex-col gap-6 mx-4 md:flex-row ">
+            <div className="self-center">
+              <img
+                className="w-48 rounded-full"
+                src="src/assets/images/pictureprofil.webp"
+                alt="profile user"
+              />
+            </div>
+            <p className="flex justify-center text-2xl font-bold md:hidden ">
+              {profile.username}{" "}
+            </p>
+            <div className="flex flex-col justify-center gap-8 ">
+              <p className="hidden text-2xl font-bold md:flex ">
+                {profile.username}{" "}
+              </p>
+              <ul className="space-y-4">
+                {profile.github && (
+                  <li className="font-bold">
+                    Github :{" "}
+                    <a className="font-extralight " href={profile.github}>
+                      {profile.github}
+                    </a>
+                  </li>
+                )}
+                {profile.linkedin && (
+                  <li className="font-bold">
+                    Linkedin :{" "}
+                    <a className="font-extralight" href={profile.linkedin}>
+                      {profile.linkedin}
+                    </a>
+                  </li>
+                )}
+                {profile.site && (
+                  <li className="font-bold">
+                    Site :{" "}
+                    <a className="font-extralight" href={profile.site}>
+                      {profile.site}
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </div>
+          </div>
+          <div>
+            {profile.biographie && (
+              <div>
+                <p className="ml-4 font-bold"> Biographie :</p>
+                <p className="ml-4 italic font-extralight ">
+                  {" "}
+                  {profile.biographie}
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+      ))}
       <section className="flex justify-center mx-4 mt-8 posts">
         {posts.map((post) => (
           <article
