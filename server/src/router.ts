@@ -15,4 +15,7 @@ router.post("/api/items", itemActions.add);
 
 /* ************************************************************************* */
 
+import profileActions from "./modules/profile/profileActions";
+router.get("/api/profile/:id", profileActions.read);
+
 export default router;
