@@ -14,5 +14,10 @@ router.get("/api/items/:id", itemActions.read);
 router.post("/api/items", itemActions.add);
 
 /* ************************************************************************* */
+import postActions from "./modules/post/postActions";
+
+router.get("/api/posts", postActions.browse);
+
+/* ************************************************************************* */
 
 export default router;
