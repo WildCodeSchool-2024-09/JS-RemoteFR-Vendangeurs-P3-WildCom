@@ -19,7 +19,7 @@ const edit: RequestHandler = async (req, res, next) => {
       picture: req.body.picture,
       title: req.body.title,
       place: req.body.place,
-      event_date: req.body.event_date,
+      calendar: req.body.calendar,
     };
 
     const affectedRows = await eventRepository.update(event);
@@ -41,7 +41,7 @@ const add: RequestHandler = async (req, res, next) => {
       picture: req.body.picture,
       title: req.body.title,
       place: req.body.place,
-      event_date: req.body.event_date,
+      calendar: req.body.calendar,
       user_id: req.body.user_id,
     };
 

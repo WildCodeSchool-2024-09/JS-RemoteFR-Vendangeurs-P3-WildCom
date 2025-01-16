@@ -1,5 +1,5 @@
 import databaseClient from "../../../database/client";
-// import formattedTimestamp from "../../utils/formattedTimestamp";
+import formattedTimestamp from "../../utils/formattedTimestamp";
 
 import type { Result, Rows } from "../../../database/client";
 
@@ -10,7 +10,7 @@ type Event = {
   created_at?: Date;
   title: string;
   place: string;
-  event_date: string;
+  calendar: string;
   user_id?: number;
 };
 
@@ -27,14 +27,14 @@ type EventWithUser = Omit<Event, "user_id"> & {
 class EventRepository {
   async create(event: Omit<Event, "id">) {
     const [result] = await databaseClient.query<Result>(
-      `INSERT INTO event (content, picture, title, place, event_date, user_id) 
+      `INSERT INTO event (content, picture, title, place, calendar, user_id) 
       VALUES (?, ?, ?, ?, ?, ?)`,
       [
         event.content,
         event.picture,
         event.title,
         event.place,
-        event.event_date,
+        event.calendar,
         event.user_id,
       ],
     );
@@ -51,6 +51,7 @@ class EventRepository {
       event.content,
       event.picture,
       event.created_at,
+      event.calendar,
       event.title,
       event.place
       FROM event
@@ -64,8 +65,8 @@ class EventRepository {
       picture: row.picture,
       title: row.title,
       place: row.place,
-      event_date: row.event_date,
-      // timestamp: formattedTimestamp(new Date(row.created_at)),
+      calendar: formattedTimestamp(new Date(row.calendar)),
+      timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,
         username: row.username,
@@ -79,14 +80,14 @@ class EventRepository {
   async update(event: Event) {
     const [result] = await databaseClient.query<Result>(
       `UPDATE event
-      SET content = ?, picture = ?, title = ?, place = ?, event_date = ? 
+      SET content = ?, picture = ?, title = ?, place = ?, calendar = ? 
       WHERE id = ?`,
       [
         event.content,
         event.picture,
         event.title,
         event.place,
-        event.event_date,
+        event.calendar,
         event.id,
       ],
     );
