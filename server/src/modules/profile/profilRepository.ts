@@ -2,6 +2,7 @@ import type { Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
 type Profil = {
+  id: number;
   username: string;
   avatar: string;
   link_github: string;
@@ -15,11 +16,12 @@ class profilRepository {
     const [rows] = await databaseClient.query<Rows>(
       `
       SELECT 
+      id,
       CONCAT (firstname, ' ' ,lastname) as username,
       avatar,
-      link_github,
-      link_linkedin,
-      link_site,
+      github,
+      linkedin,
+      site,
       biography 
       FROM user 
       WHERE id = ?`,
