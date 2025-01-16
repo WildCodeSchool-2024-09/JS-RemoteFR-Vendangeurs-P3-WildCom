@@ -5,10 +5,10 @@ type LocationProps = {
 };
 
 function SideNavigation({ location }: LocationProps) {
-  if (location === "/profile") {
+  if (location === "/profile/1") {
     return (
       <nav
-        className="flex h-1/4 w-full justify-center items-center "
+        className="flex items-center justify-center w-full h-1/4 "
         aria-label="navigation secondaire"
       >
         <ul>

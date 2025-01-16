@@ -1,5 +1,5 @@
 import databaseClient from "../../../database/client";
-// import formattedTimestamp from "../../utils/formattedTimestamp";
+import formattedTimestamp from "../../utils/formattedTimestamp";
 
 import type { Result, Rows } from "../../../database/client";
 
@@ -65,7 +65,7 @@ class EventRepository {
       title: row.title,
       place: row.place,
       event_date: row.event_date,
-      // timestamp: formattedTimestamp(new Date(row.created_at)),
+      timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,
         username: row.username,

@@ -14,13 +14,15 @@ router.get("/api/items/:id", itemActions.read);
 router.post("/api/items", itemActions.add);
 
 /* ************************************************************************* */
+
+// Define posts-related routes
 import postActions from "./modules/post/postActions";
 
 router.get("/api/posts", postActions.browse);
 
 /* ************************************************************************* */
 
-// Define event_related routes
+// Define events-related routes
 import eventActions from "./modules/event/eventActions";
 
 router.get("/api/events", eventActions.browse);
