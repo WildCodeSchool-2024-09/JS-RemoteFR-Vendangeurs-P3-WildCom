@@ -15,4 +15,12 @@ router.post("/api/items", itemActions.add);
 
 /* ************************************************************************* */
 
+// Define event_related routes
+import eventActions from "./modules/event/eventActions";
+
+router.get("/api/events", eventActions.browse);
+router.put("/api/events/:id", eventActions.edit);
+router.post("/api/events", eventActions.add);
+router.delete("/api/events/:id", eventActions.destroy);
+
 export default router;
