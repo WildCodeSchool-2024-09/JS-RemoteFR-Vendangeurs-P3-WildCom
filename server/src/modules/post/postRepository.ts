@@ -8,11 +8,13 @@ type Post = {
   picture: string | null;
   content: string;
   timestamp: string;
+  user_id: number;
 };
 
 type User = {
   id: number;
   username: string;
+  avatar: string;
 };
 
 type PostWithUser = Omit<Post, "user_id"> & {

@@ -47,7 +47,7 @@ values
   (1, "example@mail.com","Admin", "Istrateur", "123", "", true),
   (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "111", "./src/assets/images/demo/woman1.jpg", false),
   (3, "adrien.morel@mail.com", "Adrien", "Morel", "222", "./src/assets/images/demo/man.jpg", false),
-  (4, "clara.duval@mail.com", "Clara", "Duval", "333", "./src/assets/images/demo/landscape.jpg", false);
+  (4, "clara.duval@mail.com", "Clara", "Duval", "333", "./src/assets/images/demo/woman2.jpg", false);
 
 insert into post(id, content, picture, category, user_id)
 values
