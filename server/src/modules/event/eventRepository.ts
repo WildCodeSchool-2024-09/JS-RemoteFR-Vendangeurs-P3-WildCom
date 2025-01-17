@@ -6,11 +6,12 @@ import type { Result, Rows } from "../../../database/client";
 type Event = {
   id: number;
   content: string;
+  category: string;
   picture: string;
   created_at?: Date;
   title: string;
   place: string;
-  event_date: string;
+  calendar: string;
   user_id?: number;
 };
 
@@ -27,14 +28,15 @@ type EventWithUser = Omit<Event, "user_id"> & {
 class EventRepository {
   async create(event: Omit<Event, "id">) {
     const [result] = await databaseClient.query<Result>(
-      `INSERT INTO event (content, picture, title, place, event_date, user_id) 
-      VALUES (?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO event (content, category, picture, title, place, calendar, user_id) 
+      VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
         event.content,
+        event.category,
         event.picture,
         event.title,
         event.place,
-        event.event_date,
+        event.calendar,
         event.user_id,
       ],
     );
@@ -49,8 +51,10 @@ class EventRepository {
       user.avatar,
       event.id AS event_id,
       event.content,
+      event.category,
       event.picture,
       event.created_at,
+      event.calendar,
       event.title,
       event.place
       FROM event
@@ -61,10 +65,11 @@ class EventRepository {
     const formattedRows: EventWithUser[] = rows.map((row) => ({
       id: row.event_id,
       content: row.content,
+      category: row.category,
       picture: row.picture,
       title: row.title,
       place: row.place,
-      event_date: row.event_date,
+      calendar: formattedTimestamp(new Date(row.calendar)),
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,
@@ -79,14 +84,15 @@ class EventRepository {
   async update(event: Event) {
     const [result] = await databaseClient.query<Result>(
       `UPDATE event
-      SET content = ?, picture = ?, title = ?, place = ?, event_date = ? 
+      SET content = ?, category = ?, picture = ?, title = ?, place = ?, calendar = ? 
       WHERE id = ?`,
       [
         event.content,
+        event.category,
         event.picture,
         event.title,
         event.place,
-        event.event_date,
+        event.calendar,
         event.id,
       ],
     );
