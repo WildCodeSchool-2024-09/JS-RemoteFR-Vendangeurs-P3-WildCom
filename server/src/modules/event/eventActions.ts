@@ -16,6 +16,7 @@ const edit: RequestHandler = async (req, res, next) => {
     const event = {
       id: Number.parseInt(req.params.id),
       content: req.body.content,
+      category: req.body.category,
       picture: req.body.picture,
       title: req.body.title,
       place: req.body.place,
@@ -38,6 +39,7 @@ const add: RequestHandler = async (req, res, next) => {
   try {
     const newEvent = {
       content: req.body.content,
+      category: req.body.category,
       picture: req.body.picture,
       title: req.body.title,
       place: req.body.place,

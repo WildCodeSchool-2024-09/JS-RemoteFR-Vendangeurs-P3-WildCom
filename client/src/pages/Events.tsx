@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import calendar from "../assets/images/calendar.png";
+import place from "../assets/images/place.png";
 import settings from "../assets/images/settings.svg";
 
 type Event = {
   id: number;
   content: string;
+  category: string;
   picture: string | null;
   timestamp: string;
   title: string;
@@ -38,23 +40,24 @@ function Events() {
         >
           <header className="flex items-center justify-between py-2">
             <Link to={`/profile/${event.user.id}`}>
-              <section className="flex items-center gap-4">
+              <section className="flex items-center gap-2">
                 <figure>
                   <img
                     src={event.user.avatar}
                     alt=""
                     aria-labelledby="username"
-                    className="object-cover rounded-full size-12"
+                    className="object-cover rounded-full size-10 lg:size-12"
                   />
                 </figure>
-                <h2 id="username">{event.user.username}</h2>
+                <h2 id="username" className="text-sm lg:text-base">
+                  {event.user.username}
+                </h2>
               </section>
             </Link>
 
             <section className="flex items-center gap-4">
-              <span className="text-sm font-normal px-3 bg-[#176b1d]  border-2 border-accent-primary rounded">
-                In progress
-                {/* miss category in BDD */}
+              <span className="text-xs lg:text-sm font-normal px-3 bg-[#176b1d]  border-2 border-accent-primary rounded">
+                {event.category}
               </span>
               <button type="button">
                 <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
@@ -68,32 +71,33 @@ function Events() {
             </section>
           </header>
 
-          <main className="flex flex-col w-full">
-            <section className="flex w-full space-x-3">
+          <main className="flex flex-col ">
+            <section className="flex flex-col lg:flex-row space-x-3 gap-3 lg:gap-0">
               {event.picture && (
-                <figure className="w-1/3">
-                  <img
-                    src={event.picture}
-                    alt=""
-                    className="w-full rounded-md"
-                  />
+                <figure className="lg:w-1/3">
+                  <img src={event.picture} alt="" className="l rounded-md" />
                 </figure>
               )}
               <article
-                className={`${event.picture ? "w-2/3" : "w-full"} space-y-3`}
+                className={`${event.picture ? "lg:w-2/3" : "w-full"} space-y-3`}
               >
-                <h2 className="text-3xl font-semibold font-title">
+                <h2 className="text-xl font-semibold font-title">
                   {event.title}
                 </h2>
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-1">
-                    <img
-                      src={calendar}
-                      alt="date de publication de l'évènement"
-                      className="size-7"
-                    />
-                    <h2 className="text-sm">{event.calendar}</h2>
-                  </div>
+                <div className="flex items-center space-x-1">
+                  <img
+                    src={calendar}
+                    alt="date de publication de l'événement"
+                    className="size-5"
+                  />
+                  <h2 className="text-xs">{event.calendar}</h2>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <img
+                    src={place}
+                    alt="lieu de l'événement"
+                    className="size-5"
+                  />
                   <h2 className="text-sm font-title">
                     à <span>{event.place}</span>
                   </h2>
