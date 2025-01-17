@@ -23,8 +23,11 @@ router.get("/api/profile/:id", profileActions.read);
 
 // Define posts-related routes
 import postActions from "./modules/post/postActions";
+import postCommentsActions from "./modules/post/postComment/postCommentsActions";
 
 router.get("/api/posts", postActions.browse);
+
+router.get("/api/posts/:id/comments", postCommentsActions.browse);
 
 /* ************************************************************************* */
 
