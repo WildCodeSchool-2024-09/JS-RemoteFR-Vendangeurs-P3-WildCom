@@ -1,3 +1,4 @@
+import { LuCalendarDays } from "react-icons/lu";
 import { NavLink } from "react-router-dom";
 
 function Navigation() {
@@ -27,12 +28,8 @@ function Navigation() {
               `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-2xl hover:text-accent-primary`
             }
           >
-            <img
-              src="./src/assets/images/calendar.png"
-              alt=""
-              className="size-10"
-            />
-            Évènements
+            <LuCalendarDays className="size-10 text-accent-primary" />
+            Événements
           </NavLink>
         </li>
 

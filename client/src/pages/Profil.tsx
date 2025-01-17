@@ -5,8 +5,9 @@ const posts = [
   {
     id: 1,
     username: "Sam Diswar",
-    avatar: "src/assets/images/pictureprofil.webp",
-    image: "src/assets/images/gamer-playing-indoors-side-view.jpg",
+    avatar: "http://localhost:3000/src/assets/images/pictureprofil.webp",
+    image:
+      "http://localhost:3000/src/assets/images/gamer-playing-indoors-side-view.jpg",
     content:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus deserunt amet modi error officia! Commodi, corporis tenetur aspernatur quisquam nostrum aliquid dignissimos quo molestiae, ipsum, odio alias ad delectus vitae expedita. Molestias itaque facere architecto modi beatae ut dignissimos officiis numquam cumque vero adipisci, necessitatibus sequi dolor voluptatum?",
     date: "23/11/2024",
@@ -15,72 +16,75 @@ const posts = [
   },
 ];
 
-type Profile = {
+type User = {
   id: number;
   username: string;
-  avatar: string | null;
+  avatar: string;
   github: string | null;
   linkedin: string | null;
   site: string | null;
   biography: string | null;
 };
-function profile() {
+function Profil() {
   const { id } = useParams();
-  const [profiles, setProfiles] = useState([] as Profile[]);
+  const [users, setUsers] = useState([] as User[]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/profile/${id}`).then(
-      (response) =>
-        response.json().then((data: Profile[]) => {
-          setProfiles(data);
-        }),
+    fetch(`${import.meta.env.VITE_API_URL}/api/user/${id}`).then((response) =>
+      response.json().then((data: User[]) => {
+        setUsers(data);
+      }),
     );
   }, [id]);
 
   return (
     <>
-      {profiles.map((profile) => (
+      {users.map((user) => (
         <section
-          key={profile.id}
+          key={user.id}
           className="relative z-10 flex flex-col gap-6 px-10 py-4 mx-0 border-2 rounded-xl bg-bg_opacity-primary border-bg_opacity-secondary font-text text-text-primary"
         >
           <div className="flex flex-col gap-6 mx-4 md:flex-row ">
             <div className="self-center">
               <img
-                className="w-48 rounded-full"
-                src="src/assets/images/pictureprofil.webp"
-                alt="profile user"
+                className="object-cover w-48 h-48 rounded-full"
+                src={user.avatar}
+                alt=""
+                aria-labelledby="username"
               />
             </div>
-            <p className="flex justify-center text-2xl font-bold md:hidden ">
-              {profile.username}{" "}
+            <p
+              id="username"
+              className="flex justify-center text-2xl font-bold md:hidden "
+            >
+              {user.username}
             </p>
             <div className="flex flex-col justify-center gap-8 ">
               <p className="hidden text-2xl font-bold md:flex ">
-                {profile.username}{" "}
+                {user.username}
               </p>
               <ul className="space-y-4">
-                {profile.github && (
+                {user.github && (
                   <li className="font-bold">
                     Github :{" "}
-                    <a className="font-extralight " href={profile.github}>
-                      {profile.github}
+                    <a className="font-extralight " href={user.github}>
+                      {user.github}
                     </a>
                   </li>
                 )}
-                {profile.linkedin && (
+                {user.linkedin && (
                   <li className="font-bold">
                     Linkedin :{" "}
-                    <a className="font-extralight" href={profile.linkedin}>
-                      {profile.linkedin}
+                    <a className="font-extralight" href={user.linkedin}>
+                      {user.linkedin}
                     </a>
                   </li>
                 )}
-                {profile.site && (
+                {user.site && (
                   <li className="font-bold">
                     Site :{" "}
-                    <a className="font-extralight" href={profile.site}>
-                      {profile.site}
+                    <a className="font-extralight" href={user.site}>
+                      {user.site}
                     </a>
                   </li>
                 )}
@@ -88,13 +92,10 @@ function profile() {
             </div>
           </div>
           <div>
-            {profile.biography && (
+            {user.biography && (
               <div>
                 <p className="ml-4 font-bold"> Biographie :</p>
-                <p className="ml-4 italic font-extralight ">
-                  {" "}
-                  {profile.biography}
-                </p>
+                <p className="ml-4 italic font-extralight ">{user.biography}</p>
               </div>
             )}
           </div>
@@ -142,4 +143,4 @@ function profile() {
   );
 }
 
-export default profile;
+export default Profil;
