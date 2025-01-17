@@ -14,13 +14,24 @@ router.get("/api/items/:id", itemActions.read);
 router.post("/api/items", itemActions.add);
 
 /* ************************************************************************* */
-import postActions from "./modules/post/postActions";
 
-router.get("/api/posts", postActions.browse);
+// Define profiles-related routes
+import profileActions from "./modules/profile/profileActions";
+router.get("/api/profile/:id", profileActions.read);
 
 /* ************************************************************************* */
 
-// Define event_related routes
+// Define posts-related routes
+import postActions from "./modules/post/postActions";
+import postCommentsActions from "./modules/post/postComment/postCommentsActions";
+
+router.get("/api/posts", postActions.browse);
+
+router.get("/api/posts/:id/comments", postCommentsActions.browse);
+
+/* ************************************************************************* */
+
+// Define events-related routes
 import eventActions from "./modules/event/eventActions";
 
 router.get("/api/events", eventActions.browse);

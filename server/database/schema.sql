@@ -5,6 +5,10 @@ create table user (
   lastname varchar(255) not null,
   password varchar(255) not null,
   avatar varchar(255) null,
+  github VARCHAR(255) NULL,
+  linkedin VARCHAR(255) NULL,
+  site VARCHAR(255) NULL,
+  biography text NULL,
   is_admin boolean not null default false
 );
 
@@ -36,8 +40,8 @@ create table comment (
   content text not null,
   created_at timestamp default current_timestamp not null,
   user_id int unsigned not null,
-  post_id int unsigned,
-  event_id int unsigned,
+  post_id int unsigned null,
+  event_id int unsigned null,
   constraint fk_comment_user foreign key (user_id) references user(id),
   constraint fk_comment_post foreign key (post_id) references post(id),
   constraint fk_comment_event foreign key (event_id) references event(id)
@@ -61,3 +65,16 @@ values
   (1, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", "Divers", "./src/assets/images/demo/fog.jpg", "Super event de ouf", "Nogent le retrou", "2024-04-01", 1),
   (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", "Divers", "", "Boire un coup ou deux", "Bordeaux", "2026-06-15", 2),
   (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur", "Divers", "./src/assets/images/demo/landscape.jpg", "Viens on est bien", "Nantes", "2042-07-30", 3);
+
+insert into comment(id, content, user_id, post_id )
+values
+(1, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 2, 1),
+(2, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 3, 1),
+(3, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 4, 1),
+(4, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 1, 2),
+(5, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 4, 2),
+(6, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 2, 2),
+(7, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 2, 3),
+(8, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 4, 3),
+(9, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 1, 3),
+(10, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 3, 3);
