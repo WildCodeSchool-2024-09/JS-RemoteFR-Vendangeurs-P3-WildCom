@@ -5,6 +5,10 @@ create table user (
   lastname varchar(255) not null,
   password varchar(255) not null,
   avatar varchar(255) null,
+  github VARCHAR(255) NULL,
+  linkedin VARCHAR(255) NULL,
+  site VARCHAR(255) NULL,
+  biography text NULL,
   is_admin boolean not null default false
 );
 
