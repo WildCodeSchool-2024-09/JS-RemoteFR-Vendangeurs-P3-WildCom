@@ -1,36 +1,48 @@
-function Profil() {
-  const posts = [
-    {
-      id: 1,
-      username: "Sam Diswar",
-      avatar: "src/assets/images/pictureprofil.webp",
-      image: "src/assets/images/gamer-playing-indoors-side-view.jpg",
-      content:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus deserunt amet modi error officia! Commodi, corporis tenetur aspernatur quisquam nostrum aliquid dignissimos quo molestiae, ipsum, odio alias ad delectus vitae expedita. Molestias itaque facere architecto modi beatae ut dignissimos officiis numquam cumque vero adipisci, necessitatibus sequi dolor voluptatum?",
-      date: "23/11/2024",
-      hour: "13h54",
-      category: "Divers",
-    },
-  ];
-  const profiles = [
-    {
-      id: 1,
-      avatar: "",
-      biographie:
-        "Je m'apelle Sam Diswar, èléve de la Wild code school depuis le 27/09/2024. Mon formateur est Benoît Vandanjon",
-      username: "Sam Diswar",
-      github: "https://github.com/SamDiswar",
-      linkedin: "www.linkedin/SamDiswar",
-      site: "www.WildCom.com",
-    },
-  ];
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+const posts = [
+  {
+    id: 1,
+    username: "Sam Diswar",
+    avatar: "src/assets/images/pictureprofil.webp",
+    image: "src/assets/images/gamer-playing-indoors-side-view.jpg",
+    content:
+      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus deserunt amet modi error officia! Commodi, corporis tenetur aspernatur quisquam nostrum aliquid dignissimos quo molestiae, ipsum, odio alias ad delectus vitae expedita. Molestias itaque facere architecto modi beatae ut dignissimos officiis numquam cumque vero adipisci, necessitatibus sequi dolor voluptatum?",
+    date: "23/11/2024",
+    hour: "13h54",
+    category: "Divers",
+  },
+];
+
+type Profile = {
+  id: number;
+  username: string;
+  avatar: string | null;
+  github: string | null;
+  linkedin: string | null;
+  site: string | null;
+  biography: string | null;
+};
+function profile() {
+  const { id } = useParams();
+  const [profiles, setProfiles] = useState([] as Profile[]);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/profile/${id}`).then(
+      (response) =>
+        response.json().then((data: Profile[]) => {
+          setProfiles(data);
+        }),
+    );
+  }, [id]);
 
   return (
     <>
       {profiles.map((profile) => (
         <section
           key={profile.id}
-          className="relative z-10 flex flex-col gap-6 px-10 py-4 mx-0 rounded-xl bg-bg_opacity-primary border-bg_opacity-secondary font-text text-text-primary"
+          className="relative z-10 flex flex-col gap-6 px-10 py-4 mx-0 border-2 rounded-xl bg-bg_opacity-primary border-bg_opacity-secondary font-text text-text-primary"
         >
           <div className="flex flex-col gap-6 mx-4 md:flex-row ">
             <div className="self-center">
@@ -76,12 +88,12 @@ function Profil() {
             </div>
           </div>
           <div>
-            {profile.biographie && (
+            {profile.biography && (
               <div>
                 <p className="ml-4 font-bold"> Biographie :</p>
                 <p className="ml-4 italic font-extralight ">
                   {" "}
-                  {profile.biographie}
+                  {profile.biography}
                 </p>
               </div>
             )}
@@ -130,4 +142,4 @@ function Profil() {
   );
 }
 
-export default Profil;
+export default profile;

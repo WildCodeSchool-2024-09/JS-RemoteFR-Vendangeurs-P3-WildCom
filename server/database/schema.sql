@@ -5,6 +5,10 @@ create table user (
   lastname varchar(255) not null,
   password varchar(255) not null,
   avatar varchar(255) null,
+  github VARCHAR(255) NULL,
+  linkedin VARCHAR(255) NULL,
+  site VARCHAR(255) NULL,
+  biography text NULL,
   is_admin boolean not null default false
 );
 
@@ -60,3 +64,4 @@ values
   (1, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", "./src/assets/images/demo/fog.jpg", "Super event de ouf", "Nogent le retrou", "2024-04-01", 1),
   (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", "", "Boire un coup ou deux", "Bordeaux", "2026-06-15", 2),
   (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur", "./src/assets/images/demo/landscape.jpg", "Viens on est bien", "Nantes", "2042-07-30", 3);
+
