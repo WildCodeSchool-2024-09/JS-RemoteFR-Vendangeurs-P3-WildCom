@@ -15,7 +15,26 @@ router.post("/api/items", itemActions.add);
 
 /* ************************************************************************* */
 
+// Define profiles-related routes
 import profileActions from "./modules/profile/profileActions";
 router.get("/api/profile/:id", profileActions.read);
+
+/* ************************************************************************* */
+
+// Define posts-related routes
+import postActions from "./modules/post/postActions";
+
+router.get("/api/posts", postActions.browse);
+
+/* ************************************************************************* */
+
+// Define events-related routes
+import eventActions from "./modules/event/eventActions";
+
+router.get("/api/events", eventActions.browse);
+router.put("/api/events/:id", eventActions.edit);
+router.post("/api/events", eventActions.add);
+router.delete("/api/events/:id", eventActions.destroy);
+
 
 export default router;

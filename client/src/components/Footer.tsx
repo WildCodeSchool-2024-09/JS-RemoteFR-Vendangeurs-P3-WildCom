@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <section className="space-y-2 text-text-primary text-center p-6 text-sm">
+    <section className="p-6 space-y-2 text-sm text-center text-text-primary">
       <p>
         &copy; 2025{" "}
         <span className="text-accent-primary font-title">&lt;WildCom/&gt;</span>
