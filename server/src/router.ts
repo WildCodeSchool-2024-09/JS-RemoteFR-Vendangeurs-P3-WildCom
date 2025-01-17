@@ -16,7 +16,7 @@ router.post("/api/items", itemActions.add);
 /* ************************************************************************* */
 
 // Define profiles-related routes
-import userActions from "./modules/userActions";
+import userActions from "./modules/user/userActions";
 router.get("/api/user/:id", userActions.read);
 
 /* ************************************************************************* */
