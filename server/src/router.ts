@@ -36,5 +36,4 @@ router.put("/api/events/:id", eventActions.edit);
 router.post("/api/events", eventActions.add);
 router.delete("/api/events/:id", eventActions.destroy);
 
-
 export default router;
