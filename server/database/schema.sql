@@ -1,3 +1,4 @@
+-- SQLBook: Code
 create table user (
   id int unsigned primary key auto_increment not null,
   email varchar(255) not null unique,
@@ -48,20 +49,20 @@ create table comment (
 
 insert into user(id, email,firstname, lastname, password, avatar, is_admin)
 values
-  (1, "example@mail.com","Admin", "Istrateur", "123", "", true),
-  (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "111", "./src/assets/images/demo/woman1.jpg", false),
-  (3, "adrien.morel@mail.com", "Adrien", "Morel", "222", "./src/assets/images/demo/man.jpg", false),
-  (4, "clara.duval@mail.com", "Clara", "Duval", "333", "./src/assets/images/demo/woman2.jpg", false);
+  (1, "example@mail.com","Admin", "Istrateur", "123", "http://localhost:3000/src/assets/images/pictureprofil.webp", true),
+  (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "111", "http://localhost:3000/src/assets/images/demo/woman1.jpg", false),
+  (3, "adrien.morel@mail.com", "Adrien", "Morel", "222", "http://localhost:3000/src/assets/images/demo/man.jpg", false),
+  (4, "clara.duval@mail.com", "Clara", "Duval", "333", "http://localhost:3000/src/assets/images/demo/woman2.jpg", false);
 
 insert into post(id, content, picture, category, user_id)
 values
-  (1,"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus deserunt amet modi error officia! Commodi, corporis tenetur aspernatur quisquam nostrum aliquid dignissimos quo molestiae, ipsum, odio alias ad delectus vitae expedita. Molestias itaque facere architecto modi beatae ut dignissimos officiis numquam cumque vero adipisci, necessitatibus sequi dolor voluptatum?", "./src/assets/images/demo/fog.jpg",  "Divers", 2),
+  (1,"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus deserunt amet modi error officia! Commodi, corporis tenetur aspernatur quisquam nostrum aliquid dignissimos quo molestiae, ipsum, odio alias ad delectus vitae expedita. Molestias itaque facere architecto modi beatae ut dignissimos officiis numquam cumque vero adipisci, necessitatibus sequi dolor voluptatum?", "http://localhost:3000/src/assets/images/demo/fog.jpg",  "Divers", 2),
   (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", "",  "Emploi", 3),
-  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur eos consequuntur maiores minima repellendus. Dicta, voluptatum ut?", "./src/assets/images/demo/landscape.jpg",  "Divers", 4);
+  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur eos consequuntur maiores minima repellendus. Dicta, voluptatum ut?", "http://localhost:3000/src/assets/images/demo/landscape.jpg",  "Divers", 4);
 
 insert into event(id, content, picture, title, place, event_date, user_id)
 values
-  (1, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", "./src/assets/images/demo/fog.jpg", "Super event de ouf", "Nogent le retrou", "2024-04-01", 1),
+  (1, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", "http://localhost:3000/src/assets/images/demo/fog.jpg", "Super event de ouf", "Nogent le retrou", "2024-04-01", 1),
   (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", "", "Boire un coup ou deux", "Bordeaux", "2026-06-15", 2),
-  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur", "./src/assets/images/demo/landscape.jpg", "Viens on est bien", "Nantes", "2042-07-30", 3);
+  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur", "http://localhost:3000/src/assets/images/demo/landscape.jpg", "Viens on est bien", "Nantes", "2042-07-30", 3);
 

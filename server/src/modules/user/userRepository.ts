@@ -1,7 +1,7 @@
 import type { Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
-type Profil = {
+type User = {
   id: number;
   username: string;
   avatar: string;
@@ -11,7 +11,7 @@ type Profil = {
   biography: string;
 };
 
-class profilRepository {
+class userRepository {
   async read(id: number) {
     const [rows] = await databaseClient.query<Rows>(
       `
@@ -27,8 +27,8 @@ class profilRepository {
       WHERE id = ?`,
       [id],
     );
-    return rows as Profil[];
+    return rows as User[];
   }
 }
 
-export default new profilRepository();
+export default new userRepository();
