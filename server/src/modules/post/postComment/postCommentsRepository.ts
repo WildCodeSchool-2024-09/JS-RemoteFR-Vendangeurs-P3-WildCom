@@ -24,19 +24,18 @@ class PostCommentsRepository {
     const [rows] = await databaseClient.query<Rows>(
       `
       SELECT
-        c.id AS comment_id,
-        c.content,
-        c.created_at,
-        c.post_id,
-        c.user_id,
-        u.id AS user_id,
-        CONCAT (u.firstname, ' ', u.lastname) AS username,
-        u.avatar,
-        (SELECT COUNT(*) FROM comment WHERE post_id = c.post_id) AS total_comments
-      FROM comment AS c
-      JOIN user AS u
-      ON c.user_id = u.id
-      WHERE c.post_id = ?
+        comment.id AS comment_id,
+        comment.content,
+        comment.created_at,
+        comment.post_id,
+        comment.user_id,
+        user.id AS user_id,
+        CONCAT (user.firstname, ' ', user.lastname) AS username,
+        user.avatar
+      FROM comment
+      JOIN user 
+      ON comment.user_id = user.id
+      WHERE comment.post_id = ?
       `,
       [postId],
     );
@@ -45,7 +44,6 @@ class PostCommentsRepository {
       id: row.comment_id,
       content: row.content,
       timestamp: formattedTimestamp(new Date(row.created_at)),
-      totalComments: row.total_comments,
       user: {
         id: row.user_id,
         username: row.username,
