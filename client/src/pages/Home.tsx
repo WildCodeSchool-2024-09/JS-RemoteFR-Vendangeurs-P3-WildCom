@@ -1,18 +1,8 @@
 import { useEffect, useState } from "react";
+
 import { CardPost } from "../components/CardPost";
 
-export type Post = {
-  id: number;
-  category: string;
-  picture: string | null;
-  content: string;
-  timestamp: string;
-  user: {
-    id: number;
-    username: string;
-    avatar: string;
-  };
-};
+import type { Post } from "../types/type";
 
 function Home() {
   const [posts, setPosts] = useState([] as Post[]);
