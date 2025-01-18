@@ -1,14 +1,26 @@
+import { useState } from "react";
+import { BiCog } from "react-icons/bi";
+import { FaRegCommentAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
-import settings from "../assets/images/settings.svg";
-
-import type { Post } from "../pages/Home";
+import type { Post } from "../types/type";
+import { CommentPost } from "./CommentPost";
 
 interface CardPostProps {
   posts: Post[];
 }
 
 export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
+  const [commentsVisibility, setCommentsVisibility] = useState<{
+    [key: number]: boolean;
+  }>({});
+
+  const handleShowComments = (postId: number) => {
+    setCommentsVisibility((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
+
   return (
     <>
       {posts.map((post) => (
@@ -37,7 +49,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
               </span>
               <button type="button">
                 <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
-                  <img src={settings} alt="" className="size-5" />
+                  <BiCog className="text-text-secondary size-5" />
                 </figure>
               </button>
             </section>
@@ -55,8 +67,31 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             )}
             <p className="mt-6 text-sm">{post.content}</p>
             <hr className="mt-6 mb-2 border-accent-primary" />
-            <p className="flex gap-1 text-xs">{post.timestamp}</p>
+            <div className="flex justify-between">
+              <p className="flex gap-1 text-xs ">{post.timestamp}</p>
+
+              <button
+                type="button"
+                className="flex items-center gap-3 text-sm group"
+                onClick={() => handleShowComments(post.id)}
+              >
+                <FaRegCommentAlt className="size-5 fill-accent-secondary group-hover:fill-accent-primary" />
+                <span className="group-hover:text-accent-primary">
+                  {post.totalComments}
+                </span>
+              </button>
+            </div>
           </main>
+
+          <footer
+            className={`transition-all duration-500 ease-in-out overflow-hidden ${
+              commentsVisibility[post.id]
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-5"
+            }`}
+          >
+            {commentsVisibility[post.id] && <CommentPost postId={post.id} />}
+          </footer>
         </article>
       ))}
     </>
