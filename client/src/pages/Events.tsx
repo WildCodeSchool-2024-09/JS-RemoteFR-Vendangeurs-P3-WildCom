@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { LuCalendarDays } from "react-icons/lu";
 import { Link } from "react-router-dom";
-import calendar from "../assets/images/calendar.png";
 import place from "../assets/images/place.png";
 import settings from "../assets/images/settings.svg";
 
@@ -72,10 +72,10 @@ function Events() {
           </header>
 
           <main className="flex flex-col ">
-            <section className="flex flex-col lg:flex-row space-x-3 gap-3 lg:gap-0">
+            <section className="flex flex-col gap-3 space-x-3 lg:flex-row lg:gap-0">
               {event.picture && (
                 <figure className="lg:w-1/3">
-                  <img src={event.picture} alt="" className="l rounded-md" />
+                  <img src={event.picture} alt="" className="rounded-md l" />
                 </figure>
               )}
               <article
@@ -85,11 +85,7 @@ function Events() {
                   {event.title}
                 </h2>
                 <div className="flex items-center space-x-1">
-                  <img
-                    src={calendar}
-                    alt="date de publication de l'événement"
-                    className="size-5"
-                  />
+                  <LuCalendarDays className="size-5 text-accent-primary" />
                   <h2 className="text-xs">{event.calendar}</h2>
                 </div>
                 <div className="flex items-center space-x-1">
