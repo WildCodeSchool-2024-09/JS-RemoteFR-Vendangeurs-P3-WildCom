@@ -4,6 +4,7 @@ import { MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
 
+
 type Event = {
   id: number;
   content: string;
