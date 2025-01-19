@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { BiCog } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import settings from "../assets/images/settings.svg";
 
 type Post = {
   id: number;
@@ -54,7 +54,7 @@ function Home() {
               </span>
               <button type="button">
                 <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
-                  <img src={settings} alt="" className="size-5" />
+                  <BiCog className="size-5 text-text-secondary" />
                 </figure>
               </button>
             </section>
