@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FaRegUserCircle } from "react-icons/fa";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
@@ -43,12 +44,8 @@ function App() {
             className="flex items-center justify-center gap-4 mr-10"
             to={"/profile/1"}
           >
-            <img
-              className="size-11"
-              src="./src/assets/images/userprofile.png "
-              alt=""
-              aria-labelledby="username"
-            />
+            <FaRegUserCircle className="text-text-primary size-11" />
+
             <p className="text-lg text-text-primary hover:text-accent-primary font-text">
               Username
             </p>

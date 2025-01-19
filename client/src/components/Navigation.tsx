@@ -1,4 +1,4 @@
-import { LuCalendarDays } from "react-icons/lu";
+import { RxCalendar, RxDashboard, RxHome } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
 
 function Navigation() {
@@ -9,14 +9,10 @@ function Navigation() {
           <NavLink
             to={"/"}
             className={({ isActive }) =>
-              `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-2xl pt-28 hover:text-accent-primary`
+              `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl pt-28 hover:text-accent-primary`
             }
           >
-            <img
-              src="./src/assets/images/home.png"
-              alt=""
-              className="size-10"
-            />
+            <RxHome className="size-7 text-accent-primary" />
             Acceuil
           </NavLink>
         </li>
@@ -25,10 +21,10 @@ function Navigation() {
           <NavLink
             to={"/events"}
             className={({ isActive }) =>
-              `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-2xl hover:text-accent-primary`
+              `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary`
             }
           >
-            <LuCalendarDays className="size-10 text-accent-primary" />
+            <RxCalendar className="size-7 text-accent-primary" />
             Événements
           </NavLink>
         </li>
@@ -37,14 +33,10 @@ function Navigation() {
           <NavLink
             to={"/admin"}
             className={({ isActive }) =>
-              `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-2xl hover:text-accent-primary`
+              `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary`
             }
           >
-            <img
-              src="./src/assets/images/admin.png"
-              alt=""
-              className="size-10"
-            />
+            <RxDashboard className="size-7 text-accent-primary" />
             Administrateur
           </NavLink>
         </li>

@@ -1,3 +1,4 @@
+import { FaRegUser } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
 type LocationProps = {
@@ -19,11 +20,7 @@ function SideNavigation({ location }: LocationProps) {
                 `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl`
               }
             >
-              <img
-                className="w-8"
-                src="./src/assets/images/myprofile.png"
-                alt=""
-              />
+              <FaRegUser className="size-7 text-accent-primary" />
               Mon Profil
             </NavLink>
           </li>

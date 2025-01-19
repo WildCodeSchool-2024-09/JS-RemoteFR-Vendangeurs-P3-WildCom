@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { LuCalendarDays } from "react-icons/lu";
+import { BiCog } from "react-icons/bi";
+import { MdWhereToVote } from "react-icons/md";
+import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
-import place from "../assets/images/place.png";
-import settings from "../assets/images/settings.svg";
 
 type Event = {
   id: number;
@@ -61,11 +61,7 @@ function Events() {
               </span>
               <button type="button">
                 <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
-                  <img
-                    src={settings}
-                    alt="réglages évènements"
-                    className="size-5"
-                  />
+                  <BiCog className="size-5 text-text-secondary" />
                 </figure>
               </button>
             </section>
@@ -85,15 +81,11 @@ function Events() {
                   {event.title}
                 </h2>
                 <div className="flex items-center space-x-1">
-                  <LuCalendarDays className="size-5 text-accent-primary" />
+                  <RxCalendar className="size-5 text-accent-primary" />
                   <h2 className="text-xs">{event.calendar}</h2>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <img
-                    src={place}
-                    alt="lieu de l'événement"
-                    className="size-5"
-                  />
+                  <MdWhereToVote className="size-5 text-accent-primary" />
                   <h2 className="text-sm font-title">
                     à <span>{event.place}</span>
                   </h2>
