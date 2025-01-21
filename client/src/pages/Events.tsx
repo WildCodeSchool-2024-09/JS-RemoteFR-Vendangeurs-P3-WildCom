@@ -4,12 +4,6 @@ import { MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
 
-
-import { LuCalendarDays } from "react-icons/lu";
-import place from "../assets/images/place.png";
-import settings from "../assets/images/settings.svg";
-
-
 type Event = {
   id: number;
   content: string;
