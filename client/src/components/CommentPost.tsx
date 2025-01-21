@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { SlOptions } from "react-icons/sl";
 import type { Comment } from "../types/type";
@@ -10,12 +11,17 @@ export const CommentPost: React.FC<CommentPostProps> = ({ postId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments`).then(
-      (response) =>
-        response.json().then((data) => {
-          setComments(data);
-        }),
-    );
+    const fetchCommentPosts = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments`,
+        );
+        setComments(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCommentPosts();
   }, [postId]);
 
   return (
