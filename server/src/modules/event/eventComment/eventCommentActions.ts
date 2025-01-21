@@ -1,9 +1,11 @@
 import type { RequestHandler } from "express";
-import EventCommentRepository from "./eventCommentRepository";
+import eventCommentsRepository from "./eventCommentsRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
   try {
-    const comment = await EventCommentRepository.readAll();
+    const id = Number.parseInt(req.params.id);
+    const comment = await eventCommentsRepository.readAll(id);
+
     res.json(comment);
   } catch (err) {
     next(err);

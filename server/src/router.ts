@@ -33,17 +33,13 @@ router.get("/api/posts/:id/comments", postCommentsActions.browse);
 
 // Define events-related routes
 import eventActions from "./modules/event/eventActions";
+import eventCommentActions from "./modules/event/eventComment/eventCommentActions";
 
 router.get("/api/events", eventActions.browse);
 router.put("/api/events/:id", eventActions.edit);
 router.post("/api/events", eventActions.add);
 router.delete("/api/events/:id", eventActions.destroy);
 
-/* ************************************************************************* */
-
-// Define comments-related routes
-import eventCommentActions from "./modules/event/eventComment/eventCommentActions";
-
-router.get("/api/comments", eventCommentActions.browse);
+router.get("/api/events/:id/comments", eventCommentActions.browse);
 
 export default router;

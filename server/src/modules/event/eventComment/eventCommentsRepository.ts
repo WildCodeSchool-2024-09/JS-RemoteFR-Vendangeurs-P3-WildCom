@@ -7,8 +7,6 @@ type EventComment = {
   id: number;
   content: string;
   user_id: number;
-  post_id: number;
-  event_id: number;
 };
 
 type User = {
@@ -22,28 +20,29 @@ type EventCommentWithUser = Omit<EventComment, "user_id"> & {
 };
 
 class EventCommentRepository {
-  async readAll() {
-    const [rows] = await databaseClient.query<Rows>(`
-      SELECT user.id AS user_id,
-      CONCAT (user.firstname, ' ', user.lastname) AS username,
-      user.avatar,
-      comment.id AS comment_id,
-      comment.content,
-      comment.user_id,
-      comment.post_id,
-      comment.event_id
+  async readAll(eventId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+      SELECT
+        comment.id AS comment_id,
+        comment.content,
+        comment.created_at,
+        comment.event_id,
+        comment.user_id,
+        user.id AS user_id,
+        CONCAT (user.firstname, ' ', user.lastname) AS username,
+        user.avatar
       FROM comment
-      JOIN user
+      JOIN user 
       ON comment.user_id = user.id
-      WHERE comment.post_id IS NULL AND comment.event_id IS NOT NULL
-      `);
+      WHERE comment.event_id = ?
+      `,
+      [eventId],
+    );
 
     const formattedRows: EventCommentWithUser[] = rows.map((row) => ({
       id: row.comment_id,
       content: row.content,
-      user_id: row.user_id,
-      post_id: row.post_id,
-      event_id: row.event_id,
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,
