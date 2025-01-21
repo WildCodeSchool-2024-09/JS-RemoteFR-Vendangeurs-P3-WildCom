@@ -20,3 +20,7 @@ export type Comment = {
   timestamp: string;
   user: User;
 };
+
+export type LocationProps = {
+  location: string;
+};

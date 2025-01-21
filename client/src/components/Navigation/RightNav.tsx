@@ -1,12 +1,12 @@
-import { FaRegUser } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
-type LocationProps = {
-  location: string;
-};
+import { FaRegUser } from "react-icons/fa";
 
-function SideNavigation({ location }: LocationProps) {
-  if (location === "/profile/1") {
+import type { LocationProps } from "../../types/type";
+
+export const RightNav: React.FC<LocationProps> = ({ location }) => {
+  // Adapter avec l'utilisateur connecté
+  if (location === "/user/profile/1") {
     return (
       <nav
         className="flex items-center justify-center w-full h-1/4 "
@@ -15,7 +15,7 @@ function SideNavigation({ location }: LocationProps) {
         <ul>
           <li>
             <NavLink
-              to={"/profile"}
+              to={"/user/profile/1"}
               className={({ isActive }: { isActive: boolean }) =>
                 `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl`
               }
@@ -29,6 +29,4 @@ function SideNavigation({ location }: LocationProps) {
     );
   }
   return null;
-}
-
-export default SideNavigation;
+};

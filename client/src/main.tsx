@@ -1,51 +1,70 @@
 // Import necessary modules from React and React Router
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 
 /* ************************************************************************* */
 
 // Import the main app component
 import App from "./App";
+
+import { AuthAdmin } from "./components/Auth/AuthAdmin";
+import { AuthUser } from "./components/Auth/AuthUser";
 import Admin from "./pages/Admin";
 import Events from "./pages/Events";
 import Home from "./pages/Home";
+import { Login } from "./pages/Login";
 import Profil from "./pages/Profil";
-
-// Import additional components for new routes
-// Try creating these components in the "pages" folder
-
-// import About from "./pages/About";
-// import Contact from "./pages/Contact";
 
 /* ************************************************************************* */
 
-// Create router configuration with routes
-// You can add more routes as you build out your app!
 const router = createBrowserRouter([
   {
-    path: "/", // The root path
-    element: <App />, // Renders the App component for the home page
+    path: "/",
+    element: <App />,
     children: [
       {
-        index: true,
-        element: <Home />,
+        path: "",
+        element: <Navigate to="login" />,
       },
       {
-        path: "/events",
-        element: <Events />,
+        path: "login",
+        element: <Login />,
       },
       {
-        path: "/profile/:id",
-        element: <Profil />,
+        path: "user",
+        element: <AuthUser />,
+        children: [
+          {
+            path: "home",
+            element: <Home />,
+          },
+          {
+            path: "events",
+            element: <Events />,
+          },
+          {
+            path: "profile/:id",
+            element: <Profil />,
+          },
+        ],
       },
       {
-        path: "/admin",
-        element: <Admin />,
+        path: "admin",
+        element: <AuthAdmin />,
+        children: [
+          {
+            path: "dashboard",
+            element: <Admin />,
+          },
+        ],
       },
     ],
   },
-  // Try adding a new route! For example, "/about" with an About component
 ]);
 
 /* ************************************************************************* */
