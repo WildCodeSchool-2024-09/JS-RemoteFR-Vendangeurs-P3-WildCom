@@ -26,17 +26,24 @@ class PostRepository {
     const [rows] = await databaseClient.query<Rows>(
       `
       SELECT 
-        user.id AS user_id, 
-        CONCAT (user.firstname,' ', user.lastname) AS username,
-        user.avatar,
         post.id AS post_id, 
         post.category, 
         post.picture, 
         post.content, 
-        post.created_at
+        post.created_at,
+        user.id AS user_id, 
+        CONCAT (user.firstname,' ', user.lastname) AS username,
+        user.avatar,
+        (
+          SELECT COUNT(*)
+          FROM comment
+          WHERE comment.post_id = post.id
+        ) AS total_comments
       FROM post
       JOIN user 
-      ON post.user_id = user.id
+        ON post.user_id = user.id
+      ORDER BY
+        post.created_at DESC;
       `,
     );
 
@@ -45,6 +52,7 @@ class PostRepository {
       category: row.category,
       picture: row.picture,
       content: row.content,
+      totalComments: row.total_comments,
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,
