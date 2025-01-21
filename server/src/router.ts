@@ -39,4 +39,11 @@ router.put("/api/events/:id", eventActions.edit);
 router.post("/api/events", eventActions.add);
 router.delete("/api/events/:id", eventActions.destroy);
 
+/* ************************************************************************* */
+
+// Define comments-related routes
+import eventCommentActions from "./modules/event/eventComment/eventCommentActions";
+
+router.get("/api/comments", eventCommentActions.browse);
+
 export default router;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import calendar from "../assets/images/calendar.png";
+
+import { LuCalendarDays } from "react-icons/lu";
 import place from "../assets/images/place.png";
 import settings from "../assets/images/settings.svg";
 
@@ -85,11 +86,7 @@ function Events() {
                   {event.title}
                 </h2>
                 <div className="flex items-center space-x-1">
-                  <img
-                    src={calendar}
-                    alt="date de publication de l'événement"
-                    className="size-5"
-                  />
+                  <LuCalendarDays className="size-5 text-accent-primary" />
                   <h2 className="text-xs">{event.calendar}</h2>
                 </div>
                 <div className="flex items-center space-x-1">
