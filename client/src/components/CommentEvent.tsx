@@ -3,26 +3,26 @@ import { useEffect, useState } from "react";
 import { SlOptions } from "react-icons/sl";
 import type { Comment } from "../types/type";
 
-interface CommentPostProps {
-  postId: number;
+interface CommentEventProps {
+  eventId: number;
 }
 
-export const CommentPost: React.FC<CommentPostProps> = ({ postId }) => {
+export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
-    const fetchCommentPosts = async () => {
+    const fetchCommentEvents = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments`,
+          `${import.meta.env.VITE_API_URL}/api/events/${eventId}/comments`,
         );
         setComments(response.data);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchCommentPosts();
-  }, [postId]);
+    fetchCommentEvents();
+  }, [eventId]);
 
   return (
     <div>

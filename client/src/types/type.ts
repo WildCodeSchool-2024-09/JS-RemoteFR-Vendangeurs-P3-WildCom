@@ -14,6 +14,19 @@ export type Post = {
   user: User;
 };
 
+export type Event = {
+  id: number;
+  content: string;
+  category: string;
+  picture: string | null;
+  timestamp: string;
+  title: string;
+  place: string;
+  calendar: string;
+  totalComments: number;
+  user: User;
+};
+
 export type Comment = {
   id: number;
   content: string;
