@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 import { CardPost } from "../components/CardPost";
@@ -8,11 +9,19 @@ function Home() {
   const [posts, setPosts] = useState([] as Post[]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/posts`).then((response) =>
-      response.json().then((data: Post[]) => {
-        setPosts(data);
-      }),
-    );
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/posts`,
+        );
+
+        setPosts(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   return (
