@@ -1,4 +1,6 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
+
 import { BiCog } from "react-icons/bi";
 import { MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
@@ -24,11 +26,19 @@ function Events() {
   const [events, setEvents] = useState([] as Event[]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/events`).then((response) =>
-      response.json().then((data: Event[]) => {
-        setEvents(data);
-      }),
-    );
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/events`,
+        );
+
+        setEvents(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEvents();
   }, []);
 
   return (

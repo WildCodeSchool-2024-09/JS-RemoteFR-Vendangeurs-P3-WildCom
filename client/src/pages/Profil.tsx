@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -30,11 +31,19 @@ function Profil() {
   const [users, setUsers] = useState([] as User[]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/user/${id}`).then((response) =>
-      response.json().then((data: User[]) => {
-        setUsers(data);
-      }),
-    );
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/${id}`,
+        );
+
+        setUsers(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUser();
   }, [id]);
 
   return (
