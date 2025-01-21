@@ -46,20 +46,28 @@ class EventRepository {
 
   async readAll() {
     const [rows] = await databaseClient.query<Rows>(`
-      SELECT user.id AS user_id,
-      CONCAT (user.firstname, ' ', user.lastname) AS username,
-      user.avatar,
-      event.id AS event_id,
-      event.content,
-      event.category,
-      event.picture,
-      event.created_at,
-      event.calendar,
-      event.title,
-      event.place
+      SELECT 
+        event.id AS event_id,
+        event.content,
+        event.category,
+        event.picture,
+        event.created_at,
+        event.calendar,
+        event.title,
+        event.place,
+        user.id AS user_id,
+        CONCAT (user.firstname, ' ', user.lastname) AS username,
+        user.avatar,
+        (
+          SELECT COUNT(*)
+          FROM comment
+          WHERE comment.event_id = event.id
+        ) AS total_comments
       FROM event
       JOIN user
       ON event.user_id = user.id
+      ORDER BY
+        event.created_at DESC;
       `);
 
     const formattedRows: EventWithUser[] = rows.map((row) => ({
@@ -69,6 +77,7 @@ class EventRepository {
       picture: row.picture,
       title: row.title,
       place: row.place,
+      totalComments: row.total_comments,
       calendar: formattedTimestamp(new Date(row.calendar)),
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
