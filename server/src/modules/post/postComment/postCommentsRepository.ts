@@ -1,4 +1,4 @@
-import type { Rows } from "../../../../database/client";
+import type { Result, Rows } from "../../../../database/client";
 import databaseClient from "../../../../database/client";
 import formattedTimestamp from "../../../utils/formattedTimestamp";
 
@@ -17,6 +17,12 @@ type User = {
 
 type PostCommentWithUser = Omit<PostComment, "user_id"> & {
   user: User;
+};
+
+type NewPostComment = {
+  postId: number;
+  userId: number;
+  content: string;
 };
 
 class PostCommentsRepository {
@@ -53,6 +59,17 @@ class PostCommentsRepository {
 
     return formattedRows;
   }
-}
 
+  async create(newPostComment: NewPostComment) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      INSERT INTO comment (post_id, user_id, content)
+      VALUES (?, ?, ?)
+      `,
+      [newPostComment.postId, newPostComment.userId, newPostComment.content],
+    );
+
+    return result.insertId;
+  }
+}
 export default new PostCommentsRepository();
