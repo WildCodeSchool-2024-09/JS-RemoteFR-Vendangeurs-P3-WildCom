@@ -1,7 +1,7 @@
 import argon2 from "argon2";
 import type { RequestHandler } from "express";
 
-import { passwordsMatch } from "../../helpers/authTools";
+import { generateToken, passwordsMatch } from "../../helpers/authTools";
 import authRepository from "./authRepository";
 
 const login: RequestHandler = async (req, res) => {
@@ -21,6 +21,8 @@ const login: RequestHandler = async (req, res) => {
       res.status(401).json({ message: "Invalid email or password" });
       return;
     }
+
+    const token = generateToken({ user });
 
     res.status(200).json({ message: "Connection successfuly", user });
   } catch (error) {
