@@ -65,4 +65,5 @@ const destroy: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
 export default { browse, edit, add, destroy };
