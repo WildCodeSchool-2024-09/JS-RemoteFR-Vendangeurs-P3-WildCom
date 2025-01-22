@@ -11,5 +11,20 @@ const browse: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const newPostComment = {
+      content: req.body.content,
+      postId: Number.parseInt(req.params.id),
+      userId: Number.parseInt(req.body.userId),
+    };
 
-export default { browse };
+    await postCommentsRepository.create(newPostComment);
+
+    res.status(201).json({ message: "Commentaire envoyé !" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, add };
