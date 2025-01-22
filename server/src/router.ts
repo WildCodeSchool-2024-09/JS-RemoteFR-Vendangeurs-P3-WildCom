@@ -14,10 +14,17 @@ router.get("/api/items/:id", itemActions.read);
 router.post("/api/items", itemActions.add);
 
 /* ************************************************************************* */
+// Define auth-related routes
+import authActions from "./modules/auth/authActions";
+
+router.post("/api/auth/login", authActions.login);
+
+/* ************************************************************************* */
 
 // Define profiles-related routes
 import userActions from "./modules/user/userActions";
 import userPostAction from "./modules/user/userPost/userPostAction";
+
 router.get("/api/user/:id", userActions.read);
 router.get("/api/user/:id/posts", userPostAction.browse);
 
