@@ -22,12 +22,16 @@ type PostWithUser = Omit<Post, "user_id"> & {
 class UserPostRepository {
   async readAll(userId: number) {
     const [rows] = await databaseClient.query<Rows>(
-      `SELECT post.id AS post_id, post.category, post.picture, post.content, post.created_at, 
+      `SELECT post.id AS post_id, post.category, post.picture, post.content, post.created_at
+      ,(SELECT count (*) 
+      FROM comment
+      WHERE comment.post_id = post.id) AS total_comments,
       user.id AS user_id, user.avatar, 
       CONCAT(user.firstname, ' ', user.lastname) AS username
       FROM post
       JOIN user ON post.user_id = user.id
       WHERE user.id = ? 
+
       `,
       [userId],
     );
@@ -37,6 +41,7 @@ class UserPostRepository {
       category: row.category,
       picture: row.picture,
       content: row.content,
+      totalComments: row.total_comments,
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,
