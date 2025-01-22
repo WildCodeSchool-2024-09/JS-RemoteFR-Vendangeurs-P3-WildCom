@@ -15,9 +15,10 @@ router.post("/api/items", itemActions.add);
 
 /* ************************************************************************* */
 // Define auth-related routes
+import { checkAuthDatas } from "./middlewares/checkAuthDatas";
 import authActions from "./modules/auth/authActions";
 
-router.post("/api/auth/login", authActions.login);
+router.post("/api/auth/login", checkAuthDatas, authActions.login);
 
 /* ************************************************************************* */
 
