@@ -14,10 +14,19 @@ router.get("/api/items/:id", itemActions.read);
 router.post("/api/items", itemActions.add);
 
 /* ************************************************************************* */
+// Define auth-related routes
+import { checkAuthDatas } from "./middlewares/checkAuthDatas";
+import authActions from "./modules/auth/authActions";
+
+router.post("/api/auth/login", checkAuthDatas, authActions.login);
+router.get("/api/auth/find/:id", authActions.findCurrentUser);
+
+/* ************************************************************************* */
 
 // Define profiles-related routes
 import userActions from "./modules/user/userActions";
 import userPostAction from "./modules/user/userPost/userPostAction";
+
 router.get("/api/user/:id", userActions.read);
 router.get("/api/user/:id/posts", userPostAction.browse);
 

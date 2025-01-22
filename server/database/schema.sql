@@ -10,7 +10,7 @@ create table user (
   linkedin VARCHAR(255) NULL,
   site VARCHAR(255) NULL,
   biography text NULL,
-  is_admin boolean not null default false
+  role VARCHAR(255) NOT NULL DEFAULT "user"
 );
 
 create table post (
@@ -48,12 +48,12 @@ create table comment (
   constraint fk_comment_event foreign key (event_id) references event(id)
 );
 
-insert into user(id, email,firstname, lastname, password, avatar, is_admin)
+insert into user(id, email,firstname, lastname, password, avatar, role)
 values
-  (1, "example@mail.com","Admin", "Istrateur", "123", "http://localhost:3000/src/assets/images/pictureprofil.webp", true),
-  (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "111", "http://localhost:3000/src/assets/images/demo/woman1.jpg", false),
-  (3, "adrien.morel@mail.com", "Adrien", "Morel", "222", "http://localhost:3000/src/assets/images/demo/man.jpg", false),
-  (4, "clara.duval@mail.com", "Clara", "Duval", "333", "http://localhost:3000/src/assets/images/demo/woman2.jpg", false);
+  (1, "example@mail.com","Admin", "Istrateur", "$argon2id$v=19$m=65536,t=3,p=4$MEZfaWwCSctWWpxE1hPm/g$EQxm4Q2ULXL+lL9F0pSBOuwR++rMzdk68Jh1yX+a6A8", "http://localhost:3000/src/assets/images/pictureprofil.webp", "admin"),
+  (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "$argon2id$v=19$m=65536,t=3,p=4$XEraD/BNcArp3WUwG3N/LQ$ZHbE7iOLtctLKNoaiFCGCprbj0MLJyNccQdTQr18NaA", "http://localhost:3000/src/assets/images/demo/woman1.jpg", "user"),
+  (3, "adrien.morel@mail.com", "Adrien", "Morel", "$argon2id$v=19$m=65536,t=3,p=4$5F8ilwCFIjwEpUSKYJ7Zfw$LcUOU1ufJi3O2uYcAVrprMMJjVYJc8hkLRPakfK+FfI", "http://localhost:3000/src/assets/images/demo/man.jpg", "user"),
+  (4, "clara.duval@mail.com", "Clara", "Duval", "$argon2id$v=19$m=65536,t=3,p=4$XYAZxeYMvxLBwMDRGcQWHw$A2rXfVNG6j9uwBBmETWtWuhFxXvy3sqDrSwoKz7gCsM", "http://localhost:3000/src/assets/images/demo/woman2.jpg", "user");
 
 insert into post(id, content, picture, category, user_id)
 values
