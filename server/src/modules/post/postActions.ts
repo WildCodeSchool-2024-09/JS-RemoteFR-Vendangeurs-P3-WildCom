@@ -11,4 +11,21 @@ const browse: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse };
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const newPost = {
+      content: req.body.content,
+      picture: req.body.picture,
+      category: req.body.category,
+      user_id: req.body.user_id,
+    };
+
+    const insertId = await postRepository.create(newPost);
+
+    res.status(201).json({ insertId });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, add };

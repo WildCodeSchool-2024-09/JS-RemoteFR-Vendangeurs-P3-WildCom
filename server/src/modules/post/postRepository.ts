@@ -1,5 +1,5 @@
 import databaseClient from "../../../database/client";
-import type { Rows } from "../../../database/client";
+import type { Result, Rows } from "../../../database/client";
 import formattedTimestamp from "../../utils/formattedTimestamp";
 
 type Post = {
@@ -7,7 +7,7 @@ type Post = {
   category: string;
   picture: string | null;
   content: string;
-  timestamp: string;
+  timestamp?: string;
   user_id: number;
 };
 
@@ -22,6 +22,18 @@ type PostWithUser = Omit<Post, "user_id"> & {
 };
 
 class PostRepository {
+  async create(post: Omit<Post, "id">) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      INSERT INTO post (content, picture, category, user_id)
+      VALUES (?, ?, ?, ?)
+      `,
+      [post.content, post.picture, post.category, post.user_id],
+    );
+
+    return result.insertId;
+  }
+
   async readAll() {
     const [rows] = await databaseClient.query<Rows>(
       `

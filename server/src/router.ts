@@ -28,6 +28,7 @@ import postActions from "./modules/post/postActions";
 import postCommentsActions from "./modules/post/postComment/postCommentsActions";
 
 router.get("/api/posts", postActions.browse);
+router.post("/api/posts", postActions.add);
 
 router.get("/api/posts/:id/comments", postCommentsActions.browse);
 
