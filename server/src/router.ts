@@ -19,6 +19,7 @@ import { checkAuthDatas } from "./middlewares/checkAuthDatas";
 import authActions from "./modules/auth/authActions";
 
 router.post("/api/auth/login", checkAuthDatas, authActions.login);
+router.get("/api/auth/find/:id", authActions.findCurrentUser);
 
 /* ************************************************************************* */
 

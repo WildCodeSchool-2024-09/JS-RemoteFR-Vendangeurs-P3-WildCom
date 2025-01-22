@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 type User = {
   id: number;
-  role: boolean;
+  role?: string;
 };
 
 const passwordsMatch = async (
