@@ -5,21 +5,6 @@ import { useParams } from "react-router-dom";
 import { CardPost } from "../components/CardPost";
 import type { Post } from "../types/type";
 
-// const posts = [
-//   {
-//     id: 1,
-//     username: "Sam Diswar",
-//     avatar: "http://localhost:3000/src/assets/images/pictureprofil.webp",
-//     image:
-//       "http://localhost:3000/src/assets/images/gamer-playing-indoors-side-view.jpg",
-//     content:
-//       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus deserunt amet modi error officia! Commodi, corporis tenetur aspernatur quisquam nostrum aliquid dignissimos quo molestiae, ipsum, odio alias ad delectus vitae expedita. Molestias itaque facere architecto modi beatae ut dignissimos officiis numquam cumque vero adipisci, necessitatibus sequi dolor voluptatum?",
-//     date: "23/11/2024",
-//     hour: "13h54",
-//     category: "Divers",
-//   },
-// ];
-
 type User = {
   id: number;
   username: string;
