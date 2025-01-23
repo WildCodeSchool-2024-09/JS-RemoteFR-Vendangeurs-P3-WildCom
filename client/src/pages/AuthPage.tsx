@@ -4,6 +4,8 @@ import { LoginForm } from "../components/LoginForm";
 import { Logo } from "../components/Logo";
 import { RegisterForm } from "../components/RegisterForm";
 
+import "../App.css";
+
 export const AuthPage = () => {
   const [isRegister, setIsRegister] = useState(false);
 
