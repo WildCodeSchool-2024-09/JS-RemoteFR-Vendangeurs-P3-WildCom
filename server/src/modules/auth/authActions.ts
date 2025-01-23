@@ -46,4 +46,14 @@ const findCurrentUser: RequestHandler = async (req, res) => {
   res.status(200).json(user);
 };
 
-export default { login, findCurrentUser };
+const logout: RequestHandler = async (req, res, next) => {
+  res
+    .clearCookie("token", {
+      httpOnly: true,
+      sameSite: "strict",
+    })
+    .status(200)
+    .json({ message: "Déconnexion réussie" });
+};
+
+export default { login, findCurrentUser, logout };
