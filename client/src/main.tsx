@@ -14,10 +14,11 @@ import App from "./App";
 
 import { AuthAdmin } from "./components/Auth/AuthAdmin";
 import { AuthUser } from "./components/Auth/AuthUser";
+import { AuthProvider } from "./contexts/AuthContext";
 import Admin from "./pages/Admin";
+import { AuthPage } from "./pages/AuthPage";
 import Events from "./pages/Events";
 import Home from "./pages/Home";
-import { Login } from "./pages/Login";
 import Profil from "./pages/Profil";
 
 /* ************************************************************************* */
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <Login />,
+        element: <AuthPage />,
       },
       {
         path: "user",
@@ -78,7 +79,9 @@ if (rootElement == null) {
 // Render the app inside the root element
 createRoot(rootElement).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 );
 
