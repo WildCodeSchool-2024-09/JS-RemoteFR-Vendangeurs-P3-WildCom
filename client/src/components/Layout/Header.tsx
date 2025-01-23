@@ -1,14 +1,20 @@
-import { Link, useNavigate } from "react-router-dom";
-
-import { LeftNav } from "../Navigation/LeftNav";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
+import { LeftNav } from "../Navigation/LeftNav";
+
+import { FiLogOut } from "react-icons/fi";
 import { Logo } from "../Logo";
 
 export const Header = () => {
-  const navigate = useNavigate();
-
   const { user } = useAuth();
+
+  const handleLogout = async () => {
+    await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+      withCredentials: true,
+    });
+  };
 
   return (
     <header className="z-10 flex w-full h-20 lg:fixed lg:left-0 lg:top-0 lg:bottom-0 bg-text-secondary lg:bg-bg_opacity-secondary lg:flex-col lg:justify-between lg:w-1/5 lg:h-screen">
@@ -20,9 +26,9 @@ export const Header = () => {
         <LeftNav />
       </section>
 
-      <section className="flex-col items-center justify-center hidden w-full p-6 lg:flex ">
+      <section className="items-center justify-center hidden w-full p-8 lg:flex-col lg:flex text-text-primary ">
         <Link
-          className="flex items-center justify-center gap-4 mr-10"
+          className="flex items-center justify-center gap-4 m-2"
           to={`/user/profile/${user?.id}`}
         >
           <img
@@ -31,12 +37,20 @@ export const Header = () => {
             className="object-cover rounded-full size-10"
           />
 
-          <p className="text-lg text-text-primary hover:text-accent-primary font-text">
+          <p className="text-lg hover:text-accent-primary font-text">
             {user?.username}
           </p>
         </Link>
-        <button type="button" onClick={() => navigate("/")}>
-          Se déconnecter
+
+        <button
+          type="button"
+          className="flex items-center justify-center gap-4 m-2"
+          onClick={handleLogout}
+        >
+          <FiLogOut className="ml-4 size-7 text-accent-primary" />
+          <span className="hover:text-accent-primary font-text">
+            Se déconnecter
+          </span>
         </button>
       </section>
     </header>
