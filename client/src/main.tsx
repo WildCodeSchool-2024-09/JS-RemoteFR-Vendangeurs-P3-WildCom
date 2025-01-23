@@ -1,23 +1,19 @@
 // Import necessary modules from React and React Router
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import {
-  Navigate,
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 /* ************************************************************************* */
 
 // Import the main app component
-import App from "./App";
 
 import { AuthAdmin } from "./components/Auth/AuthAdmin";
 import { AuthUser } from "./components/Auth/AuthUser";
+import { AuthProvider } from "./contexts/AuthContext";
 import Admin from "./pages/Admin";
+import { AuthPage } from "./pages/AuthPage";
 import Events from "./pages/Events";
 import Home from "./pages/Home";
-import { Login } from "./pages/Login";
 import Profil from "./pages/Profil";
 
 /* ************************************************************************* */
@@ -25,43 +21,33 @@ import Profil from "./pages/Profil";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <AuthPage />,
+  },
+  {
+    path: "user",
+    element: <AuthUser />,
     children: [
       {
-        path: "",
-        element: <Navigate to="login" />,
+        path: "home",
+        element: <Home />,
       },
       {
-        path: "login",
-        element: <Login />,
+        path: "events",
+        element: <Events />,
       },
       {
-        path: "user",
-        element: <AuthUser />,
-        children: [
-          {
-            path: "home",
-            element: <Home />,
-          },
-          {
-            path: "events",
-            element: <Events />,
-          },
-          {
-            path: "profile/:id",
-            element: <Profil />,
-          },
-        ],
+        path: "profile/:id",
+        element: <Profil />,
       },
+    ],
+  },
+  {
+    path: "admin",
+    element: <AuthAdmin />,
+    children: [
       {
-        path: "admin",
-        element: <AuthAdmin />,
-        children: [
-          {
-            path: "dashboard",
-            element: <Admin />,
-          },
-        ],
+        path: "dashboard",
+        element: <Admin />,
       },
     ],
   },
@@ -78,7 +64,9 @@ if (rootElement == null) {
 // Render the app inside the root element
 createRoot(rootElement).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 );
 
