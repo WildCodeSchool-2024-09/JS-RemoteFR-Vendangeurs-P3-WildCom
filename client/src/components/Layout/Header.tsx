@@ -35,9 +35,9 @@ export const Header = () => {
         <LeftNav />
       </section>
 
-      <section className="items-center justify-center hidden w-full p-8 lg:flex-col lg:flex text-text-primary ">
+      <section className="items-center justify-center hidden w-full gap-4 mb-6 lg:flex-col lg:flex text-text-primary">
         <Link
-          className="flex items-center justify-center gap-4 m-2"
+          className="flex items-center justify-center gap-4 m-2 group"
           to={`/user/profile/${user?.id}`}
         >
           <img
@@ -46,18 +46,18 @@ export const Header = () => {
             className="object-cover rounded-full size-10"
           />
 
-          <p className="text-sm lg:text-lg hover:text-accent-primary font-text">
+          <p className="text-xs sm:text-lg group-hover:text-accent-primary font-text">
             {user?.username}
           </p>
         </Link>
 
         <button
           type="button"
-          className="flex items-center justify-center gap-4 m-2"
+          className="flex items-center justify-center gap-4 group"
           onClick={handleLogout}
         >
-          <FiLogOut className="ml-4 size-7 text-accent-primary" />
-          <span className="hover:text-accent-primary font-text">
+          <FiLogOut className="ml-4 size-4 md:size-7 text-accent-primary" />
+          <span className=" group-hover:text-accent-primary font-text">
             Se déconnecter
           </span>
         </button>
