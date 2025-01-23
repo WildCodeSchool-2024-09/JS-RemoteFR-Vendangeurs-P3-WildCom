@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { LeftNav } from "../Navigation/LeftNav";
@@ -8,12 +8,21 @@ import { FiLogOut } from "react-icons/fi";
 import { Logo } from "../Logo";
 
 export const Header = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const handleLogout = async () => {
-    await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
-      withCredentials: true,
-    });
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/auth/logout`,
+      null,
+      {
+        withCredentials: true,
+      },
+    );
+
+    if (response.status === 200) {
+      navigate("/");
+    }
   };
 
   return (
@@ -37,7 +46,7 @@ export const Header = () => {
             className="object-cover rounded-full size-10"
           />
 
-          <p className="text-lg hover:text-accent-primary font-text">
+          <p className="text-sm lg:text-lg hover:text-accent-primary font-text">
             {user?.username}
           </p>
         </Link>
