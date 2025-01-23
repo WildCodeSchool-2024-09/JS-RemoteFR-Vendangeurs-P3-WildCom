@@ -1,8 +1,11 @@
 import { NavLink } from "react-router-dom";
 
 import { RxCalendar, RxDashboard, RxHome } from "react-icons/rx";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const LeftNav = () => {
+  const { user } = useAuth();
+
   return (
     <nav className="flex lg:justify-center">
       <ul className="space-y-8">
@@ -31,15 +34,17 @@ export const LeftNav = () => {
         </li>
 
         <li>
-          <NavLink
-            to="/admin/dashboard"
-            className={({ isActive }) =>
-              `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary`
-            }
-          >
-            <RxDashboard className="size-7 text-accent-primary" />
-            Administrateur
-          </NavLink>
+          {user?.role === "admin" && (
+            <NavLink
+              to="/admin/dashboard"
+              className={({ isActive }) =>
+                `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary`
+              }
+            >
+              <RxDashboard className="size-7 text-accent-primary" />
+              Administrateur
+            </NavLink>
+          )}
         </li>
       </ul>
     </nav>

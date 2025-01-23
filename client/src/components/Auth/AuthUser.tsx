@@ -1,11 +1,12 @@
 import { Navigate } from "react-router-dom";
 
+import { useAuth } from "../../contexts/AuthContext";
 import { Layout } from "../Layout/Layout";
 
 export const AuthUser = () => {
-  const isAuth = true;
+  const { user } = useAuth();
 
-  if (!isAuth) {
+  if (user?.role !== "user") {
     return <Navigate to={"/login"} replace />;
   }
 

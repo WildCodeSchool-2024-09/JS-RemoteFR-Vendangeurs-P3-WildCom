@@ -1,11 +1,12 @@
 import { Navigate } from "react-router-dom";
 
+import { useAuth } from "../../contexts/AuthContext";
 import { Layout } from "../Layout/Layout";
 
 export const AuthAdmin = () => {
-  const isAdmin = true;
+  const { user } = useAuth();
 
-  if (!isAdmin) {
+  if (user?.role !== "admin") {
     return <Navigate to={"/user/home"} replace />;
   }
 
