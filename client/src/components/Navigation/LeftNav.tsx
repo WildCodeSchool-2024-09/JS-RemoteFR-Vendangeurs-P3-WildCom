@@ -17,7 +17,7 @@ export const LeftNav = () => {
             }
           >
             <RxHome className="size-7 text-accent-primary" />
-            Acceuil
+            Accueil
           </NavLink>
         </li>
 
