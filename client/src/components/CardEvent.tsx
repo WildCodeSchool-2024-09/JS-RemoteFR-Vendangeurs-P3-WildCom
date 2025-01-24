@@ -31,7 +31,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
           className="z-10 flex flex-col h-auto gap-2 px-10 py-4 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary "
         >
           <header className="flex items-center justify-between py-2">
-            <Link to={`/profile/${event.user.id}`}>
+            <Link to={`/user/profile/${event.user.id}`}>
               <section className="flex items-center gap-2">
                 <figure>
                   <img
