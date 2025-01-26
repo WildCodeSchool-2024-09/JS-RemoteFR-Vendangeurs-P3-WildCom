@@ -4,6 +4,7 @@ import { FaRegCommentAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import type { Post } from "../types/type";
 import { CommentPost } from "./CommentPost";
+import { CommentInput } from "./PostComment/CommentInput";
 
 interface CardPostProps {
   posts: Post[];
@@ -91,6 +92,9 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             }`}
           >
             {commentsVisibility[post.id] && <CommentPost postId={post.id} />}
+            <section>
+              {commentsVisibility[post.id] && <CommentInput postId={post.id} />}
+            </section>
           </footer>
         </article>
       ))}
