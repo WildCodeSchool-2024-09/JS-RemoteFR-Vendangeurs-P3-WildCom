@@ -20,7 +20,7 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
             <NavLink
               to={`/user/profile/${user?.id}`}
               className={({ isActive }: { isActive: boolean }) =>
-                `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl`
+                `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
               }
             >
               <FaRegUser className="size-7 text-accent-primary" />

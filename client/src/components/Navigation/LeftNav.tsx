@@ -13,7 +13,7 @@ export const LeftNav = () => {
           <NavLink
             to="/user/home"
             className={({ isActive }) =>
-              `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl mt-28 hover:text-accent-primary`
+              `${isActive ? " drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl mt-28 hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
             }
           >
             <RxHome className="size-7 text-accent-primary" />
@@ -25,10 +25,10 @@ export const LeftNav = () => {
           <NavLink
             to="/user/events"
             className={({ isActive }) =>
-              `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary`
+              `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
             }
           >
-            <RxCalendar className="size-7 text-accent-primary" />
+            <RxCalendar className="size-7 text-accent-primary " />
             Événements
           </NavLink>
         </li>
@@ -38,10 +38,10 @@ export const LeftNav = () => {
             <NavLink
               to="/admin/dashboard"
               className={({ isActive }) =>
-                `${isActive ? "text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary`
+                `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
               }
             >
-              <RxDashboard className="size-7 text-accent-primary" />
+              <RxDashboard className="size-7 text-accent-primary " />
               Administrateur
             </NavLink>
           )}

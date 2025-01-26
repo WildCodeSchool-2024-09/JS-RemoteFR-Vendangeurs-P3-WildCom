@@ -37,7 +37,7 @@ export const Header = () => {
 
       <section className="items-center justify-center hidden w-full gap-4 mb-6 lg:flex-col lg:flex text-text-primary">
         <Link
-          className="flex items-center justify-center gap-4 m-2 group"
+          className="flex items-center justify-center gap-4 m-2 group hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
           to={`/user/profile/${user?.id}`}
         >
           <img
@@ -53,7 +53,7 @@ export const Header = () => {
 
         <button
           type="button"
-          className="flex items-center justify-center gap-4 group"
+          className="flex items-center justify-center gap-4 group hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
           onClick={handleLogout}
         >
           <FiLogOut className="ml-4 size-4 md:size-7 text-accent-primary" />

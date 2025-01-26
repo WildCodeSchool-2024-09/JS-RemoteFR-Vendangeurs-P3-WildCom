@@ -28,7 +28,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
       {events.map((event) => (
         <article
           key={event.id}
-          className="z-10 flex flex-col h-auto gap-2 px-10 py-4 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary "
+          className="z-10 flex flex-col h-auto gap-2 px-10 py-4 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]"
         >
           <header className="flex items-center justify-between py-2">
             <Link to={`/user/profile/${event.user.id}`}>
@@ -86,7 +86,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             </section>
             <p className="mt-6 text-sm">{event.content}</p>
 
-            <hr className="mt-6 mb-2 border-accent-primary" />
+            <hr className="mt-6 mb-2 border-accent-primary drop-shadow-[0_3px_2px_rgba(65,242,77,1)]" />
             <div className="flex justify-between">
               <p className="flex gap-1 text-xs">{event.timestamp}</p>
 
