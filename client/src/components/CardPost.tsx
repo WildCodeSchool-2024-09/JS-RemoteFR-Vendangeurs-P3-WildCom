@@ -67,7 +67,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
               </figure>
             )}
             <p className="mt-6 text-sm">{post.content}</p>
-            <hr className="mt-6 mb-2 border-accent-primary drop-shadow-[0_3px_2px_rgba(65,242,77,1)]" />
+            <hr className="mt-6 mb-4 border-accent-primary drop-shadow-[0_3px_2px_rgba(65,242,77,1)]" />
             <div className="flex justify-between">
               <p className="flex gap-1 text-xs ">{post.timestamp}</p>
 

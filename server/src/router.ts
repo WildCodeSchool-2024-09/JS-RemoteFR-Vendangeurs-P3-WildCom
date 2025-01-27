@@ -43,6 +43,9 @@ router.post("/api/posts", postActions.add);
 router.get("/api/posts/:id/comments", postCommentsActions.browse);
 router.post("/api/posts/:id/comments", postCommentsActions.add);
 
+import postLikesActions from "./modules/post/postLike/postLikesActions";
+router.post("/api/posts/:id/likes", postLikesActions.add);
+
 /* ************************************************************************* */
 
 // Define events-related routes
