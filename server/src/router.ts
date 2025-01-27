@@ -44,7 +44,9 @@ router.get("/api/posts/:id/comments", postCommentsActions.browse);
 router.post("/api/posts/:id/comments", postCommentsActions.add);
 
 import postLikesActions from "./modules/post/postLike/postLikesActions";
+router.get("/api/users/posts-likes", postLikesActions.browse);
 router.post("/api/posts/:id/likes", postLikesActions.add);
+router.delete("/api/posts/:id/likes", postLikesActions.destroy);
 
 /* ************************************************************************* */
 

@@ -1,13 +1,28 @@
-import type { Result } from "../../../../database/client";
+import type { Result, Rows } from "../../../../database/client";
 import databaseClient from "../../../../database/client";
 
-type NewPostLike = {
+type PostLike = {
   userId: number;
   postId: number;
 };
 
 class PostLikesRepository {
-  async create(newPostLike: NewPostLike) {
+  async readLikesByUserId(userId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+        SELECT post_id
+        FROM post_like
+        WHERE user_id = ? 
+      `,
+      [userId],
+    );
+
+    const likedPosts = rows.map((row) => row.post_id);
+
+    return likedPosts;
+  }
+
+  async create(newPostLike: PostLike) {
     const [result] = await databaseClient.query<Result>(
       `
         INSERT INTO post_like (post_id, user_id)
@@ -17,6 +32,20 @@ class PostLikesRepository {
     );
 
     return result.insertId;
+  }
+
+  async delete(deletedPostLike: PostLike) {
+    const [result] = await databaseClient.query<Result>(
+      `
+        DELETE 
+        FROM post_like
+        WHERE user_id = ?
+        AND post_id = ?
+      `,
+      [deletedPostLike.userId, deletedPostLike.postId],
+    );
+
+    return result.affectedRows;
   }
 }
 
