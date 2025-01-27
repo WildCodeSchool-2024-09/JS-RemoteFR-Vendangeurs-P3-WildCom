@@ -1,13 +1,12 @@
 import type { RequestHandler } from "express";
 import postLikesRepository from "./postLikesRepository";
 
-const browse: RequestHandler = async (req, res, next) => {
+const readLikesByUserId: RequestHandler = async (req, res, next) => {
   try {
-    const userId = Number.parseInt(req.body.userId);
+    const userId = Number.parseInt(req.body.data.userId);
 
-    const likes = await postLikesRepository.readLikesByUserId(userId);
-
-    res.json(likes);
+    const userLikes = await postLikesRepository.readLikesByUserId(userId);
+    res.json(userLikes);
   } catch (err) {
     next(err);
   }
@@ -16,7 +15,7 @@ const browse: RequestHandler = async (req, res, next) => {
 const add: RequestHandler = async (req, res, next) => {
   try {
     const newPostLike = {
-      userId: Number.parseInt(req.body.userId),
+      userId: Number.parseInt(req.body.data.userId),
       postId: Number.parseInt(req.params.id),
     };
 
@@ -43,4 +42,4 @@ const destroy: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, add, destroy };
+export default { readLikesByUserId, add, destroy };
