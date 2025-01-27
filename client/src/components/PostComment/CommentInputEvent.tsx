@@ -4,10 +4,10 @@ import { IoSendSharp } from "react-icons/io5";
 import { useAuth } from "../../contexts/AuthContext";
 
 interface CommentInputProps {
-  postId: number;
+  eventId: number;
 }
 
-export const CommentInput: React.FC<CommentInputProps> = ({ postId }) => {
+export const CommentInputEvent: React.FC<CommentInputProps> = ({ eventId }) => {
   const [comment, setComment] = useState({
     userId: 0 as number | undefined,
     content: "",
@@ -37,7 +37,7 @@ export const CommentInput: React.FC<CommentInputProps> = ({ postId }) => {
       if (comment.content !== "") {
         try {
           await axios.post(
-            `${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments`,
+            `${import.meta.env.VITE_API_URL}/api/events/${eventId}/comments`,
             comment,
           );
         } catch (error) {
