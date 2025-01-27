@@ -53,8 +53,17 @@ CREATE TABLE post_like (
   user_id INT UNSIGNED NOT NULL,
   post_id INT UNSIGNED NOT NULL,
   CONSTRAINT fk_like_user FOREIGN KEY (user_id) REFERENCES user(id),
-  CONSTRAINT fk_like_post_id FOREIGN KEY (post_id) REFERENCES post(id),
+  CONSTRAINT fk_like_post FOREIGN KEY (post_id) REFERENCES post(id),
   UNIQUE (user_id, post_id)
+);
+
+CREATE TABLE event_participation (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  event_id INT UNSIGNED NOT NULL,
+  CONSTRAINT fk_participation_event FOREIGN KEY (event_id) REFERENCES event(id),
+  CONSTRAINT fk_participation_user FOREIGN KEY (user_id) REFERENCES user(id),
+  UNIQUE (user_id, event_id)
 );
 
 insert into user(id, email,firstname, lastname, password, avatar, linkedin, github, site, biography, role)
@@ -111,3 +120,10 @@ VALUES
 (5, 2 , 2),
 (6, 3 , 2),
 (7, 3 , 3);
+
+INSERT INTO event_participation(id, user_id, event_id )
+VALUES 
+(1, 1 , 1),
+(2, 2 , 2),
+(3, 3 , 3),
+(4, 4 , 1);
