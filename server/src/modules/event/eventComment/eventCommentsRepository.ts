@@ -1,7 +1,6 @@
+import type { Result, Rows } from "../../../../database/client";
 import databaseClient from "../../../../database/client";
 import formattedTimestamp from "../../../utils/formattedTimestamp";
-
-import type { Rows } from "../../../../database/client";
 
 type EventComment = {
   id: number;
@@ -17,6 +16,12 @@ type User = {
 
 type EventCommentWithUser = Omit<EventComment, "user_id"> & {
   user: User;
+};
+
+type NewEventComment = {
+  eventId: number;
+  userId: number;
+  content: string;
 };
 
 class EventCommentRepository {
@@ -52,6 +57,21 @@ class EventCommentRepository {
     }));
 
     return formattedRows;
+  }
+
+  async create(newEventComment: NewEventComment) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      INSERT INTO comment (event_id, user_id, content)
+      VALUES (?, ?, ?)
+      `,
+      [
+        newEventComment.eventId,
+        newEventComment.userId,
+        newEventComment.content,
+      ],
+    );
+    return result.insertId;
   }
 }
 
