@@ -6,6 +6,7 @@ import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import type { Event } from "../types/type";
 import { CommentEvent } from "./CommentEvent";
+import { CommentInputEvent } from "./PostComment/CommentInputEvent";
 
 interface CardEventProps {
   events: Event[];
@@ -112,6 +113,11 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             {commentsVisibility[event.id] && (
               <CommentEvent eventId={event.id} />
             )}
+            <section>
+              {commentsVisibility[event.id] && (
+                <CommentInputEvent eventId={event.id} />
+              )}
+            </section>
           </footer>
         </article>
       ))}
