@@ -37,7 +37,7 @@ export const Header = () => {
 
       <section className="items-center justify-center hidden w-full gap-4 mb-6 lg:flex-col lg:flex text-text-primary">
         <Link
-          className="flex items-center justify-center gap-4 m-2 group hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
+          className="flex items-center justify-center gap-4 m-2 group "
           to={`/user/profile/${user?.id}`}
         >
           <img
@@ -46,7 +46,7 @@ export const Header = () => {
             className="object-cover rounded-full size-10"
           />
 
-          <p className="text-xs sm:text-lg group-hover:text-accent-primary font-text">
+          <p className="text-xs sm:text-lg group-hover:text-accent-primary font-text group-hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]">
             {user?.username}
           </p>
         </Link>

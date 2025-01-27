@@ -1,7 +1,9 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { BiCog } from "react-icons/bi";
-import { FaRegCommentAlt } from "react-icons/fa";
+import { FaHeart, FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import type { Post } from "../types/type";
 import { CommentPost } from "./CommentPost";
 import { CommentInputPost } from "./PostComment/CommentInputPost";
@@ -11,9 +13,71 @@ interface CardPostProps {
 }
 
 export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
+  const { user } = useAuth();
+  const [liked, setLiked] = useState<{ [key: number]: boolean }>({});
   const [commentsVisibility, setCommentsVisibility] = useState<{
     [key: number]: boolean;
   }>({});
+
+  useEffect(() => {
+    const getLikes = async () => {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/users/posts-likes`,
+          {
+            data: {
+              userId: user?.id,
+            },
+          },
+        );
+
+        const likedPosts = response.data.reduce(
+          (acc: { [key: number]: boolean }, postId: number) => {
+            acc[postId] = true;
+            return acc;
+          },
+          {},
+        );
+
+        setLiked(likedPosts);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des likes", error);
+      }
+    };
+
+    if (user?.id) {
+      getLikes();
+    }
+  }, [user?.id]);
+
+  const handleLike = async (postId: number) => {
+    try {
+      if (liked[postId]) {
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/api/posts/${postId}/likes`,
+          {
+            data: {
+              userId: user?.id,
+            },
+          },
+        );
+      } else {
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/posts/${postId}/likes`,
+          {
+            data: {
+              userId: user?.id,
+            },
+          },
+        );
+      }
+
+      setLiked((prev) => ({
+        ...prev,
+        [postId]: !prev[postId],
+      }));
+    } catch (error) {}
+  };
 
   const handleShowComments = (postId: number) => {
     setCommentsVisibility((prev) => ({
@@ -67,20 +131,38 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
               </figure>
             )}
             <p className="mt-6 text-sm">{post.content}</p>
-            <hr className="mt-6 mb-2 border-accent-primary drop-shadow-[0_3px_2px_rgba(65,242,77,1)]" />
+            <hr className="mt-6 mb-4 border-accent-primary drop-shadow-[0_3px_2px_rgba(65,242,77,1)]" />
             <div className="flex justify-between">
               <p className="flex gap-1 text-xs ">{post.timestamp}</p>
 
-              <button
-                type="button"
-                className="flex items-center gap-3 text-sm group"
-                onClick={() => handleShowComments(post.id)}
-              >
-                <FaRegCommentAlt className="size-5 fill-accent-secondary group-hover:fill-accent-primary" />
-                <span className="group-hover:text-accent-primary">
-                  {post.totalComments}
-                </span>
-              </button>
+              <div className="flex items-center justify-center gap-6">
+                <button
+                  type="button"
+                  className="flex items-center gap-3 text-sm group"
+                  onClick={() => handleLike(post.id)}
+                >
+                  {liked[post.id] ? (
+                    <FaHeart className="size-5 fill-accent-primary" />
+                  ) : (
+                    <FaRegHeart className="size-5 fill-accent-secondary group-hover:fill-accent-primary" />
+                  )}
+
+                  <span className="group-hover:text-accent-primary">
+                    {post.totalLikes}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  className="flex items-center gap-3 text-sm group"
+                  onClick={() => handleShowComments(post.id)}
+                >
+                  <FaRegCommentAlt className="size-5 fill-accent-secondary group-hover:fill-accent-primary" />
+                  <span className="group-hover:text-accent-primary">
+                    {post.totalComments}
+                  </span>
+                </button>
+              </div>
             </div>
           </main>
 

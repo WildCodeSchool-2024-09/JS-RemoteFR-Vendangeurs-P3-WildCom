@@ -48,6 +48,15 @@ create table comment (
   constraint fk_comment_event foreign key (event_id) references event(id)
 );
 
+CREATE TABLE post_like (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  post_id INT UNSIGNED NOT NULL,
+  CONSTRAINT fk_like_user FOREIGN KEY (user_id) REFERENCES user(id),
+  CONSTRAINT fk_like_post_id FOREIGN KEY (post_id) REFERENCES post(id),
+  UNIQUE (user_id, post_id)
+);
+
 insert into user(id, email,firstname, lastname, password, avatar, linkedin, github, site, biography, role)
 values
   (1, "example@mail.com","Admin", "Istrateur", "$argon2id$v=19$m=65536,t=3,p=4$MEZfaWwCSctWWpxE1hPm/g$EQxm4Q2ULXL+lL9F0pSBOuwR++rMzdk68Jh1yX+a6A8", "http://localhost:3000/src/assets/images/pictureprofil.webp", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "admin"),
@@ -93,3 +102,12 @@ values
 (19, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 1, 3),
 (20, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 3, 3);
 
+INSERT INTO post_like(id, user_id, post_id )
+VALUES 
+(1, 1 , 1),
+(2, 2 , 1),
+(3, 3 , 1),
+(4, 1 , 2),
+(5, 2 , 2),
+(6, 3 , 2),
+(7, 3 , 3);

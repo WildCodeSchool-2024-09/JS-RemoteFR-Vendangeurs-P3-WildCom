@@ -11,6 +11,7 @@ export type Post = {
   content: string;
   timestamp: string;
   totalComments: number;
+  totalLikes: number;
   user: User;
 };
 
