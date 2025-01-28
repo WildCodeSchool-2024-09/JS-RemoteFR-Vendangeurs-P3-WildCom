@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { BiCog } from "react-icons/bi";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { LuCalendar, LuCalendarCheck2 } from "react-icons/lu";
-import { MdWhereToVote } from "react-icons/md";
+import { MdDeleteOutline, MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -98,10 +98,22 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
     try {
       await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/events/${eventId}`,
+        { withCredentials: true },
       );
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const [menuEventVisible, setMenuEventVisible] = useState<{
+    [key: number]: boolean;
+  }>({});
+
+  const toggleMenu = (postId: number) => {
+    setMenuEventVisible((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
   };
 
   return (
@@ -132,11 +144,27 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
               <span className="text-xs lg:text-sm font-normal px-3 bg-[#176b1d]  border-2 border-accent-primary rounded">
                 {event.category}
               </span>
-              <button onClick={() => handleDeleteEvent(event.id)} type="button">
-                <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
-                  <BiCog className="size-5 text-text-secondary" />
-                </figure>
-              </button>
+              <div className="relative">
+                <button onClick={() => toggleMenu(event.id)} type="button">
+                  <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
+                    <BiCog className="size-5 text-text-secondary" />
+                  </figure>
+                </button>
+                {menuEventVisible[event.id] && (
+                  <div className="absolute z-50 w-40 bg-white border lg:-top-1 right-0 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] ">
+                    {(user?.id === event.user.id || user?.role === "admin") && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteEvent(event.id)}
+                        className="flex w-full gap-2 px-4 py-2 text-sm text-left hover:text-text-red"
+                      >
+                        <MdDeleteOutline className="size-5 text-text-red " />
+                        Supprimer
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             </section>
           </header>
 
