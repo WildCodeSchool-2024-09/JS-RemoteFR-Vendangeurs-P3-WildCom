@@ -5,7 +5,7 @@ import formattedTimestamp from "../../../utils/formattedTimestamp";
 type EventComment = {
   id: number;
   content: string;
-  user_id: number;
+  user_id?: number;
 };
 
 type User = {
@@ -72,6 +72,19 @@ class EventCommentRepository {
       ],
     );
     return result.insertId;
+  }
+
+  async update(comment: EventComment) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      UPDATE comment
+      SET content = ?
+      WHERE id = ?
+      `,
+      [comment.content, comment.id],
+    );
+
+    return result.affectedRows;
   }
 }
 

@@ -53,7 +53,6 @@ router.delete("/api/posts/:id/likes", postLikesActions.destroy);
 
 // Define events-related routes
 import eventActions from "./modules/event/eventActions";
-import eventCommentActions from "./modules/event/eventComment/eventCommentActions";
 
 router.get("/api/events", eventActions.browse);
 router.put("/api/events/:id", eventActions.edit);
@@ -61,7 +60,9 @@ router.post("/api/events", eventActions.add);
 router.post("/api/events/:id/comments", eventCommentActions.add);
 router.delete("/api/events/:id", eventActions.destroy);
 
+import eventCommentActions from "./modules/event/eventComment/eventCommentActions";
 router.get("/api/events/:id/comments", eventCommentActions.browse);
+router.put("/api/events/comments/:id", eventCommentActions.edit);
 
 import eventParticipationActions from "./modules/event/eventParticipation/eventParticipationActions";
 router.post(
