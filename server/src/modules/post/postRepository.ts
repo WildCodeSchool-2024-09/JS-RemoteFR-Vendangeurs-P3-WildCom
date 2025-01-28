@@ -81,6 +81,14 @@ class PostRepository {
 
     return formattedRows;
   }
+  async delete(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "DELETE FROM post WHERE id = ?",
+
+      [id],
+    );
+    return result.affectedRows;
+  }
 }
 
 export default new PostRepository();

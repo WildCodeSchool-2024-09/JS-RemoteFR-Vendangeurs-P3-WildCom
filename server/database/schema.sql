@@ -1,4 +1,3 @@
--- SQLBook: Code
 create table user (
   id int unsigned primary key auto_increment not null,
   email varchar(255) not null unique,
@@ -43,17 +42,17 @@ create table comment (
   user_id int unsigned not null,
   post_id int unsigned null,
   event_id int unsigned null,
-  constraint fk_comment_user foreign key (user_id) references user(id),
-  constraint fk_comment_post foreign key (post_id) references post(id),
-  constraint fk_comment_event foreign key (event_id) references event(id)
+  constraint fk_comment_user foreign key (user_id) references user(id) on delete CASCADE,
+  constraint fk_comment_post foreign key (post_id) references post(id) on delete CASCADE,
+  constraint fk_comment_event foreign key (event_id) references event(id)  on delete CASCADE 
 );
 
 CREATE TABLE post_like (
   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
   user_id INT UNSIGNED NOT NULL,
   post_id INT UNSIGNED NOT NULL,
-  CONSTRAINT fk_like_user FOREIGN KEY (user_id) REFERENCES user(id),
-  CONSTRAINT fk_like_post_id FOREIGN KEY (post_id) REFERENCES post(id),
+  CONSTRAINT fk_like_user FOREIGN KEY (user_id) REFERENCES user(id) on delete CASCADE,
+  CONSTRAINT fk_like_post_id FOREIGN KEY (post_id) REFERENCES post(id) on delete CASCADE,
   UNIQUE (user_id, post_id)
 );
 
