@@ -61,8 +61,8 @@ CREATE TABLE event_participation (
   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
   user_id INT UNSIGNED NOT NULL,
   event_id INT UNSIGNED NOT NULL,
-  CONSTRAINT fk_participation_event FOREIGN KEY (event_id) REFERENCES event(id),
-  CONSTRAINT fk_participation_user FOREIGN KEY (user_id) REFERENCES user(id),
+  CONSTRAINT fk_participation_event FOREIGN KEY (event_id) REFERENCES event(id) ON DELETE CASCADE,
+  CONSTRAINT fk_participation_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
   UNIQUE (user_id, event_id)
 );
 
