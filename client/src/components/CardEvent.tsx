@@ -94,6 +94,16 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
     }));
   };
 
+  const handleDeleteEvent = async (eventId: number) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/events/${eventId}`,
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <section className="flex flex-col items-center flex-grow w-full gap-5 lg:gap-10">
       {events.map((event) => (
@@ -122,7 +132,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
               <span className="text-xs lg:text-sm font-normal px-3 bg-[#176b1d]  border-2 border-accent-primary rounded">
                 {event.category}
               </span>
-              <button type="button">
+              <button onClick={() => handleDeleteEvent(event.id)} type="button">
                 <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
                   <BiCog className="size-5 text-text-secondary" />
                 </figure>
