@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiCog } from "react-icons/bi";
 import { FaHeart, FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import type { Post } from "../types/type";
@@ -18,6 +19,17 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
   const [commentsVisibility, setCommentsVisibility] = useState<{
     [key: number]: boolean;
   }>({});
+
+  const [menuPostVisible, setMenuPostVisible] = useState<{
+    [key: number]: boolean;
+  }>({});
+
+  const toggleMenu = (postId: number) => {
+    setMenuPostVisible((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
 
   useEffect(() => {
     const getLikes = async () => {
@@ -49,6 +61,22 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
       getLikes();
     }
   }, [user?.id]);
+
+  const handleDeletePost = async (postId: number) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/posts/${postId}`,
+        {
+          data: {
+            userId: user?.id,
+          },
+          withCredentials: true,
+        },
+      );
+    } catch (error) {
+      console.error("Erreur lors de la suppression du post", error);
+    }
+  };
 
   const handleLike = async (postId: number) => {
     try {
@@ -109,14 +137,30 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             </Link>
 
             <section className="flex items-center gap-4">
-              <span className="text-sm font-normal px-3 bg-[#176b1d]  border-2 border-accent-primary rounded">
+              <span className="text-sm font-normal px-3 bg-[#176b1d] border-2 border-accent-primary rounded">
                 {post.category}
               </span>
-              <button type="button">
-                <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
-                  <BiCog className="text-text-secondary size-5" />
-                </figure>
-              </button>
+              <div className="relative">
+                <button type="button" onClick={() => toggleMenu(post.id)}>
+                  <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
+                    <BiCog className="text-text-secondary size-5" />
+                  </figure>
+                </button>
+                {menuPostVisible[post.id] && (
+                  <div className="absolute z-50 w-40 bg-white border lg:-top-1 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] right-0 ">
+                    {(user?.id === post.user.id || user?.role === "admin") && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeletePost(post.id)}
+                        className="right-0 flex w-full gap-2 px-4 py-2 text-sm text-left hover:text-text-red"
+                      >
+                        <MdDeleteOutline className="size-5 text-text-red " />
+                        Supprimer
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             </section>
           </header>
 
