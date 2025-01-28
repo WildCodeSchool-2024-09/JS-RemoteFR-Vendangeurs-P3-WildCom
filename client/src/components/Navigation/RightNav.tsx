@@ -4,6 +4,8 @@ import { FaRegUser } from "react-icons/fa";
 
 import type { LocationProps } from "../../types/type";
 
+import ModalButton from "../ModalButton";
+
 export const RightNav: React.FC<LocationProps> = ({ location }) => {
   // Adapter avec l'utilisateur connecté
   if (location === "/user/profile/1") {
@@ -28,5 +30,14 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
       </nav>
     );
   }
+
+  if (location === "/user/home") {
+    return (
+      <section className="flex items-center justify-center w-full h-1/4">
+        <ModalButton>Ajouter une publication</ModalButton>
+      </section>
+    );
+  }
+
   return null;
 };

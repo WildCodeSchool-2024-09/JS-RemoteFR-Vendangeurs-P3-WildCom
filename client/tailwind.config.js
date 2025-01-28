@@ -22,6 +22,7 @@ export default {
       accent: {
         primary: "var(--accent-primary)",
         secondary: "var(--accent-secondary)",
+        primaryhover: "var(--accent-primary-hover)",
       },
     },
     extend: {
