@@ -1,9 +1,12 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { BiCog } from "react-icons/bi";
 import { FaRegCommentAlt } from "react-icons/fa";
+import { LuCalendar, LuCalendarCheck2 } from "react-icons/lu";
 import { MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import type { Event } from "../types/type";
 import { CommentEvent } from "./CommentEvent";
 import { CommentInputEvent } from "./PostComment/CommentInputEvent";
@@ -13,9 +16,76 @@ interface CardEventProps {
 }
 
 export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
+  const { user } = useAuth();
+  const [participated, setParticipated] = useState<{ [key: number]: boolean }>(
+    {},
+  );
   const [commentsVisibility, setCommentsVisibility] = useState<{
     [key: number]: boolean;
   }>({});
+
+  useEffect(() => {
+    const getParticipations = async () => {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/users/events-participations`,
+          {
+            data: {
+              userId: user?.id,
+            },
+          },
+        );
+
+        const participatedEvents = response.data.reduce(
+          (acc: { [key: number]: boolean }, eventId: number) => {
+            acc[eventId] = true;
+            return acc;
+          },
+          {},
+        );
+
+        setParticipated(participatedEvents);
+      } catch (error) {
+        console.error(
+          "Erreur lors de la récupération des participations",
+          error,
+        );
+      }
+    };
+
+    if (user?.id) {
+      getParticipations();
+    }
+  }, [user?.id]);
+
+  const handleLike = async (eventId: number) => {
+    try {
+      if (participated[eventId]) {
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/api/events/${eventId}/participations`,
+          {
+            data: {
+              userId: user?.id,
+            },
+          },
+        );
+      } else {
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/events/${eventId}/participations`,
+          {
+            data: {
+              userId: user?.id,
+            },
+          },
+        );
+      }
+
+      setParticipated((prev) => ({
+        ...prev,
+        [eventId]: !prev[eventId],
+      }));
+    } catch (error) {}
+  };
 
   const handleShowComments = (eventId: number) => {
     setCommentsVisibility((prev) => ({
@@ -91,16 +161,33 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             <div className="flex justify-between">
               <p className="flex gap-1 text-xs">{event.timestamp}</p>
 
-              <button
-                type="button"
-                className="flex items-center gap-3 text-sm group"
-                onClick={() => handleShowComments(event.id)}
-              >
-                <FaRegCommentAlt className="size-5 fill-accent-secondary group-hover:fill-accent-primary" />
-                <span className="group-hover:text-accent-primary">
-                  {event.totalComments}
-                </span>
-              </button>
+              <div className="flex items-center justify-center gap-6">
+                <button
+                  type="button"
+                  className="flex items-center gap-3 text-sm group"
+                  onClick={() => handleLike(event.id)}
+                >
+                  {participated[event.id] ? (
+                    <LuCalendarCheck2 className="size-6 text-accent-primary" />
+                  ) : (
+                    <LuCalendar className="size-6 text-accent-secondary group-hover:text-accent-primary" />
+                  )}
+                  <span className="group-hover:text-accent-primary">
+                    {event.totalParticipations}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  className="flex items-center gap-3 text-sm group"
+                  onClick={() => handleShowComments(event.id)}
+                >
+                  <FaRegCommentAlt className="size-5 fill-accent-secondary group-hover:fill-accent-primary" />
+                  <span className="group-hover:text-accent-primary">
+                    {event.totalComments}
+                  </span>
+                </button>
+              </div>
             </div>
           </main>
           <footer

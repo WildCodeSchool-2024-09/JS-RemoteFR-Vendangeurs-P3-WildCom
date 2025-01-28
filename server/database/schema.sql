@@ -56,6 +56,15 @@ CREATE TABLE post_like (
   UNIQUE (user_id, post_id)
 );
 
+CREATE TABLE event_participation (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  event_id INT UNSIGNED NOT NULL,
+  CONSTRAINT fk_participation_event FOREIGN KEY (event_id) REFERENCES event(id) ON DELETE CASCADE,
+  CONSTRAINT fk_participation_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+  UNIQUE (user_id, event_id)
+);
+
 insert into user(id, email,firstname, lastname, password, avatar, linkedin, github, site, biography, role)
 values
   (1, "example@mail.com","Admin", "Istrateur", "$argon2id$v=19$m=65536,t=3,p=4$MEZfaWwCSctWWpxE1hPm/g$EQxm4Q2ULXL+lL9F0pSBOuwR++rMzdk68Jh1yX+a6A8", "http://localhost:3000/src/assets/images/pictureprofil.webp", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "admin"),
@@ -110,3 +119,10 @@ VALUES
 (5, 2 , 2),
 (6, 3 , 2),
 (7, 3 , 3);
+
+INSERT INTO event_participation(id, user_id, event_id )
+VALUES 
+(1, 1 , 1),
+(2, 2 , 2),
+(3, 3 , 3),
+(4, 4 , 1);

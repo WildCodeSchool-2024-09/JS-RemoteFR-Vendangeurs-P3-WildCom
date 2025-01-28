@@ -63,4 +63,15 @@ router.delete("/api/events/:id", eventActions.destroy);
 
 router.get("/api/events/:id/comments", eventCommentActions.browse);
 
+import eventParticipationActions from "./modules/event/eventParticipation/eventParticipationActions";
+router.post(
+  "/api/users/events-participations",
+  eventParticipationActions.readParticipationsByUserId,
+);
+router.post("/api/events/:id/participations", eventParticipationActions.add);
+router.delete(
+  "/api/events/:id/participations",
+  eventParticipationActions.destroy,
+);
+
 export default router;
