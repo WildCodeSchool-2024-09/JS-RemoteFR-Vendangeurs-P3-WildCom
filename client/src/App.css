@@ -17,6 +17,7 @@
     --text-red: #ff0000;
 
     --accent-primary: rgb(65, 242, 77);
+    --accent-primary-hover: #2ca333;
     --accent-secondary: #c3fcf2;
 
     --shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
