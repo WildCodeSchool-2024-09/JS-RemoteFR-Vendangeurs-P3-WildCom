@@ -6,6 +6,7 @@ import { LeftNav } from "../Navigation/LeftNav";
 
 import { FiLogOut } from "react-icons/fi";
 import { Logo } from "../Logo";
+import MobileNav from "../Navigation/MobileNav";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -27,8 +28,11 @@ export const Header = () => {
 
   return (
     <header className="z-10 flex w-full h-20 lg:fixed lg:left-0 lg:top-0 lg:bottom-0 bg-text-secondary lg:bg-bg_opacity-secondary lg:flex-col lg:justify-between lg:w-1/5 lg:h-screen">
-      <section className="flex w-full px-4 py-6 lg:justify-center ">
+      <section className="flex w-1/2 px-4 py-6 lg:w-full lg:justify-center ">
         <Logo isLayout={true} />
+      </section>
+      <section className="flex w-1/2 lg:hidden ">
+        <MobileNav />
       </section>
 
       <section className="flex-grow hidden lg:block">
