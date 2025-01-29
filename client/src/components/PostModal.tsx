@@ -1,22 +1,30 @@
+import axios from "axios";
 import { useState } from "react";
-import { BiImageAdd } from "react-icons/bi";
 import { FaRegUserCircle } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface PostModalProps {
   closeModal: () => void;
 }
 
 function PostModal({ closeModal }: PostModalProps) {
-  const [image, setImage] = useState<string | ArrayBuffer | null>(null);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
+  const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handlePublish = async () => {
+    if (!content.trim()) return;
+
+    setLoading(true);
+
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/posts`, {
+        content,
+      });
+
+      closeModal();
+    } catch (error) {
+      console.error("Erreur lors de la publication", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -37,34 +45,10 @@ function PostModal({ closeModal }: PostModalProps) {
             <p className="text-base text-text-primary">Username</p>
           </section>
           <form className="flex gap-3" action="">
-            {image !== null && (
-              <button
-                onClick={() => setImage(null)}
-                type="button"
-                className="text-text-primary hover:text-accent-primary cursor-pointer text-3xl"
-              >
-                <RiDeleteBin6Line />
-              </button>
-            )}
-            {image === null && (
-              <label
-                className="text-text-primary hover:text-accent-primary cursor-pointer text-4xl"
-                htmlFor="upload"
-              >
-                <BiImageAdd />
-              </label>
-            )}
-            <input
-              onChange={handleChange}
-              className="hidden"
-              id="upload"
-              type="file"
-            />
+            <input className="hidden" id="upload" type="file" />
           </form>
         </header>
         <form className="flex flex-col gap-4" action="">
-          {/* {image && <img className="rounded-xl" src={image} alt="" />} */}
-
           <textarea
             maxLength={65535}
             style={{ resize: "none" }}
@@ -73,24 +57,26 @@ function PostModal({ closeModal }: PostModalProps) {
             name=""
             placeholder="Rédigez une publication"
             id=""
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
           />
 
-          <select
-            name=""
-            id=""
-            // onChange={}
-            className="rounded-xl px-3 py-2"
-          >
+          <select name="" id="" className="rounded-xl px-3 py-2">
             <option className="bg-bg-secondary" value="Divers">
               Choisissez une catégorie
             </option>
           </select>
 
           <button
+            onClick={handlePublish}
+            disabled={loading}
             type="submit"
             className="text-xl text-text-secondary bg-accent-primary hover:bg-accent-primaryhover mt-4 w-fit self-center px-6 py-2 rounded-xl font-text"
           >
-            Publier
+            {loading ? "Publication..." : "Publier"}
+          </button>
+          <button type="button" onClick={closeModal} disabled={loading}>
+            Annuler
           </button>
         </form>
 
@@ -107,6 +93,3 @@ function PostModal({ closeModal }: PostModalProps) {
 }
 
 export default PostModal;
-
-// transformer l'image en url pour pouvoir la stocker dans la bdd
-// lier le bouton publier à la bdd (create)

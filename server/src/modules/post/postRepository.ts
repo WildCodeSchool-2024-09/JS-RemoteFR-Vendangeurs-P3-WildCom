@@ -25,10 +25,10 @@ class PostRepository {
   async create(post: Omit<Post, "id">) {
     const [result] = await databaseClient.query<Result>(
       `
-      INSERT INTO post (content, picture, category, user_id)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO post (content, user_id)
+      VALUES (?, ?)
       `,
-      [post.content, post.picture, post.category, post.user_id],
+      [post.content, post.user_id],
     );
 
     return result.insertId;
