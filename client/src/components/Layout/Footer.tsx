@@ -6,7 +6,7 @@ export const Footer: React.FC<LocationProps> = ({ location }) => {
   return (
     <>
       <footer className="top-0 bottom-0 right-0 flex-col hidden w-1/5 lg:fixed bg-bg_opacity-secondary lg:flex">
-        <section className="flex-grow hidden lg:flex">
+        <section className="flex-grow hidden lg:flex justify-center pt-10">
           <RightNav location={location} />
         </section>
 

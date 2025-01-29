@@ -4,11 +4,11 @@ import formattedTimestamp from "../../utils/formattedTimestamp";
 
 type Post = {
   id: number;
-  category: string;
-  picture: string | null;
+  category?: string;
+  picture?: string | null;
   content: string;
   timestamp?: string;
-  user_id: number;
+  userId: number;
 };
 
 type User = {
@@ -17,18 +17,18 @@ type User = {
   avatar: string;
 };
 
-type PostWithUser = Omit<Post, "user_id"> & {
+type PostWithUser = Omit<Post, "userId"> & {
   user: User;
 };
 
 class PostRepository {
-  async create(post: Omit<Post, "id">) {
+  async create(content: string, category: string, userId: number) {
     const [result] = await databaseClient.query<Result>(
       `
-      INSERT INTO post (content, picture, category, user_id)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO post (content, category, user_id)
+      VALUES (?, ?, ?)
       `,
-      [post.content, post.picture, post.category, post.user_id],
+      [content, category, userId],
     );
 
     return result.insertId;
