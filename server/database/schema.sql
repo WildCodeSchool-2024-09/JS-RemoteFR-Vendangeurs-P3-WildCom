@@ -17,7 +17,7 @@ create table post (
   content text not null,
   picture varchar(255),
   created_at timestamp default current_timestamp not null,
-  category varchar(255) null,
+  category varchar(255) not null,
   user_id int unsigned not null,
   constraint fk_post_user foreign key (user_id) references user(id)
 );

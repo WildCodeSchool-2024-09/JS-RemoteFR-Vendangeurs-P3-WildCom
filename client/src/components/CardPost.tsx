@@ -137,9 +137,11 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             </Link>
 
             <section className="flex items-center gap-4">
-              <span className="text-sm font-normal px-3 bg-[#176b1d] border-2 border-accent-primary rounded">
-                {post.category}
-              </span>
+              {post.category && (
+                <span className="text-sm font-normal px-3 bg-[#176b1d] border-2 border-accent-primary rounded">
+                  {post.category}
+                </span>
+              )}
               <div className="relative">
                 <button type="button" onClick={() => toggleMenu(post.id)}>
                   <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
