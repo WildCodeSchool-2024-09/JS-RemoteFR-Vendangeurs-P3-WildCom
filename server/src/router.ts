@@ -30,6 +30,7 @@ import userPostAction from "./modules/user/userPost/userPostAction";
 
 router.get("/api/user/:id", userActions.read);
 router.get("/api/user/:id/posts", userPostAction.browse);
+router.put("/api/user/:id", userActions.update);
 
 /* ************************************************************************* */
 
