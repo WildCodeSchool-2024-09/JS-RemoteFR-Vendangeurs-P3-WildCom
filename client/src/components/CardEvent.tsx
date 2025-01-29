@@ -236,13 +236,14 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             }`}
           >
             {commentsVisibility[event.id] && (
-              <CommentEvent eventId={event.id} />
+              <>
+                <CommentEvent eventId={event.id} />
+
+                <section>
+                  <CommentInputEvent eventId={event.id} />
+                </section>
+              </>
             )}
-            <section>
-              {commentsVisibility[event.id] && (
-                <CommentInputEvent eventId={event.id} />
-              )}
-            </section>
           </footer>
         </article>
       ))}

@@ -1,7 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { FaPen } from "react-icons/fa";
+import { IoSendSharp } from "react-icons/io5";
+import { RxCross2 } from "react-icons/rx";
 import { SlOptions } from "react-icons/sl";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import type { Comment } from "../types/type";
 
 interface CommentEventProps {
@@ -9,7 +13,13 @@ interface CommentEventProps {
 }
 
 export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
+  const { user } = useAuth();
   const [comments, setComments] = useState<Comment[]>([]);
+  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
+    null,
+  );
+  const [isEditingComment, setIsEditingComment] = useState<number | null>(null);
+  const [editedCommentContent, setEditedCommentContent] = useState<string>("");
 
   useEffect(() => {
     const fetchCommentEvents = async () => {
@@ -25,32 +35,128 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
     fetchCommentEvents();
   }, [eventId]);
 
+  const toggleCommentMenu = (commentId: number) => {
+    setSelectedCommentId((prevId) => (prevId === commentId ? null : commentId));
+  };
+
+  const startEditingComment = (commentId: number, content: string) => {
+    setIsEditingComment(commentId);
+    setEditedCommentContent(content);
+  };
+
+  const cancelEditingComment = () => {
+    setIsEditingComment(null);
+    setEditedCommentContent("");
+  };
+
+  const submitEditedComment = async (e: React.FormEvent, commentId: number) => {
+    e.preventDefault();
+
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/events/comments/${commentId}`,
+        { content: editedCommentContent },
+        { withCredentials: true },
+      );
+
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment.id === commentId
+            ? { ...comment, content: editedCommentContent }
+            : comment,
+        ),
+      );
+
+      cancelEditingComment();
+    } catch (error) {
+      console.error("Erreur lors de la modification du commentaire", error);
+    }
+  };
   return (
     <div>
       {comments.length === 0 ? (
         <p>Aucun commentaire à afficher</p>
       ) : (
-        comments.map((comments) => (
-          <div key={comments.id} className="flex flex-col my-4">
-            <p className="self-end text-xs">{comments.timestamp}</p>
+        comments.map((comment) => (
+          <div key={comment.id} className="flex flex-col my-4">
+            <p className="self-end text-xs">{comment.timestamp}</p>
             <div className="flex gap-4">
               <figure className="w-14">
-                <Link to={`/user/profile/${comments.user.id}`}>
+                <Link to={`/user/profile/${comment.user.id}`}>
                   <img
-                    src={comments.user.avatar}
-                    alt={`Avatar de ${comments.user.username}`}
+                    src={comment.user.avatar}
+                    alt={`Avatar de ${comment.user.username}`}
                     className="object-cover rounded-full size-12"
                   />
                 </Link>
               </figure>
+
               <article className="w-full h-auto p-4 space-y-2 text-sm rounded-xl bg-bg-secondary text-text-secondary">
-                <header className="flex items-start justify-between">
-                  <p className="font-bold">{comments.user.username}</p>
-                  <button type="button">
+                <header className="relative flex items-start justify-between">
+                  <p className="font-bold">{comment.user.username}</p>
+
+                  {/* Bouton d'options */}
+                  <button
+                    type="button"
+                    onClick={() => toggleCommentMenu(comment.id)}
+                  >
                     <SlOptions />
                   </button>
+
+                  {/* Menu d'actions */}
+                  {selectedCommentId === comment.id && (
+                    <div className="absolute flex items-center justify-center w-8 h-4 m-2 text-xs font-medium right-5 -top-3 text-text-secondary font-text ">
+                      {(user?.id === comment.user.id ||
+                        user?.role === "admin") && (
+                        <button
+                          type="button"
+                          className="flex items-center justify-center p-1 mx-1 rounded-md group hover:border border-bg_opacity-secondary"
+                          onClick={() =>
+                            startEditingComment(comment.id, comment.content)
+                          }
+                        >
+                          <FaPen className="size-3 group-hover:text-accent-primary" />
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </header>
-                <main className="font-normal">{comments.content}</main>
+
+                {/* Contenu du commentaire */}
+                <main className="h-auto font-normal">
+                  {isEditingComment === comment.id ? (
+                    <form
+                      className="flex flex-col"
+                      onSubmit={(e) => submitEditedComment(e, comment.id)}
+                    >
+                      <textarea
+                        className="w-full p-2 resize-none rounded-xl min-h-24"
+                        onChange={(e) =>
+                          setEditedCommentContent(e.target.value)
+                        }
+                        value={editedCommentContent}
+                      />
+
+                      <div className="flex items-center justify-end h-8 gap-4 mt-2 mr-1 ">
+                        <button
+                          type="button"
+                          className="flex items-center justify-center w-6 h-6 rounded-md group hover:border border-bg_opacity-secondary"
+                          onClick={cancelEditingComment}
+                        >
+                          <RxCross2 className="size-4 group-hover:text-[#ff0000]" />
+                        </button>
+                        <button
+                          type="submit"
+                          className="flex items-center justify-center w-6 h-6 rounded-md group hover:border border-bg_opacity-secondary"
+                        >
+                          <IoSendSharp className="size-4 text-accent-primary" />
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <p>{comment.content}</p>
+                  )}
+                </main>
               </article>
             </div>
           </div>
