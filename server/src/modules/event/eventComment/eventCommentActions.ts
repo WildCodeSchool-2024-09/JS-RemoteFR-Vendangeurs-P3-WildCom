@@ -11,5 +11,38 @@ const browse: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const newEventComment = {
+      content: req.body.content,
+      eventId: Number.parseInt(req.params.id),
+      userId: Number.parseInt(req.body.userId),
+    };
 
-export default { browse };
+    await eventCommentsRepository.create(newEventComment);
+
+    res.status(201).json({ message: "Commentaire envoyé !" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    const comment = {
+      id: Number.parseInt(req.params.id),
+      content: req.body.content,
+    };
+
+    const affectedRows = await eventCommentsRepository.update(comment);
+
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    }
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { browse, add, edit };

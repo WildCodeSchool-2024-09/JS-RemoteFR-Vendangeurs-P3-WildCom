@@ -55,7 +55,7 @@ function Profil() {
       {users.map((user) => (
         <section
           key={user.id}
-          className="relative z-10 flex flex-col gap-6 px-10 py-4 mx-0 border-2 rounded-xl bg-bg_opacity-primary border-bg_opacity-secondary font-text text-text-primary"
+          className="relative z-10 flex flex-col gap-6 px-10 py-4 mx-0 border-2 rounded-xl bg-bg_opacity-primary border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]"
         >
           <div className="flex flex-col gap-6 mx-4 md:flex-row ">
             <div className="self-center">
@@ -80,7 +80,12 @@ function Profil() {
                 {user.github && (
                   <li className="font-bold">
                     Github :{" "}
-                    <a className="font-extralight " href={user.github}>
+                    <a
+                      className="font-extralight hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] "
+                      href={user.github}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
                       {user.github}
                     </a>
                   </li>
@@ -88,7 +93,12 @@ function Profil() {
                 {user.linkedin && (
                   <li className="font-bold">
                     Linkedin :{" "}
-                    <a className="font-extralight" href={user.linkedin}>
+                    <a
+                      className="font-extralight hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
+                      href={user.linkedin}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
                       {user.linkedin}
                     </a>
                   </li>
@@ -96,7 +106,12 @@ function Profil() {
                 {user.site && (
                   <li className="font-bold">
                     Site :{" "}
-                    <a className="font-extralight" href={user.site}>
+                    <a
+                      className="font-extralight hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
+                      href={user.site}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
                       {user.site}
                     </a>
                   </li>

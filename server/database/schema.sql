@@ -1,4 +1,3 @@
--- SQLBook: Code
 create table user (
   id int unsigned primary key auto_increment not null,
   email varchar(255) not null unique,
@@ -10,7 +9,7 @@ create table user (
   linkedin VARCHAR(255) NULL,
   site VARCHAR(255) NULL,
   biography text NULL,
-  is_admin boolean not null default false
+  role VARCHAR(255) NOT NULL DEFAULT "user"
 );
 
 create table post (
@@ -43,17 +42,35 @@ create table comment (
   user_id int unsigned not null,
   post_id int unsigned null,
   event_id int unsigned null,
-  constraint fk_comment_user foreign key (user_id) references user(id),
-  constraint fk_comment_post foreign key (post_id) references post(id),
-  constraint fk_comment_event foreign key (event_id) references event(id)
+  constraint fk_comment_user foreign key (user_id) references user(id) on delete CASCADE,
+  constraint fk_comment_post foreign key (post_id) references post(id) on delete CASCADE,
+  constraint fk_comment_event foreign key (event_id) references event(id)  on delete CASCADE 
 );
 
-insert into user(id, email,firstname, lastname, password, avatar, is_admin)
+CREATE TABLE post_like (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  post_id INT UNSIGNED NOT NULL,
+  CONSTRAINT fk_like_user FOREIGN KEY (user_id) REFERENCES user(id) on delete CASCADE,
+  CONSTRAINT fk_like_post_id FOREIGN KEY (post_id) REFERENCES post(id) on delete CASCADE,
+  UNIQUE (user_id, post_id)
+);
+
+CREATE TABLE event_participation (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  event_id INT UNSIGNED NOT NULL,
+  CONSTRAINT fk_participation_event FOREIGN KEY (event_id) REFERENCES event(id) ON DELETE CASCADE,
+  CONSTRAINT fk_participation_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+  UNIQUE (user_id, event_id)
+);
+
+insert into user(id, email,firstname, lastname, password, avatar, linkedin, github, site, biography, role)
 values
-  (1, "example@mail.com","Admin", "Istrateur", "123", "http://localhost:3000/src/assets/images/pictureprofil.webp", true),
-  (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "111", "http://localhost:3000/src/assets/images/demo/woman1.jpg", false),
-  (3, "adrien.morel@mail.com", "Adrien", "Morel", "222", "http://localhost:3000/src/assets/images/demo/man.jpg", false),
-  (4, "clara.duval@mail.com", "Clara", "Duval", "333", "http://localhost:3000/src/assets/images/demo/woman2.jpg", false);
+  (1, "example@mail.com","Admin", "Istrateur", "$argon2id$v=19$m=65536,t=3,p=4$MEZfaWwCSctWWpxE1hPm/g$EQxm4Q2ULXL+lL9F0pSBOuwR++rMzdk68Jh1yX+a6A8", "http://localhost:3000/src/assets/images/pictureprofil.webp", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "admin"),
+  (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "$argon2id$v=19$m=65536,t=3,p=4$XEraD/BNcArp3WUwG3N/LQ$ZHbE7iOLtctLKNoaiFCGCprbj0MLJyNccQdTQr18NaA", "http://localhost:3000/src/assets/images/demo/woman1.jpg", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user"),
+  (3, "adrien.morel@mail.com", "Adrien", "Morel", "$argon2id$v=19$m=65536,t=3,p=4$5F8ilwCFIjwEpUSKYJ7Zfw$LcUOU1ufJi3O2uYcAVrprMMJjVYJc8hkLRPakfK+FfI", "http://localhost:3000/src/assets/images/demo/man.jpg", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user"),
+  (4, "clara.duval@mail.com", "Clara", "Duval", "$argon2id$v=19$m=65536,t=3,p=4$XYAZxeYMvxLBwMDRGcQWHw$A2rXfVNG6j9uwBBmETWtWuhFxXvy3sqDrSwoKz7gCsM", "http://localhost:3000/src/assets/images/demo/woman2.jpg", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user");
 
 insert into post(id, content, picture, category, user_id)
 values
@@ -93,3 +110,19 @@ values
 (19, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 1, 3),
 (20, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 3, 3);
 
+INSERT INTO post_like(id, user_id, post_id )
+VALUES 
+(1, 1 , 1),
+(2, 2 , 1),
+(3, 3 , 1),
+(4, 1 , 2),
+(5, 2 , 2),
+(6, 3 , 2),
+(7, 3 , 3);
+
+INSERT INTO event_participation(id, user_id, event_id )
+VALUES 
+(1, 1 , 1),
+(2, 2 , 2),
+(3, 3 , 3),
+(4, 4 , 1);

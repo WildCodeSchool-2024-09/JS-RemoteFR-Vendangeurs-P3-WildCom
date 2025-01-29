@@ -50,7 +50,12 @@ class PostRepository {
           SELECT COUNT(*)
           FROM comment
           WHERE comment.post_id = post.id
-        ) AS total_comments
+        ) AS total_comments,
+        (
+        SELECT COUNT(*)
+        FROM post_like AS pl
+        WHERE pl.post_id = post.id
+        ) AS total_likes
       FROM post
       JOIN user 
         ON post.user_id = user.id
@@ -65,6 +70,7 @@ class PostRepository {
       picture: row.picture,
       content: row.content,
       totalComments: row.total_comments,
+      totalLikes: row.total_likes,
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,
@@ -74,6 +80,14 @@ class PostRepository {
     }));
 
     return formattedRows;
+  }
+  async delete(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "DELETE FROM post WHERE id = ?",
+
+      [id],
+    );
+    return result.affectedRows;
   }
 }
 

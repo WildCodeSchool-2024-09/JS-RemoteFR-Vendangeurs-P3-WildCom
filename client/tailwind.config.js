@@ -18,6 +18,7 @@ export default {
       text: {
         primary: "var(--text-primary)",
         secondary: "var(--text-secondary)",
+        red: "var(--text-red)",
       },
       accent: {
         primary: "var(--accent-primary)",

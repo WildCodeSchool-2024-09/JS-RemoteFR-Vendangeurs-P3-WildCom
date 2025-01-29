@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SlOptions } from "react-icons/sl";
+import { Link } from "react-router-dom";
 import type { Comment } from "../types/type";
 
 interface CommentEventProps {
@@ -34,11 +35,13 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
             <p className="self-end text-xs">{comments.timestamp}</p>
             <div className="flex gap-4">
               <figure className="w-14">
-                <img
-                  src={comments.user.avatar}
-                  alt={`Avatar de ${comments.user.username}`}
-                  className="object-cover rounded-full size-12"
-                />
+                <Link to={`/user/profile/${comments.user.id}`}>
+                  <img
+                    src={comments.user.avatar}
+                    alt={`Avatar de ${comments.user.username}`}
+                    className="object-cover rounded-full size-12"
+                  />
+                </Link>
               </figure>
               <article className="w-full h-auto p-4 space-y-2 text-sm rounded-xl bg-bg-secondary text-text-secondary">
                 <header className="flex items-start justify-between">

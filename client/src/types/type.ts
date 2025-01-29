@@ -11,6 +11,7 @@ export type Post = {
   content: string;
   timestamp: string;
   totalComments: number;
+  totalLikes: number;
   user: User;
 };
 
@@ -24,6 +25,7 @@ export type Event = {
   place: string;
   calendar: string;
   totalComments: number;
+  totalParticipations: number;
   user: User;
 };
 

@@ -62,7 +62,12 @@ class EventRepository {
           SELECT COUNT(*)
           FROM comment
           WHERE comment.event_id = event.id
-        ) AS total_comments
+        ) AS total_comments,
+        (
+        SELECT COUNT(*)
+        FROM event_participation AS ep
+        WHERE ep.event_id = event.id
+        ) AS total_participations
       FROM event
       JOIN user
       ON event.user_id = user.id
@@ -78,6 +83,7 @@ class EventRepository {
       title: row.title,
       place: row.place,
       totalComments: row.total_comments,
+      totalParticipations: row.total_participations,
       calendar: formattedTimestamp(new Date(row.calendar)),
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {

@@ -27,5 +27,15 @@ const add: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const postId = Number(req.params.id);
 
-export default { browse, add };
+    await postRepository.delete(postId);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, add, destroy };
