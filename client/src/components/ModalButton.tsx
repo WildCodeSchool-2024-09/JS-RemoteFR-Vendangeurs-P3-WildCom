@@ -9,7 +9,7 @@ function ModalButton({ children }: { children: ReactNode }) {
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="flex justify-center items-center gap-3 text-text-primary px-3 py-2 rounded-xl font-text font-semibold text-lg hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
+        className="flex justify-center items-center gap-3 text-text-primary rounded-xl font-text font-semibold text-lg hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
         type="button"
       >
         {children}

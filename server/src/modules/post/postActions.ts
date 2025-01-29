@@ -13,8 +13,7 @@ const browse: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
-    const { content, category, userId } = req.body.content;
-
+    const { content, category, userId } = req.body.newPost;
     const insertId = await postRepository.create(content, category, userId);
 
     res.status(201).json({ insertId });
