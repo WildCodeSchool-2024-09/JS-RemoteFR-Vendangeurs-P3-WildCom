@@ -15,4 +15,15 @@ const read: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-export default { read };
+
+const update: RequestHandler = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updatedUser = await userRepository.update(id, req.body);
+    res.json(updatedUser);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { read, update };

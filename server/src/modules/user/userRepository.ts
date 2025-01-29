@@ -1,3 +1,4 @@
+import type { ResultSetHeader } from "mysql2";
 import type { Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
@@ -28,6 +29,20 @@ class userRepository {
       [id],
     );
     return rows as User[];
+  }
+  async update(id: string, userData: Partial<User>) {
+    const [result] = await databaseClient.query<ResultSetHeader>(
+      "UPDATE user SET ? WHERE id = ?",
+      [userData, id],
+    );
+    if (result.affectedRows === 0) {
+      return null;
+    }
+    const [updatedUser] = await databaseClient.query(
+      "SELECT * FROM user WHERE id = ?",
+      [id],
+    );
+    return updatedUser;
   }
 }
 
