@@ -1,17 +1,39 @@
 import axios from "axios";
 import { useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
+import { useAuth } from "../contexts/AuthContext";
 
 interface PostModalProps {
   closeModal: () => void;
 }
 
 function PostModal({ closeModal }: PostModalProps) {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState({
+    userId: 0 as number | undefined,
+    content: "",
+    category: "",
+  });
+
+  const { user } = useAuth();
+
   const [loading, setLoading] = useState(false);
 
+  const handlePostChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newComment = e.target.value;
+
+    setContent({
+      ...content,
+      userId: user?.id,
+      content: newComment,
+    });
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setContent({ ...content, category: e.target.value });
+  };
+
   const handlePublish = async () => {
-    if (!content.trim()) return;
+    if (!content.content.trim() || !content.userId) return;
 
     setLoading(true);
 
@@ -44,9 +66,6 @@ function PostModal({ closeModal }: PostModalProps) {
             <FaRegUserCircle className="text-text-primary size-9" />
             <p className="text-base text-text-primary">Username</p>
           </section>
-          <form className="flex gap-3" action="">
-            <input className="hidden" id="upload" type="file" />
-          </form>
         </header>
         <form className="flex flex-col gap-4" action="">
           <textarea
@@ -57,14 +76,18 @@ function PostModal({ closeModal }: PostModalProps) {
             name=""
             placeholder="Rédigez une publication"
             id=""
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            value={content.content}
+            onChange={handlePostChange}
           />
 
-          <select name="" id="" className="rounded-xl px-3 py-2">
-            <option className="bg-bg-secondary" value="Divers">
-              Choisissez une catégorie
-            </option>
+          <select
+            name="category"
+            id="category"
+            className="rounded-xl px-3 py-2"
+            value={content.category}
+            onChange={handleCategoryChange}
+          >
+            <option value="">{content.category}</option>
           </select>
 
           <button
