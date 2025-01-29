@@ -67,6 +67,8 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
         ),
       );
 
+      setSelectedCommentId(null);
+
       cancelEditingComment();
     } catch (error) {
       console.error("Erreur lors de la modification du commentaire", error);
