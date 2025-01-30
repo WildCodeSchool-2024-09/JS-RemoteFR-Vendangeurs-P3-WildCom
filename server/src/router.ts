@@ -26,26 +26,31 @@ router.post("/api/auth/logout", authActions.logout);
 
 // Define profiles-related routes
 import userActions from "./modules/user/userActions";
-import userPostAction from "./modules/user/userPost/userPostAction";
 
 router.get("/api/user/:id", userActions.read);
-router.get("/api/user/:id/posts", userPostAction.browse);
 router.put("/api/user/:id", userActions.update);
+
+import userPostAction from "./modules/user/userPost/userPostAction";
+
+router.get("/api/user/:id/posts", userPostAction.browse);
 
 /* ************************************************************************* */
 
 // Define posts-related routes
 import postActions from "./modules/post/postActions";
-import postCommentsActions from "./modules/post/postComment/postCommentsActions";
 
 router.get("/api/posts", postActions.browse);
 router.post("/api/posts", postActions.add);
+router.delete("/api/posts/:id", postActions.destroy);
+
+import postCommentsActions from "./modules/post/postComment/postCommentsActions";
 
 router.get("/api/posts/:id/comments", postCommentsActions.browse);
 router.post("/api/posts/:id/comments", postCommentsActions.add);
-router.delete("/api/posts/:id", postActions.destroy);
+router.put("/api/posts/comments/:id", postCommentsActions.edit);
 
 import postLikesActions from "./modules/post/postLike/postLikesActions";
+
 router.post("/api/users/posts-likes", postLikesActions.readLikesByUserId);
 router.post("/api/posts/:id/likes", postLikesActions.add);
 router.delete("/api/posts/:id/likes", postLikesActions.destroy);
@@ -58,14 +63,16 @@ import eventActions from "./modules/event/eventActions";
 router.get("/api/events", eventActions.browse);
 router.put("/api/events/:id", eventActions.edit);
 router.post("/api/events", eventActions.add);
-router.post("/api/events/:id/comments", eventCommentActions.add);
 router.delete("/api/events/:id", eventActions.destroy);
 
 import eventCommentActions from "./modules/event/eventComment/eventCommentActions";
+
+router.post("/api/events/:id/comments", eventCommentActions.add);
 router.get("/api/events/:id/comments", eventCommentActions.browse);
 router.put("/api/events/comments/:id", eventCommentActions.edit);
 
 import eventParticipationActions from "./modules/event/eventParticipation/eventParticipationActions";
+
 router.post(
   "/api/users/events-participations",
   eventParticipationActions.readParticipationsByUserId,

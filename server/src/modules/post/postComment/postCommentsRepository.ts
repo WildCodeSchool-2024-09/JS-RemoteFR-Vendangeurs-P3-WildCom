@@ -5,8 +5,8 @@ import formattedTimestamp from "../../../utils/formattedTimestamp";
 type PostComment = {
   id: number;
   content: string;
-  timestamp: string;
-  user_id: number;
+  timestamp?: string;
+  user_id?: number;
 };
 
 type User = {
@@ -70,6 +70,19 @@ class PostCommentsRepository {
     );
 
     return result.insertId;
+  }
+
+  async update(post: PostComment) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      UPDATE comment
+      SET content = ?
+      WHERE id = ?
+      `,
+      [post.content, post.id],
+    );
+
+    return result.affectedRows;
   }
 }
 export default new PostCommentsRepository();
