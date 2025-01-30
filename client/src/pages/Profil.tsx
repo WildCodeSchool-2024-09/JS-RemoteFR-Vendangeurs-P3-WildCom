@@ -58,27 +58,28 @@ function Profil() {
           className="relative z-10 flex flex-col gap-6 px-10 py-4 mx-0 border-2 rounded-xl bg-bg_opacity-primary border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]"
         >
           <div className="flex flex-col gap-6 mx-4 md:flex-row ">
-            <div className="self-center">
+            <figure className="self-center w-52">
               <img
-                className="object-cover w-48 h-48 rounded-full"
+                className="object-cover w-48 h-48 rounded-full "
                 src={user.avatar}
                 alt=""
                 aria-labelledby="username"
               />
-            </div>
+            </figure>
+
             <p
               id="username"
               className="flex justify-center text-2xl font-bold md:hidden "
             >
               {user.username}
             </p>
-            <div className="flex flex-col justify-center gap-8 ">
+            <div className="flex flex-col justify-center w-3/4 gap-8">
               <p className="hidden text-2xl font-bold md:flex ">
                 {user.username}
               </p>
               <ul className="space-y-4">
                 {user.github && (
-                  <li className="font-bold">
+                  <li className="font-bold break-all">
                     Github :{" "}
                     <a
                       className="font-extralight hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] "
@@ -91,7 +92,7 @@ function Profil() {
                   </li>
                 )}
                 {user.linkedin && (
-                  <li className="font-bold">
+                  <li className="font-bold break-all">
                     Linkedin :{" "}
                     <a
                       className="font-extralight hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
@@ -104,7 +105,7 @@ function Profil() {
                   </li>
                 )}
                 {user.site && (
-                  <li className="font-bold">
+                  <li className="font-bold break-all">
                     Site :{" "}
                     <a
                       className="font-extralight hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
