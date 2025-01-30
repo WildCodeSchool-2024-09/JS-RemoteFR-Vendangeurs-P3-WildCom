@@ -1,6 +1,6 @@
 import type { Result, Rows } from "../../../../database/client";
 import databaseClient from "../../../../database/client";
-import formattedTimestamp from "../../../utils/formattedTimestamp";
+import { formattedTimestamp } from "../../../utils/formattedTimestamp";
 
 type PostComment = {
   id: number;

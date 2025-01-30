@@ -1,8 +1,15 @@
-import { type ReactNode, useState } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
+import EventModal from "./EventModal";
 import PostModal from "./PostModal";
 
-function ModalButton({ children }: { children: ReactNode }) {
+interface ModalButtonProps {
+  children: React.ReactNode;
+
+  type: string;
+}
+
+function ModalButton({ children, type }: ModalButtonProps) {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -16,7 +23,14 @@ function ModalButton({ children }: { children: ReactNode }) {
       </button>
       {showModal &&
         createPortal(
-          <PostModal closeModal={() => setShowModal(false)} />,
+          <>
+            {type === "post" && (
+              <PostModal closeModal={() => setShowModal(false)} />
+            )}
+            {type === "event" && (
+              <EventModal closeModal={() => setShowModal(false)} />
+            )}
+          </>,
           document.body,
         )}
     </>

@@ -1,6 +1,6 @@
 import type { Rows } from "../../../../database/client";
 import databaseClient from "../../../../database/client";
-import formattedTimestamp from "../../../utils/formattedTimestamp";
+import { formattedTimestamp } from "../../../utils/formattedTimestamp";
 
 type User = {
   id: number;

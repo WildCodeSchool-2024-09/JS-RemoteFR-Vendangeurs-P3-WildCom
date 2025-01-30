@@ -126,7 +126,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
       {events.map((event) => (
         <article
           key={event.id}
-          className="z-10 flex flex-col h-auto gap-2 px-10 py-4 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]"
+          className="z-10 flex flex-col w-full h-auto gap-2 px-10 py-4 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]"
         >
           <header className="flex items-center justify-between py-2">
             <Link to={`/user/profile/${event.user.id}`}>
@@ -188,13 +188,14 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                 </h2>
                 <div className="flex items-center space-x-1">
                   <RxCalendar className="size-5 text-accent-primary" />
-                  <h2 className="text-xs">{event.calendar}</h2>
+                  <p className="text-xs">Le {event.calendar}</p>
+                  <p>à {event.time}</p>
                 </div>
                 <div className="flex items-center space-x-1">
                   <MdWhereToVote className="size-5 text-accent-primary" />
-                  <h2 className="text-sm font-title">
+                  <p className="text-sm font-title">
                     à <span>{event.place}</span>
-                  </h2>
+                  </p>
                 </div>
               </article>
             </section>

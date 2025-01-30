@@ -24,6 +24,7 @@ export type Event = {
   title: string;
   place: string;
   calendar: string;
+  time: string;
   totalComments: number;
   totalParticipations: number;
   user: User;

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 
 import { CardPost } from "../components/CardPost";
 
+import { IoMdAdd } from "react-icons/io";
+import ModalButton from "../components/ModalButton";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Post } from "../types/type";
 
@@ -32,6 +34,11 @@ function Home() {
 
   return (
     <section className="flex flex-col items-center flex-grow w-full gap-5 lg:gap-10">
+      <div className="group lg:hidden">
+        <ModalButton type={"post"}>
+          <IoMdAdd className="bg-accent-primary text-text-secondary rounded-full size-8" />
+        </ModalButton>
+      </div>
       <CardPost posts={posts} />
     </section>
   );
