@@ -38,9 +38,21 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
     return (
       <section className="flex items-center justify-center w-auto h-1/4">
         <div className="group">
-          <ModalButton>
+          <ModalButton type={"post"}>
             <IoMdAdd className="bg-accent-primary text-text-secondary rounded-full size-7 transition-transform duration-300 group-hover:rotate-90" />
             Ajouter une publication
+          </ModalButton>
+        </div>
+      </section>
+    );
+  }
+  if (location === "/user/events") {
+    return (
+      <section className="flex items-center justify-center w-auto h-1/4">
+        <div className="group">
+          <ModalButton type={"event"}>
+            <IoMdAdd className="bg-accent-primary text-text-secondary rounded-full size-7 transition-transform duration-300 group-hover:rotate-90" />
+            Ajouter un événement
           </ModalButton>
         </div>
       </section>

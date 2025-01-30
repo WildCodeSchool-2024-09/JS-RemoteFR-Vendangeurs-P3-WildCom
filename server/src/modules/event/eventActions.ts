@@ -21,6 +21,7 @@ const edit: RequestHandler = async (req, res, next) => {
       title: req.body.title,
       place: req.body.place,
       calendar: req.body.calendar,
+      time: req.body.time,
     };
 
     const affectedRows = await eventRepository.update(event);
@@ -38,13 +39,14 @@ const edit: RequestHandler = async (req, res, next) => {
 const add: RequestHandler = async (req, res, next) => {
   try {
     const newEvent = {
-      content: req.body.content,
-      category: req.body.category,
-      picture: req.body.picture,
-      title: req.body.title,
-      place: req.body.place,
-      calendar: req.body.calendar,
-      user_id: req.body.user_id,
+      content: req.body.newEvent.content,
+      category: req.body.newEvent.category,
+      picture: req.body.newEvent.picture,
+      title: req.body.newEvent.title,
+      place: req.body.newEvent.place,
+      calendar: req.body.newEvent.calendar,
+      time: req.body.newEvent.time,
+      userId: req.body.newEvent.userId,
     };
 
     const insertId = await eventRepository.create(newEvent);
