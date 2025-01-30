@@ -5,6 +5,7 @@ import { FaHeart, FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useUpdate } from "../contexts/UpdateContext";
 import type { Post } from "../types/type";
 import { CommentPost } from "./CommentPost";
 import { CommentInputPost } from "./PostComment/CommentInputPost";
@@ -23,6 +24,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
   const [menuPostVisible, setMenuPostVisible] = useState<{
     [key: number]: boolean;
   }>({});
+  const { setUpdateLike, setUpdatePost } = useUpdate();
 
   const toggleMenu = (postId: number) => {
     setMenuPostVisible((prev) => ({
@@ -76,6 +78,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
     } catch (error) {
       console.error("Erreur lors de la suppression du post", error);
     }
+    setUpdatePost((prev) => prev + 1);
   };
 
   const handleLike = async (postId: number) => {
@@ -105,6 +108,8 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
         [postId]: !prev[postId],
       }));
     } catch (error) {}
+
+    setUpdateLike((prev) => prev + 1);
   };
 
   const handleShowComments = (postId: number) => {
@@ -148,7 +153,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
                     <BiCog className="text-text-secondary size-5" />
                   </figure>
                 </button>
-                {menuPostVisible[post.id] && user?.id === post.user.id ? (
+                {menuPostVisible[post.id] && (
                   <div className="absolute z-50 w-40 bg-white border lg:-top-1 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] right-0 ">
                     {(user?.id === post.user.id || user?.role === "admin") && (
                       <button
@@ -161,7 +166,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
                       </button>
                     )}
                   </div>
-                ) : null}
+                )}
               </div>
             </section>
           </header>

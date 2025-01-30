@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { SlOptions } from "react-icons/sl";
 import { Link } from "react-router-dom";
+import { useUpdate } from "../contexts/UpdateContext";
 import type { Comment } from "../types/type";
 
 interface CommentPostProps {
@@ -10,6 +11,7 @@ interface CommentPostProps {
 
 export const CommentPost: React.FC<CommentPostProps> = ({ postId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
+  const { updateLike, updateComment } = useUpdate();
 
   useEffect(() => {
     const fetchCommentPosts = async () => {
@@ -23,7 +25,11 @@ export const CommentPost: React.FC<CommentPostProps> = ({ postId }) => {
       }
     };
     fetchCommentPosts();
-  }, [postId]);
+
+    if (updateComment || updateLike) {
+      fetchCommentPosts();
+    }
+  }, [postId, updateLike, updateComment]);
 
   return (
     <div>

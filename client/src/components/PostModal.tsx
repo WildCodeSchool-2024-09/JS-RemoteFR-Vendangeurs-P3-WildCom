@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { useAuth } from "../contexts/AuthContext";
+import { useUpdate } from "../contexts/UpdateContext";
 
 interface PostModalProps {
   closeModal: () => void;
@@ -16,6 +17,7 @@ function PostModal({ closeModal }: PostModalProps) {
   });
 
   const [loading, setLoading] = useState(false);
+  const { setUpdatePost } = useUpdate();
 
   const handlePostChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
@@ -52,6 +54,8 @@ function PostModal({ closeModal }: PostModalProps) {
     } finally {
       setLoading(false);
     }
+
+    setUpdatePost((prev) => prev + 1);
   };
 
   return (

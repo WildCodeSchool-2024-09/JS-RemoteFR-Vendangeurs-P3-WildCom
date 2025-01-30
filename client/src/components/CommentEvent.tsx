@@ -7,6 +7,7 @@ import { SlOptions } from "react-icons/sl";
 import { Link } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import { useAuth } from "../contexts/AuthContext";
+import { useUpdate } from "../contexts/UpdateContext";
 import type { Comment } from "../types/type";
 
 interface CommentEventProps {
@@ -22,6 +23,7 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
   const [isEditingComment, setIsEditingComment] = useState<number | null>(null);
   const [editedCommentContent, setEditedCommentContent] = useState<string>("");
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const { updateComment } = useUpdate();
 
   useEffect(() => {
     const fetchCommentEvents = async () => {
@@ -35,7 +37,11 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
       }
     };
     fetchCommentEvents();
-  }, [eventId]);
+
+    if (updateComment) {
+      fetchCommentEvents();
+    }
+  }, [eventId, updateComment]);
 
   const toggleCommentMenu = (commentId: number) => {
     setSelectedCommentId((prevId) => (prevId === commentId ? null : commentId));

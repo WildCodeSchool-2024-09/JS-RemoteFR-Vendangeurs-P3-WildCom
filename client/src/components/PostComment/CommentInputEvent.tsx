@@ -2,6 +2,7 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import { IoSendSharp } from "react-icons/io5";
 import { useAuth } from "../../contexts/AuthContext";
+import { useUpdate } from "../../contexts/UpdateContext";
 
 interface CommentInputProps {
   eventId: number;
@@ -15,6 +16,7 @@ export const CommentInputEvent: React.FC<CommentInputProps> = ({ eventId }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { user } = useAuth();
+  const { setUpdateComment } = useUpdate();
 
   const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
     const textarea = e.target as HTMLTextAreaElement;
@@ -53,6 +55,8 @@ export const CommentInputEvent: React.FC<CommentInputProps> = ({ eventId }) => {
       if (textareaRef.current) {
         textareaRef.current.style.height = "auto";
       }
+
+      setUpdateComment((prev) => prev + 1);
     }
   };
 
