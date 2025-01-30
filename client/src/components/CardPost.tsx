@@ -119,7 +119,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
       {posts.map((post) => (
         <article
           key={post.id}
-          className="z-10 flex flex-col h-auto gap-2 px-10 py-4 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]"
+          className="z-10 flex flex-col w-full h-auto gap-2 px-10 py-4 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]"
         >
           <header className="flex items-center justify-between py-2">
             <Link to={`/user/profile/${post.user.id}`}>
@@ -148,7 +148,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
                     <BiCog className="text-text-secondary size-5" />
                   </figure>
                 </button>
-                {menuPostVisible[post.id] && (
+                {menuPostVisible[post.id] && user?.id === post.user.id ? (
                   <div className="absolute z-50 w-40 bg-white border lg:-top-1 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] right-0 ">
                     {(user?.id === post.user.id || user?.role === "admin") && (
                       <button
@@ -161,7 +161,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
                       </button>
                     )}
                   </div>
-                )}
+                ) : null}
               </div>
             </section>
           </header>
@@ -176,7 +176,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
                 />
               </figure>
             )}
-            <p className="mt-6 text-sm">{post.content}</p>
+            <p className="mt-6 text-sm break-all">{post.content}</p>
             <hr className="mt-6 mb-4 border-accent-primary drop-shadow-[0_3px_2px_rgba(65,242,77,1)]" />
             <div className="flex justify-between">
               <p className="flex gap-1 text-xs ">{post.timestamp}</p>
