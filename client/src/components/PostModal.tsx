@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 import { useAuth } from "../contexts/AuthContext";
 
 interface PostModalProps {
@@ -60,8 +61,8 @@ function PostModal({ closeModal }: PostModalProps) {
         onKeyUp={(e) => e.key === "Enter" && closeModal()}
         className="fixed inset-0 z-10 bg-bg_opacity-secondary backdrop-blur-sm"
       />
-      <div className=" flex flex-col space-y-3 fixed z-20 top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 p-10 rounded-xl bg-bg-primary gap-3 w-full md:w-2/3 lg:w-1/3 h-auto">
-        <h2 className="text-text-primary flex justify-center font-title text-xl">
+      <div className="fixed z-20 flex flex-col w-full h-auto gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
+        <h2 className="flex justify-center text-xl text-text-primary font-title">
           Créer une publication
         </h2>
         <header className="flex items-center justify-between">
@@ -69,44 +70,41 @@ function PostModal({ closeModal }: PostModalProps) {
             <img
               src={user?.avatar}
               alt={user?.username}
-              className="text-text-primary size-9 rounded-full"
+              className="object-cover rounded-full text-text-primary size-9"
             />
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
         </header>
         <form className="flex flex-col gap-4" action="">
-          <textarea
+          <TextareaAutosize
             maxLength={65535}
-            style={{ resize: "none" }}
-            rows={6}
-            className="p-4 space-y-2 text-sm rounded-xl text-text-secondary w-full"
-            name=""
+            minRows={6}
+            className="w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary"
             placeholder="Rédigez une publication"
-            id=""
             onChange={handlePostChange}
           />
 
           <select
             name="category"
             id="category"
-            className="rounded-xl px-3 py-2"
+            className="px-3 py-2 rounded-xl"
             onChange={handleCategoryChange}
           >
             <option value="Divers">Divers</option>
             <option value="Job">Job</option>
             <option value="Tech">Tech</option>
           </select>
-          <div className="flex justify-center gap-8 items-center">
+          <div className="flex items-center justify-center gap-8">
             <button
               onClick={handlePublish}
               disabled={loading}
               type="submit"
-              className="text-xl text-text-secondary bg-accent-primary hover:bg-accent-primaryhover mt-4 w-fit self-center px-6 py-2 rounded-xl font-text"
+              className="self-center px-6 py-2 mt-4 text-xl text-text-secondary bg-accent-primary hover:bg-accent-primaryhover w-fit rounded-xl font-text"
             >
               {loading ? "Publication..." : "Publier"}
             </button>
             <button
-              className="text-xl text-accent-primary border border-accent-primary hover:text-accent-primaryhover hover:border-accent-primaryhover mt-4 w-fit self-center px-6 py-2 rounded-xl font-text"
+              className="self-center px-6 py-2 mt-4 text-xl border text-accent-primary border-accent-primary hover:text-accent-primaryhover hover:border-accent-primaryhover w-fit rounded-xl font-text"
               type="button"
               onClick={closeModal}
               disabled={loading}
@@ -119,7 +117,7 @@ function PostModal({ closeModal }: PostModalProps) {
         <button
           type="button"
           onClick={closeModal}
-          className="flex justify-center absolute top-0 right-2 w-7 h-7 bg-accent-primary hover:bg-accent-primaryhover text-bg-primary rounded-lg"
+          className="absolute top-0 flex justify-center rounded-lg right-2 w-7 h-7 bg-accent-primary hover:bg-accent-primaryhover text-bg-primary"
         >
           x
         </button>

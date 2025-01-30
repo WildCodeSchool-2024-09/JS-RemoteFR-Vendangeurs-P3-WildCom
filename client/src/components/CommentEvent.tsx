@@ -1,10 +1,11 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { IoSendSharp } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import { SlOptions } from "react-icons/sl";
 import { Link } from "react-router-dom";
+import TextareaAutosize from "react-textarea-autosize";
 import { useAuth } from "../contexts/AuthContext";
 import type { Comment } from "../types/type";
 
@@ -20,6 +21,7 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
   );
   const [isEditingComment, setIsEditingComment] = useState<number | null>(null);
   const [editedCommentContent, setEditedCommentContent] = useState<string>("");
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const fetchCommentEvents = async () => {
@@ -42,6 +44,7 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
   const startEditingComment = (commentId: number, content: string) => {
     setIsEditingComment(commentId);
     setEditedCommentContent(content);
+    setSelectedCommentId(null);
   };
 
   const cancelEditingComment = () => {
@@ -49,8 +52,26 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
     setEditedCommentContent("");
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setSelectedCommentId(null);
+        setIsEditingComment(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const submitEditedComment = async (e: React.FormEvent, commentId: number) => {
     e.preventDefault();
+
+    if (editedCommentContent.length <= 0) {
+      return;
+    }
 
     try {
       await axios.put(
@@ -107,7 +128,10 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
 
                   {/* Menu d'actions */}
                   {selectedCommentId === comment.id && (
-                    <div className="absolute flex items-center justify-center w-8 h-4 m-2 text-xs font-medium right-5 -top-3 text-text-secondary font-text ">
+                    <div
+                      ref={menuRef}
+                      className="absolute flex items-center justify-center w-8 h-4 m-2 text-xs font-medium right-5 -top-3 text-text-secondary font-text"
+                    >
                       {(user?.id === comment.user.id ||
                         user?.role === "admin") && (
                         <button
@@ -131,12 +155,13 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
                       className="flex flex-col"
                       onSubmit={(e) => submitEditedComment(e, comment.id)}
                     >
-                      <textarea
-                        className="w-full p-2 resize-none rounded-xl min-h-24"
+                      <TextareaAutosize
+                        className="w-full p-2 overflow-hidden resize-none rounded-xl "
                         onChange={(e) =>
                           setEditedCommentContent(e.target.value)
                         }
                         value={editedCommentContent}
+                        autoFocus
                       />
 
                       <div className="flex items-center justify-end h-8 gap-4 mt-2 mr-1 ">
@@ -156,7 +181,7 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
                       </div>
                     </form>
                   ) : (
-                    <p>{comment.content}</p>
+                    <p className="break-all">{comment.content}</p>
                   )}
                 </main>
               </article>
