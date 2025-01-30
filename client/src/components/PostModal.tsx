@@ -16,8 +16,9 @@ function PostModal({ closeModal }: PostModalProps) {
     category: "",
   });
 
-  const [loading, setLoading] = useState(false);
   const { setUpdatePost } = useUpdate();
+  const [missContent, setMissContent] = useState("");
+  const [missCategory, setMissCategory] = useState("");
 
   const handlePostChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
@@ -34,10 +35,15 @@ function PostModal({ closeModal }: PostModalProps) {
 
   const handlePublish = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!newPost.content.trim() || !newPost.userId) return;
 
-    setLoading(true);
-    if (newPost.content.length <= 0) return;
+    if (newPost.content === "") {
+      setMissContent("Veuillez rédiger une publication");
+      return;
+    }
+    if (newPost.category === "") {
+      setMissCategory("Veuillez choisir une catégorie");
+      return;
+    }
 
     try {
       await axios.post(
@@ -51,8 +57,6 @@ function PostModal({ closeModal }: PostModalProps) {
       closeModal();
     } catch (error) {
       console.error("Erreur lors de la publication", error);
-    } finally {
-      setLoading(false);
     }
 
     setUpdatePost((prev) => prev + 1);
@@ -80,20 +84,26 @@ function PostModal({ closeModal }: PostModalProps) {
           </section>
         </header>
         <form className="flex flex-col gap-4" action="">
+          {missContent && (
+            <p className="text-xs text-text-red">{missContent}</p>
+          )}
           <TextareaAutosize
             maxLength={65535}
             minRows={6}
-            className="w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary"
+            className={`${missContent ? " border-2 border-text-red " : ""}w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary`}
             placeholder="Rédigez une publication"
             onChange={handlePostChange}
           />
-
+          {missCategory && (
+            <p className="text-xs text-text-red">{missCategory}</p>
+          )}
           <select
             name="category"
             id="category"
-            className="px-3 py-2 rounded-xl"
+            className={`${missCategory ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl`}
             onChange={handleCategoryChange}
           >
+            <option value="">Choisissez une catégorie</option>
             <option value="Divers">Divers</option>
             <option value="Job">Job</option>
             <option value="Tech">Tech</option>
@@ -101,17 +111,15 @@ function PostModal({ closeModal }: PostModalProps) {
           <div className="flex items-center justify-center gap-8">
             <button
               onClick={handlePublish}
-              disabled={loading}
               type="submit"
               className="self-center px-6 py-2 mt-4 text-xl text-text-secondary bg-accent-primary hover:bg-accent-primaryhover w-fit rounded-xl font-text"
             >
-              {loading ? "Publication..." : "Publier"}
+              Publier
             </button>
             <button
               className="self-center px-6 py-2 mt-4 text-xl border text-accent-primary border-accent-primary hover:text-accent-primaryhover hover:border-accent-primaryhover w-fit rounded-xl font-text"
               type="button"
               onClick={closeModal}
-              disabled={loading}
             >
               Annuler
             </button>
