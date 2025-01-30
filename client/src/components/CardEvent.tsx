@@ -7,6 +7,7 @@ import { MdDeleteOutline, MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useUpdate } from "../contexts/UpdateContext";
 import type { Event } from "../types/type";
 import { CommentEvent } from "./CommentEvent";
 import { CommentInputEvent } from "./PostComment/CommentInputEvent";
@@ -23,6 +24,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
   const [commentsVisibility, setCommentsVisibility] = useState<{
     [key: number]: boolean;
   }>({});
+  const { setUpdateParticipation, setUpdateEvent } = useUpdate();
 
   useEffect(() => {
     const getParticipations = async () => {
@@ -85,6 +87,8 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
         [eventId]: !prev[eventId],
       }));
     } catch (error) {}
+
+    setUpdateParticipation((prev) => prev + 1);
   };
 
   const handleShowComments = (eventId: number) => {
@@ -103,6 +107,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
     } catch (error) {
       console.error(error);
     }
+    setUpdateEvent((prev) => prev + 1);
   };
 
   const [menuEventVisible, setMenuEventVisible] = useState<{
@@ -150,7 +155,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                     <BiCog className="size-5 text-text-secondary" />
                   </figure>
                 </button>
-                {menuEventVisible[event.id] && user?.id === event.user.id ? (
+                {menuEventVisible[event.id] && (
                   <div className="absolute z-50 w-40 bg-white border lg:-top-1 right-0 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] ">
                     {(user?.id === event.user.id || user?.role === "admin") && (
                       <button
@@ -163,7 +168,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                       </button>
                     )}
                   </div>
-                ) : null}
+                )}
               </div>
             </section>
           </header>

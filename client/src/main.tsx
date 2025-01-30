@@ -10,6 +10,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { AuthAdmin } from "./components/Auth/AuthAdmin";
 import { AuthUser } from "./components/Auth/AuthUser";
 import { AuthProvider } from "./contexts/AuthContext";
+import { UpdateProvider } from "./contexts/UpdateContext";
 import Admin from "./pages/Admin";
 import { AuthPage } from "./pages/AuthPage";
 import Events from "./pages/Events";
@@ -65,7 +66,9 @@ if (rootElement == null) {
 createRoot(rootElement).render(
   <StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <UpdateProvider>
+        <RouterProvider router={router} />
+      </UpdateProvider>
     </AuthProvider>
   </StrictMode>,
 );
