@@ -122,8 +122,10 @@ function Profil() {
           <div>
             {user.biography && (
               <div>
-                <p className="ml-4 font-bold"> Biographie :</p>
-                <p className="ml-4 italic font-extralight ">{user.biography}</p>
+                <p className="ml-4 font-bold "> Biographie :</p>
+                <p className="ml-4 italic break-all font-extralight ">
+                  {user.biography}
+                </p>
               </div>
             )}
           </div>
