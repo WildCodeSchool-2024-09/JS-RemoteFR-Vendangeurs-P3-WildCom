@@ -81,12 +81,26 @@ class PostRepository {
 
     return formattedRows;
   }
+
   async delete(id: number) {
     const [result] = await databaseClient.query<Result>(
       "DELETE FROM post WHERE id = ?",
 
       [id],
     );
+    return result.affectedRows;
+  }
+
+  async update(postId: number, content: string, category: string) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      UPDATE post
+      SET content = ?, category = ?
+      WHERE id = ?
+      `,
+      [content, category, postId],
+    );
+
     return result.affectedRows;
   }
 }
