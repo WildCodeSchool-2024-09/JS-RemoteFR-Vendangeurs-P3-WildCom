@@ -25,7 +25,7 @@ class PostRepository {
   async create(content: string, category: string, userId: number) {
     const [result] = await databaseClient.query<Result>(
       `
-      INSERT INTO post (content, category, user_id)
+      INSERT INTO post (content, category_id, user_id)
       VALUES (?, ?, ?)
       `,
       [content, category, userId],

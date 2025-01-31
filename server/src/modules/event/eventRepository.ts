@@ -10,7 +10,7 @@ import type { Result, Rows } from "../../../database/client";
 type Event = {
   id: number;
   content: string;
-  category: string;
+  category: number;
   picture: string;
   created_at?: Date;
   title: string;
@@ -33,7 +33,7 @@ type EventWithUser = Omit<Event, "user_id"> & {
 class EventRepository {
   async create(event: Omit<Event, "id">) {
     const [result] = await databaseClient.query<Result>(
-      `INSERT INTO event (content, category, picture, title, place, calendar, time, user_id) 
+      `INSERT INTO event (content, category_id, picture, title, place, calendar, time, user_id) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         event.content,

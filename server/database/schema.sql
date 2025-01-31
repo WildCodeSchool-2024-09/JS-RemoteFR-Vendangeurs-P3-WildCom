@@ -87,7 +87,7 @@ VALUES
 (1, "Emploi", "post"),
 (2, "Divers", "post"),
 (3, "Tech", "post"),
-(4, "Projets", "post"),
+(4, "Projet", "post"),
 (5, "Rencontre", "event"),
 (6, "Conférence", "event"),
 (7, "Démo day", "event"),
