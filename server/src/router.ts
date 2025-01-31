@@ -40,7 +40,9 @@ router.get("/api/user/:id/posts", userPostAction.browse);
 import postActions from "./modules/post/postActions";
 
 router.get("/api/posts", postActions.browse);
+router.get("/api/post/:id", postActions.read);
 router.post("/api/posts", postActions.add);
+router.put("/api/posts/:id/edit", postActions.edit);
 router.delete("/api/posts/:id", postActions.destroy);
 
 import postCommentsActions from "./modules/post/postComment/postCommentsActions";
@@ -82,5 +84,13 @@ router.delete(
   "/api/events/:id/participations",
   eventParticipationActions.destroy,
 );
+
+/* ************************************************************************* */
+
+// Define categories-related routes
+import categoryActions from "./modules/category/categoryActions";
+
+router.get("/api/categories/posts", categoryActions.readByTypePost);
+router.get("/api/categories/events", categoryActions.readByTypeEvent);
 
 export default router;

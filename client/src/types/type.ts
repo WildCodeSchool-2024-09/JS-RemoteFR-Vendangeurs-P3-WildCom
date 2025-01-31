@@ -40,3 +40,8 @@ export type Comment = {
 export type LocationProps = {
   location: string;
 };
+
+export type Category = {
+  id: number;
+  name: string;
+};

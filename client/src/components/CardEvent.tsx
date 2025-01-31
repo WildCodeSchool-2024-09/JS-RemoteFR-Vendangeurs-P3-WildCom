@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiCog } from "react-icons/bi";
-import { FaRegCommentAlt } from "react-icons/fa";
+import { FaRegClock, FaRegCommentAlt } from "react-icons/fa";
 import { LuCalendar, LuCalendarCheck2 } from "react-icons/lu";
 import { MdDeleteOutline, MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
@@ -149,7 +149,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
               <span className="text-xs lg:text-sm font-normal px-3 bg-[#176b1d]  border-2 border-accent-primary rounded">
                 {event.category}
               </span>
-              <div className="relative">
+              <div className="relative flex items-center">
                 <button onClick={() => toggleMenu(event.id)} type="button">
                   <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
                     <BiCog className="size-5 text-text-secondary" />
@@ -174,10 +174,10 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
           </header>
 
           <main className="flex flex-col ">
-            <section className="flex flex-col gap-3 space-x-3 lg:flex-row lg:gap-0">
+            <section className="flex flex-col gap-3 lg:gap-0">
               {event.picture && (
-                <figure className="lg:w-1/3">
-                  <img src={event.picture} alt="" className="rounded-md l" />
+                <figure className="">
+                  <img src={event.picture} alt="" className="mb-4 rounded-md" />
                 </figure>
               )}
               <article
@@ -186,16 +186,21 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                 <h2 className="text-xl font-semibold font-title">
                   {event.title}
                 </h2>
-                <div className="flex items-center space-x-1">
-                  <RxCalendar className="size-5 text-accent-primary" />
-                  <p className="text-xs">Le {event.calendar}</p>
-                  <p>à {event.time}</p>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <MdWhereToVote className="size-5 text-accent-primary" />
-                  <p className="text-sm font-title">
-                    à <span>{event.place}</span>
-                  </p>
+                <div className="grid items-center justify-start grid-cols-2 gap-2 text-sm lg:gap-4 lg:flex lg:flex-row">
+                  <div className="flex items-center order-1 space-x-2 lg:order-1">
+                    <RxCalendar className="size-5 text-accent-primary" />
+                    <p>Le {event.calendar}</p>
+                  </div>
+                  <div className="flex items-center justify-start order-3 space-x-2 lg:order-2">
+                    <FaRegClock className="size-5 text-accent-primary" />
+                    <p>à {event.time}</p>
+                  </div>
+                  <div className="flex items-center justify-start order-2 space-x-2 lg:order-3">
+                    <MdWhereToVote className="size-6 text-accent-primary" />
+                    <p className="text-sm font-text">
+                      à <span>{event.place}</span>
+                    </p>
+                  </div>
                 </div>
               </article>
             </section>

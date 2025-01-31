@@ -12,20 +12,28 @@ create table user (
   role VARCHAR(255) NOT NULL DEFAULT "user"
 );
 
+CREATE TABLE category (
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  type ENUM('post', 'event') NOT NULL,
+  UNIQUE (name, type)
+);
+
 create table post (
   id int unsigned primary key auto_increment not null,
   content text not null,
   picture varchar(255) null,
   created_at timestamp default current_timestamp not null,
-  category varchar(255) not null,
+  category_id int unsigned not null,
   user_id int unsigned not null,
-  constraint fk_post_user foreign key (user_id) references user(id)
+  constraint fk_post_user foreign key (user_id) references user(id),
+  constraint fk_post_category foreign key (category_id) references category(id) on delete restrict
 );
 
 create table event (
   id int unsigned primary key auto_increment not null,
   content text not null,
-  category varchar(255) not null,
+  category_id int unsigned not null,
   picture varchar(255) null,
   created_at timestamp default current_timestamp not null,
   title varchar(255) not null,
@@ -33,7 +41,8 @@ create table event (
   calendar date not null,
   time time not null,
   user_id int unsigned not null,
-  constraint fk_event_user foreign key (user_id) references user(id)
+  constraint fk_event_user foreign key (user_id) references user(id),
+  constraint fk_event_category foreign key (category_id) references category(id) on delete restrict
 );
 
 create table comment (
@@ -66,24 +75,37 @@ CREATE TABLE event_participation (
   UNIQUE (user_id, event_id)
 );
 
-insert into user(id, email,firstname, lastname, password, avatar, linkedin, github, site, biography, role)
+insert into user(id, email, firstname, lastname, password, avatar, linkedin, github, site, biography, role)
 values
   (1, "example@mail.com","Admin", "Istrateur", "$argon2id$v=19$m=65536,t=3,p=4$MEZfaWwCSctWWpxE1hPm/g$EQxm4Q2ULXL+lL9F0pSBOuwR++rMzdk68Jh1yX+a6A8", "http://localhost:3000/src/assets/images/pictureprofil.webp", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "admin"),
   (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "$argon2id$v=19$m=65536,t=3,p=4$XEraD/BNcArp3WUwG3N/LQ$ZHbE7iOLtctLKNoaiFCGCprbj0MLJyNccQdTQr18NaA", "http://localhost:3000/src/assets/images/demo/woman1.jpg", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user"),
   (3, "adrien.morel@mail.com", "Adrien", "Morel", "$argon2id$v=19$m=65536,t=3,p=4$5F8ilwCFIjwEpUSKYJ7Zfw$LcUOU1ufJi3O2uYcAVrprMMJjVYJc8hkLRPakfK+FfI", "http://localhost:3000/src/assets/images/demo/man.jpg", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user"),
   (4, "clara.duval@mail.com", "Clara", "Duval", "$argon2id$v=19$m=65536,t=3,p=4$XYAZxeYMvxLBwMDRGcQWHw$A2rXfVNG6j9uwBBmETWtWuhFxXvy3sqDrSwoKz7gCsM", "http://localhost:3000/src/assets/images/demo/woman2.jpg", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user");
 
-insert into post(id, content, picture, category, user_id)
-values
-  (1,"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus deserunt amet modi error officia! Commodi, corporis tenetur aspernatur quisquam nostrum aliquid dignissimos quo molestiae, ipsum, odio alias ad delectus vitae expedita. Molestias itaque facere architecto modi beatae ut dignissimos officiis numquam cumque vero adipisci, necessitatibus sequi dolor voluptatum?", "http://localhost:3000/src/assets/images/demo/fog.jpg",  "Divers", 2),
-  (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", "",  "Emploi", 3),
-  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur eos consequuntur maiores minima repellendus. Dicta, voluptatum ut?", "http://localhost:3000/src/assets/images/demo/landscape.jpg",  "Divers", 4);
+INSERT INTO category(id, name, type)
+VALUES 
+(1, "Emploi", "post"),
+(2, "Divers", "post"),
+(3, "Tech", "post"),
+(4, "Projet", "post"),
+(5, "Rencontre", "event"),
+(6, "Conférence", "event"),
+(7, "Démo day", "event"),
+(8, "Hackathon", "event");
 
-insert into event(id, content, category,  picture, title, place, calendar, time, user_id)
+insert into post(id, content, picture, category_id, user_id)
 values
-  (1, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", "Divers", "http://localhost:3000/src/assets/images/demo/fog.jpg", "Super event de ouf", "Nogent le retrou", "2024-04-01", "18:20:00", 1),
-  (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", "Divers", "", "Boire un coup ou deux", "Bordeaux", "2026-06-15", "18:20:00", 2),
-  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur", "Divers", "http://localhost:3000/src/assets/images/demo/landscape.jpg", "Viens on est bien", "Nantes", "2042-07-30", "18:20:00", 3);
+  (1,"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus deserunt amet modi error officia! Commodi, corporis tenetur aspernatur quisquam nostrum aliquid dignissimos quo molestiae, ipsum, odio alias ad delectus vitae expedita. Molestias itaque facere architecto modi beatae ut dignissimos officiis numquam cumque vero adipisci, necessitatibus sequi dolor voluptatum?", "http://localhost:3000/src/assets/images/demo/fog.jpg",  2, 2),
+  (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", "",  4, 3),
+  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur eos consequuntur maiores minima repellendus. Dicta, voluptatum ut?", "http://localhost:3000/src/assets/images/demo/landscape.jpg",  3, 4);
+
+insert into event(id, content, category_id, picture, title, place, calendar, time, user_id)
+values
+  (1, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 5, "http://localhost:3000/src/assets/images/demo/fog.jpg", "Super event de ouf", "Nogent le retrou", "2024-04-01", "18:20:00", 1),
+  (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", 7, "", "Boire un coup ou deux", "Bordeaux", "2026-06-15", "18:20:00", 2),
+  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur", 8, "http://localhost:3000/src/assets/images/demo/landscape.jpg", "Viens on est bien", "Nantes", "2042-07-30", "18:20:00", 3);
+
+
 
 insert into comment(id, content, user_id, post_id )
 values
