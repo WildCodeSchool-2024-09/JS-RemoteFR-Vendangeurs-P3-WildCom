@@ -11,6 +11,17 @@ const browse: RequestHandler = async (req, res, next) => {
   }
 };
 
+const read: RequestHandler = async (req, res, next) => {
+  try {
+    const postId = Number(req.params.id);
+    const post = await postRepository.read(postId);
+
+    res.json(post);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const add: RequestHandler = async (req, res, next) => {
   try {
     const { content, category, userId } = req.body.newPost;
@@ -52,4 +63,4 @@ const edit: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, add, destroy, edit };
+export default { browse, read, add, edit, destroy };

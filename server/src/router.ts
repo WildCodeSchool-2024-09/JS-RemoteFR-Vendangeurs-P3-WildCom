@@ -40,9 +40,10 @@ router.get("/api/user/:id/posts", userPostAction.browse);
 import postActions from "./modules/post/postActions";
 
 router.get("/api/posts", postActions.browse);
+router.get("/api/post/:id", postActions.read);
 router.post("/api/posts", postActions.add);
-router.delete("/api/posts/:id", postActions.destroy);
 router.put("/api/posts/:id/edit", postActions.edit);
+router.delete("/api/posts/:id", postActions.destroy);
 
 import postCommentsActions from "./modules/post/postComment/postCommentsActions";
 

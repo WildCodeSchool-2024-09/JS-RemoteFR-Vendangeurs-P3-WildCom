@@ -55,7 +55,7 @@ class EventRepository {
       SELECT 
         event.id AS event_id,
         event.content,
-        event.category,
+        category.name,
         event.picture,
         event.created_at,
         event.calendar,
@@ -78,6 +78,8 @@ class EventRepository {
       FROM event
       JOIN user
       ON event.user_id = user.id
+      JOIN category
+        ON event.category_id = category.id
       ORDER BY
         event.created_at DESC;
       `);
@@ -85,7 +87,7 @@ class EventRepository {
     const formattedRows: EventWithUser[] = rows.map((row) => ({
       id: row.event_id,
       content: row.content,
-      category: row.category,
+      category: row.name,
       picture: row.picture,
       title: row.title,
       place: row.place,
