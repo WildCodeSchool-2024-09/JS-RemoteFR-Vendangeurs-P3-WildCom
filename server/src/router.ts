@@ -85,4 +85,12 @@ router.delete(
   eventParticipationActions.destroy,
 );
 
+/* ************************************************************************* */
+
+// Define categories-related routes
+import categoryActions from "./modules/category/categoryActions";
+
+router.get("/api/categories/posts", categoryActions.readByTypePost);
+router.get("/api/categories/events", categoryActions.readByTypeEvent);
+
 export default router;
