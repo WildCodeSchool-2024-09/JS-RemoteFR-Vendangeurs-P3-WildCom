@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
+import type { Category } from "../types/type";
 
 interface PostModalProps {
   closeModal: () => void;
@@ -19,6 +20,23 @@ function PostModal({ closeModal }: PostModalProps) {
   const { setUpdatePost } = useUpdate();
   const [missContent, setMissContent] = useState("");
   const [missCategory, setMissCategory] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/categories/posts`,
+        );
+
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des catégories", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handlePostChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
@@ -107,9 +125,11 @@ function PostModal({ closeModal }: PostModalProps) {
             onChange={handleCategoryChange}
           >
             <option value="">Choisissez une catégorie</option>
-            <option value="Divers">Divers</option>
-            <option value="Job">Job</option>
-            <option value="Tech">Tech</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
           </select>
           <div className="flex items-center justify-center gap-8">
             <button

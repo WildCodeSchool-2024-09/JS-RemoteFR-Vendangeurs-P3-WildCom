@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
+import type { Category } from "../types/type";
 
 interface EventModalProps {
   closeModal: () => void;
@@ -28,6 +29,23 @@ function EventModal({ closeModal }: EventModalProps) {
   const [missTime, setMissTime] = useState("");
   const [missPlace, setMissPlace] = useState("");
   const [missTitle, setMissTitle] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/categories/events`,
+        );
+
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des catégories", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleEventChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
@@ -140,7 +158,7 @@ function EventModal({ closeModal }: EventModalProps) {
             onChange={handlePlaceChange}
           />
           <div className="flex gap-3">
-            <div className="flex-col space-y-3 flex-1">
+            <div className="flex-col flex-1 space-y-3">
               {missDate && <p className="text-xs text-text-red">{missDate}</p>}
               <input
                 type="date"
@@ -148,7 +166,7 @@ function EventModal({ closeModal }: EventModalProps) {
                 onChange={handleDateChange}
               />
             </div>
-            <div className="flex-col space-y-3 flex-1">
+            <div className="flex-col flex-1 space-y-3">
               {missTime && <p className="text-xs text-text-red">{missTime}</p>}
               <input
                 type="time"
@@ -177,9 +195,11 @@ function EventModal({ closeModal }: EventModalProps) {
             onChange={handleCategoryChange}
           >
             <option value="">Choisissez une catégorie</option>
-            <option value="Divers">Divers</option>
-            <option value="Job">Job</option>
-            <option value="Tech">Tech</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
           </select>
           <div className="flex items-center justify-center gap-8">
             <button

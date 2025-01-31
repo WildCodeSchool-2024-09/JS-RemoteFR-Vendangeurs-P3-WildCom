@@ -147,7 +147,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
                   {post.category}
                 </span>
               )}
-              <div className="relative">
+              <div className="relative flex items-center">
                 <button type="button" onClick={() => toggleMenu(post.id)}>
                   <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
                     <BiCog className="text-text-secondary size-5" />
