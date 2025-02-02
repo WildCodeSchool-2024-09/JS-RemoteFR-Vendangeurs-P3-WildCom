@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import EditPostModal from "./EditPostModal";
 import EventModal from "./EventModal";
 import PostModal from "./PostModal";
 
 interface ModalButtonProps {
   children: React.ReactNode;
-
+  postId?: number;
   type: string;
 }
 
-function ModalButton({ children, type }: ModalButtonProps) {
+function ModalButton({ children, type, postId }: ModalButtonProps) {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -29,6 +30,12 @@ function ModalButton({ children, type }: ModalButtonProps) {
             )}
             {type === "event" && (
               <EventModal closeModal={() => setShowModal(false)} />
+            )}
+            {type === "editPost" && (
+              <EditPostModal
+                postId={postId ? postId : 0}
+                closeModal={() => setShowModal(false)}
+              />
             )}
           </>,
           document.body,
