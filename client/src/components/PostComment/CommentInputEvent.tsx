@@ -41,6 +41,7 @@ export const CommentInputEvent: React.FC<CommentInputProps> = ({ eventId }) => {
           await axios.post(
             `${import.meta.env.VITE_API_URL}/api/events/${eventId}/comments`,
             comment,
+            { withCredentials: true },
           );
         } catch (error) {
           console.error(error);

@@ -41,6 +41,7 @@ export const CommentInputPost: React.FC<CommentInputProps> = ({ postId }) => {
           await axios.post(
             `${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments`,
             comment,
+            { withCredentials: true },
           );
         } catch (error) {
           console.error(error);

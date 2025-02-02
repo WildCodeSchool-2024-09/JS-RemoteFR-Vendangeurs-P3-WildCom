@@ -42,6 +42,7 @@ export const CommentPost: React.FC<CommentPostProps> = ({ postId }) => {
       fetchCommentPosts();
     }
   }, [postId, updateLike, updateComment]);
+
   const toggleCommentMenu = (commentId: number) => {
     setSelectedCommentId((prevId) => (prevId === commentId ? null : commentId));
   };
