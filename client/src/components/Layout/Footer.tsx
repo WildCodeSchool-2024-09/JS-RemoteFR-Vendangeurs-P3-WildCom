@@ -6,7 +6,7 @@ export const Footer: React.FC<LocationProps> = ({ location }) => {
   return (
     <>
       <footer className="top-0 bottom-0 right-0 flex-col hidden w-1/5 lg:fixed bg-bg_opacity-secondary lg:flex">
-        <section className="flex-grow hidden lg:flex justify-center pt-10">
+        <section className="justify-center flex-grow hidden pt-10 lg:flex">
           <RightNav location={location} />
         </section>
 
@@ -22,7 +22,7 @@ export const Footer: React.FC<LocationProps> = ({ location }) => {
             className="hover:text-accent-primary"
             href="mailto:creamedoc@gmail.com"
           >
-            Contactez Nous
+            Contactez nous
           </a>
         </section>
       </footer>
