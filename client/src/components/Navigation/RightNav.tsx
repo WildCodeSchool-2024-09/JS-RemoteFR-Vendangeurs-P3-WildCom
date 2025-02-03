@@ -5,6 +5,7 @@ import { FaRegUser } from "react-icons/fa";
 import type { LocationProps } from "../../types/type";
 
 import { IoMdAdd } from "react-icons/io";
+import { SlEqualizer } from "react-icons/sl";
 import { useAuth } from "../../contexts/AuthContext";
 import ModalButton from "../ModalButton";
 
@@ -25,7 +26,7 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
             <NavLink
               to={`/user/profile/${user?.id}`}
               className={({ isActive }: { isActive: boolean }) =>
-                `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
+                `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
               }
             >
               <FaRegUser className="size-7 text-accent-primary" />
@@ -36,10 +37,10 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
             <NavLink
               to={`/user/profile/edit/${user?.id}`}
               className={({ isActive }: { isActive: boolean }) =>
-                `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
+                `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
               }
             >
-              <FaRegUser className=" size-7 drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]size-7 text-accent-primary hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]" />
+              <SlEqualizer className=" size-7 drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]size-7 text-accent-primary hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]" />
               Mes informations
             </NavLink>
           </li>

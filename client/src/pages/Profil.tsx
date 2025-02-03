@@ -8,11 +8,11 @@ import type { Post } from "../types/type";
 type User = {
   id: number;
   username: string;
-  avatar: string;
   github: string | null;
   linkedin: string | null;
   site: string | null;
   biography: string | null;
+  avatar: string | null;
 };
 function Profil() {
   const { id } = useParams();
@@ -61,7 +61,7 @@ function Profil() {
             <figure className="self-center w-52">
               <img
                 className="object-cover w-48 h-48 rounded-full "
-                src={user.avatar}
+                src={user.avatar ?? ""}
                 alt=""
                 aria-labelledby="username"
               />
@@ -69,12 +69,12 @@ function Profil() {
 
             <p
               id="username"
-              className="flex justify-center text-2xl font-bold md:hidden "
+              className="flex justify-center text-2xl font-bold break-all md:hidden"
             >
               {user.username}
             </p>
             <div className="flex flex-col justify-center w-3/4 gap-8">
-              <p className="hidden text-2xl font-bold md:flex ">
+              <p className="hidden text-2xl font-bold break-all md:flex">
                 {user.username}
               </p>
               <ul className="space-y-4">
@@ -132,7 +132,7 @@ function Profil() {
           </div>
         </section>
       ))}
-      <section className="flex justify-center mx-4 mt-8 posts">
+      <section className="flex flex-col items-center justify-center gap-8 mt-8 lg:mx-4">
         <CardPost posts={posts} />
       </section>
     </>

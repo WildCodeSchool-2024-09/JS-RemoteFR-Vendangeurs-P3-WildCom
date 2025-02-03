@@ -30,6 +30,25 @@ class userRepository {
     );
     return rows as User[];
   }
+
+  async readUserInfo(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+      SELECT 
+      firstname,
+      lastname,
+      avatar,
+      github,
+      linkedin,
+      site,
+      biography 
+      FROM user 
+      WHERE id = ?`,
+      [id],
+    );
+    return rows as User[];
+  }
+
   async update(id: string, userData: Partial<User>) {
     const [result] = await databaseClient.query<ResultSetHeader>(
       "UPDATE user SET ? WHERE id = ?",
@@ -42,6 +61,7 @@ class userRepository {
       "SELECT * FROM user WHERE id = ?",
       [id],
     );
+
     return updatedUser;
   }
 }
