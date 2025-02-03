@@ -84,5 +84,18 @@ class PostCommentsRepository {
 
     return result.affectedRows;
   }
+  async delete(postId: number) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      DELETE
+      FROM
+      comment
+      WHERE id = ?
+      `,
+      [postId],
+    );
+
+    return result.affectedRows;
+  }
 }
 export default new PostCommentsRepository();

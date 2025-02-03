@@ -45,4 +45,18 @@ const edit: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, add, edit };
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const postId = Number.parseInt(req.params.id);
+    const affectedRows = await postCommentsRepository.delete(postId);
+
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    }
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { browse, add, edit, destroy };

@@ -44,6 +44,7 @@ import postCommentsActions from "./modules/post/postComment/postCommentsActions"
 router.get("/api/posts/:id/comments", postCommentsActions.browse);
 router.post("/api/posts/:id/comments", postCommentsActions.add);
 router.put("/api/posts/comments/:id", postCommentsActions.edit);
+router.delete("/api/posts/comments/:id", postCommentsActions.destroy);
 
 import postLikesActions from "./modules/post/postLike/postLikesActions";
 
