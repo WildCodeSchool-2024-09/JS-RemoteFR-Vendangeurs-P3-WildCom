@@ -4,7 +4,8 @@ import { formattedTimestamp } from "../../utils/formattedTimestamp";
 
 type Post = {
   id: number;
-  category: number;
+  categoryId?: number;
+  categoryName: string;
   picture?: string | null;
   content: string;
   timestamp?: string;
@@ -39,7 +40,7 @@ class PostRepository {
       `
       SELECT 
         post.id AS post_id, 
-        category.name, 
+        category.name,
         post.picture, 
         post.content, 
         post.created_at,
@@ -68,7 +69,7 @@ class PostRepository {
 
     const formattedRows: PostWithUser[] = rows.map((row) => ({
       id: row.post_id,
-      category: row.name,
+      categoryName: row.name,
       picture: row.picture,
       content: row.content,
       totalComments: row.total_comments,
@@ -89,7 +90,8 @@ class PostRepository {
       `
       SELECT 
         post.id AS post_id, 
-        post.category, 
+        category.name AS category_name, 
+        category.id AS category_id,
         post.picture, 
         post.content, 
         post.created_at,
@@ -99,6 +101,8 @@ class PostRepository {
       FROM post
       JOIN user
         ON post.user_id = user.id
+      JOIN category
+        ON post.category_id = category.id
       WHERE post.id = ?
       `,
       [postId],
@@ -106,7 +110,8 @@ class PostRepository {
 
     const formattedRows: PostWithUser[] = rows.map((row) => ({
       id: row.post_id,
-      category: row.category,
+      categoryName: row.category_name,
+      categoryId: row.category_id,
       picture: row.picture,
       content: row.content,
       user: {
@@ -128,14 +133,18 @@ class PostRepository {
     return result.affectedRows;
   }
 
-  async update(postId: number, content: string, category: string) {
+  async update(updatedPost: {
+    content: string;
+    categoryId: number;
+    postId: number;
+  }) {
     const [result] = await databaseClient.query<Result>(
       `
       UPDATE post
-      SET content = ?, category = ?
+      SET content = ?, category_id = ?
       WHERE id = ?
       `,
-      [content, category, postId],
+      [updatedPost.content, updatedPost.categoryId, updatedPost.postId],
     );
 
     return result.affectedRows;
