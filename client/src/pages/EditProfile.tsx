@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import { useAuth } from "../contexts/AuthContext";
+import { useUpdate } from "../contexts/UpdateContext";
 
 type User = {
   id: number;
@@ -18,6 +19,7 @@ type User = {
 
 function EditProfile() {
   const { user } = useAuth();
+  const { setUpdateUser } = useUpdate();
   const navigate = useNavigate();
   const [dataUser, setDataUser] = useState<User | null>(null);
 
@@ -60,6 +62,7 @@ function EditProfile() {
         dataUser,
         { withCredentials: true },
       );
+      setUpdateUser((prev) => prev + 1);
 
       navigate(`/user/profile/${user?.id}`);
     } catch (error) {

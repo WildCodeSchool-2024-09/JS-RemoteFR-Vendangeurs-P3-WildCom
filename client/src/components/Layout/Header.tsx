@@ -4,13 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { LeftNav } from "../Navigation/LeftNav";
 
+import { useEffect } from "react";
 import { FiLogOut } from "react-icons/fi";
+import { useUpdate } from "../../contexts/UpdateContext";
 import { Logo } from "../Logo";
 import MobileNav from "../Navigation/MobileNav";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+  const { updateUser } = useUpdate();
 
   const handleLogout = async () => {
     const response = await axios.post(
@@ -25,6 +28,23 @@ export const Header = () => {
       navigate("/");
     }
   };
+
+  useEffect(() => {
+    const getUpdatedCurrentUser = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/auth/find/${user?.id}`,
+          { withCredentials: true },
+        );
+        setUser(response.data);
+      } catch (error) {
+        console.error("Erreur lors du chargement de l'utilisateur", error);
+      }
+    };
+    if (updateUser) {
+      getUpdatedCurrentUser();
+    }
+  }, [updateUser, user?.id, setUser]);
 
   return (
     <header className="z-10 flex w-full h-20 lg:fixed lg:left-0 lg:top-0 lg:bottom-0 bg-text-secondary lg:bg-bg_opacity-secondary lg:flex-col lg:justify-between lg:w-1/5 lg:h-screen">
