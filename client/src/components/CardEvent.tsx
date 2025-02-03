@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiCog } from "react-icons/bi";
-import { FaRegClock, FaRegCommentAlt } from "react-icons/fa";
+import { FaPen, FaRegClock, FaRegCommentAlt } from "react-icons/fa";
 import { LuCalendar, LuCalendarCheck2 } from "react-icons/lu";
 import { MdDeleteOutline, MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
@@ -10,6 +10,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Event } from "../types/type";
 import { CommentEvent } from "./CommentEvent";
+import ModalButton from "./ModalButton";
 import { CommentInputEvent } from "./PostComment/CommentInputEvent";
 
 interface CardEventProps {
@@ -147,7 +148,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
 
             <section className="flex items-center gap-4">
               <span className="text-xs lg:text-sm font-normal px-3 bg-[#176b1d]  border-2 border-accent-primary rounded">
-                {event.category}
+                {event.categoryName}
               </span>
               <div className="relative flex items-center">
                 <button onClick={() => toggleMenu(event.id)} type="button">
@@ -156,16 +157,24 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                   </figure>
                 </button>
                 {menuEventVisible[event.id] && (
-                  <div className="absolute z-50 w-40 bg-white border lg:-top-1 right-0 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] ">
+                  <div className="absolute z-50 w-40 bg-white border lg:-top-1 right-0 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] text-sm">
                     {(user?.id === event.user.id || user?.role === "admin") && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteEvent(event.id)}
-                        className="flex w-full gap-2 px-4 py-2 text-sm text-left hover:text-text-red"
-                      >
-                        <MdDeleteOutline className="size-5 text-text-red " />
-                        Supprimer
-                      </button>
+                      <>
+                        <div className="flex w-full gap-2 px-4 py-2 text-left hover:text-accent-primary">
+                          <FaPen className="w-5 text-accent-primary" />
+                          <ModalButton eventId={event.id} type={"editEvent"}>
+                            Modifier
+                          </ModalButton>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteEvent(event.id)}
+                          className="flex w-full gap-2 px-4 py-2 text-left hover:text-text-red"
+                        >
+                          <MdDeleteOutline className="size-5 text-text-red " />
+                          Supprimer
+                        </button>
+                      </>
                     )}
                   </div>
                 )}

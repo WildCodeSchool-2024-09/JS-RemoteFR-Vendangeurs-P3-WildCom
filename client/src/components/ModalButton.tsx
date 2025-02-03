@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import EventModal from "./EventModal";
-import PostModal from "./PostModal";
+import AddEventModal from "./AddEventModal";
+import AddPostModal from "./AddPostModal";
+import EditEventModal from "./EditEventModal";
 
 interface ModalButtonProps {
   children: React.ReactNode;
-
+  eventId?: number;
   type: string;
 }
 
-function ModalButton({ children, type }: ModalButtonProps) {
+function ModalButton({ children, eventId, type }: ModalButtonProps) {
   const [showModal, setShowModal] = useState(false);
-
   return (
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="flex justify-center items-center gap-3 text-text-primary rounded-xl font-text font-semibold text-lg hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
+        className="flex justify-center items-center gap-3 text-text-primary rounded-xl font-text hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
         type="button"
       >
         {children}
@@ -25,10 +25,16 @@ function ModalButton({ children, type }: ModalButtonProps) {
         createPortal(
           <>
             {type === "post" && (
-              <PostModal closeModal={() => setShowModal(false)} />
+              <AddPostModal closeModal={() => setShowModal(false)} />
             )}
             {type === "event" && (
-              <EventModal closeModal={() => setShowModal(false)} />
+              <AddEventModal closeModal={() => setShowModal(false)} />
+            )}
+            {type === "editEvent" && (
+              <EditEventModal
+                eventId={eventId}
+                closeModal={() => setShowModal(false)}
+              />
             )}
           </>,
           document.body,

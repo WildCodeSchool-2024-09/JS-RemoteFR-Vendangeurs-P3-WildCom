@@ -16,7 +16,7 @@ const edit: RequestHandler = async (req, res, next) => {
     const event = {
       id: Number.parseInt(req.params.id),
       content: req.body.content,
-      category: req.body.category,
+      categoryId: req.body.categoryId,
       picture: req.body.picture,
       title: req.body.title,
       place: req.body.place,
@@ -31,6 +31,17 @@ const edit: RequestHandler = async (req, res, next) => {
     } else {
       res.sendStatus(204);
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const read: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number(req.params.id);
+    const event = await eventRepository.read(eventId);
+
+    res.json(event);
   } catch (err) {
     next(err);
   }
@@ -68,4 +79,4 @@ const destroy: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, edit, add, destroy };
+export default { browse, read, edit, add, destroy };

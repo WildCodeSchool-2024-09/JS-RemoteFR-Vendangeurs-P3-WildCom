@@ -18,7 +18,7 @@ export type Post = {
 export type Event = {
   id: number;
   content: string;
-  category: string;
+  categoryName: string;
   picture: string | null;
   timestamp: string;
   title: string;
