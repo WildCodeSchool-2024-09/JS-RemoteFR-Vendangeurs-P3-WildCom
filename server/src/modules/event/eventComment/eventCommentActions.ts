@@ -44,5 +44,18 @@ const edit: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const eventId = Number.parseInt(req.params.id);
+    const affectedRows = await eventCommentsRepository.delete(eventId);
 
-export default { browse, add, edit };
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    }
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { browse, add, edit, destroy };

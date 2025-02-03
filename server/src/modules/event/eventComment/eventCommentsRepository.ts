@@ -86,6 +86,19 @@ class EventCommentRepository {
 
     return result.affectedRows;
   }
+  async delete(eventId: number) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      DELETE
+      FROM
+      comment
+      WHERE id = ?
+      `,
+      [eventId],
+    );
+
+    return result.affectedRows;
+  }
 }
 
 export default new EventCommentRepository();

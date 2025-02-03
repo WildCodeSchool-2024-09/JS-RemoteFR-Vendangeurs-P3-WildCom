@@ -67,6 +67,7 @@ import eventCommentActions from "./modules/event/eventComment/eventCommentAction
 router.post("/api/events/:id/comments", eventCommentActions.add);
 router.get("/api/events/:id/comments", eventCommentActions.browse);
 router.put("/api/events/comments/:id", eventCommentActions.edit);
+router.delete("/api/events/comments/:id", eventCommentActions.destroy);
 
 import eventParticipationActions from "./modules/event/eventParticipation/eventParticipationActions";
 
