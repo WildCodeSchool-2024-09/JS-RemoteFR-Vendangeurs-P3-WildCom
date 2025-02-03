@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiCog } from "react-icons/bi";
-import { FaRegCommentAlt } from "react-icons/fa";
+import { FaRegClock, FaRegCommentAlt } from "react-icons/fa";
 import { LuCalendar, LuCalendarCheck2 } from "react-icons/lu";
 import { MdDeleteOutline, MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useUpdate } from "../contexts/UpdateContext";
 import type { Event } from "../types/type";
 import { CommentEvent } from "./CommentEvent";
 import { CommentInputEvent } from "./PostComment/CommentInputEvent";
@@ -23,6 +24,9 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
   const [commentsVisibility, setCommentsVisibility] = useState<{
     [key: number]: boolean;
   }>({});
+  const [isExpanded, setIsExpanded] = useState<{ [key: number]: boolean }>({});
+  const { setUpdateParticipation, setUpdateEvent } = useUpdate();
+  const [menuEventVisible, setMenuEventVisible] = useState<number | null>(null);
 
   useEffect(() => {
     const getParticipations = async () => {
@@ -67,6 +71,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             data: {
               userId: user?.id,
             },
+            withCredentials: true,
           },
         );
       } else {
@@ -76,6 +81,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             data: {
               userId: user?.id,
             },
+            withCredentials: true,
           },
         );
       }
@@ -85,6 +91,8 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
         [eventId]: !prev[eventId],
       }));
     } catch (error) {}
+
+    setUpdateParticipation((prev) => prev + 1);
   };
 
   const handleShowComments = (eventId: number) => {
@@ -103,14 +111,15 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
     } catch (error) {
       console.error(error);
     }
+    setUpdateEvent((prev) => prev + 1);
   };
 
-  const [menuEventVisible, setMenuEventVisible] = useState<{
-    [key: number]: boolean;
-  }>({});
+  const toggleMenu = (eventId: number) => {
+    setMenuEventVisible((prev) => (prev === eventId ? null : eventId));
+  };
 
-  const toggleMenu = (postId: number) => {
-    setMenuEventVisible((prev) => ({
+  const toggleExpansion = (postId: number) => {
+    setIsExpanded((prev) => ({
       ...prev,
       [postId]: !prev[postId],
     }));
@@ -121,7 +130,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
       {events.map((event) => (
         <article
           key={event.id}
-          className="z-10 flex flex-col h-auto gap-2 px-10 py-4 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]"
+          className="z-10 flex flex-col w-full h-auto gap-2 px-10 py-4 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]"
         >
           <header className="flex items-center justify-between py-2">
             <Link to={`/user/profile/${event.user.id}`}>
@@ -144,13 +153,13 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
               <span className="text-xs lg:text-sm font-normal px-3 bg-[#176b1d]  border-2 border-accent-primary rounded">
                 {event.category}
               </span>
-              <div className="relative">
+              <div className="relative flex items-center">
                 <button onClick={() => toggleMenu(event.id)} type="button">
                   <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
                     <BiCog className="size-5 text-text-secondary" />
                   </figure>
                 </button>
-                {menuEventVisible[event.id] && (
+                {menuEventVisible === event.id && (
                   <div className="absolute z-50 w-40 bg-white border lg:-top-1 right-0 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] ">
                     {(user?.id === event.user.id || user?.role === "admin") && (
                       <button
@@ -169,31 +178,48 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
           </header>
 
           <main className="flex flex-col ">
-            <section className="flex flex-col gap-3 space-x-3 lg:flex-row lg:gap-0">
+            <section className="flex flex-col gap-3 lg:gap-0">
               {event.picture && (
-                <figure className="lg:w-1/3">
-                  <img src={event.picture} alt="" className="rounded-md l" />
+                <figure className="">
+                  <img src={event.picture} alt="" className="mb-4 rounded-md" />
                 </figure>
               )}
-              <article
-                className={`${event.picture ? "lg:w-2/3" : "w-full"} space-y-3`}
-              >
+              <article className="w-full space-y-3">
                 <h2 className="text-xl font-semibold font-title">
                   {event.title}
                 </h2>
-                <div className="flex items-center space-x-1">
-                  <RxCalendar className="size-5 text-accent-primary" />
-                  <h2 className="text-xs">{event.calendar}</h2>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <MdWhereToVote className="size-5 text-accent-primary" />
-                  <h2 className="text-sm font-title">
-                    à <span>{event.place}</span>
-                  </h2>
+                <div className="flex flex-wrap items-center justify-start gap-4 text-sm">
+                  <div className="flex items-center order-1 space-x-2 lg:order-1">
+                    <RxCalendar className="size-5 text-accent-primary" />
+                    <p>Le {event.calendar}</p>
+                  </div>
+                  <div className="flex items-center justify-start order-3 space-x-2 md:order-2">
+                    <FaRegClock className="size-5 text-accent-primary" />
+                    <p>à {event.time}</p>
+                  </div>
+                  <div className="flex items-center justify-start order-2 space-x-2 md:order-3">
+                    <MdWhereToVote className="size-6 text-accent-primary" />
+                    <p className="text-sm font-text">
+                      à <span>{event.place}</span>
+                    </p>
+                  </div>
                 </div>
               </article>
             </section>
-            <p className="mt-6 text-sm">{event.content}</p>
+            <p className="mt-6 text-sm break-words whitespace-pre-line">
+              {isExpanded[event.id]
+                ? event.content
+                : `${event.content.slice(0, 600)} ${event.content.length < 600 ? "" : "..."}`}
+            </p>
+            {event.content.length > 600 && (
+              <button
+                type="button"
+                className="w-full mt-2 text-sm text-end font-text hobver:text-accent-primary"
+                onClick={() => toggleExpansion(event.id)}
+              >
+                {isExpanded[event.id] ? "Réduire" : "Lire la suite"}
+              </button>
+            )}
 
             <hr className="mt-6 mb-4 border-accent-primary drop-shadow-[0_3px_2px_rgba(65,242,77,1)]" />
             <div className="flex justify-between">

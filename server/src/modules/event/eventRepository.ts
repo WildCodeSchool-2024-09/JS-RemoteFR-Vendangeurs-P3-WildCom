@@ -1,18 +1,23 @@
 import databaseClient from "../../../database/client";
-import formattedTimestamp from "../../utils/formattedTimestamp";
+import {
+  formattedDate,
+  formattedTime,
+  formattedTimestamp,
+} from "../../utils/formattedTimestamp";
 
 import type { Result, Rows } from "../../../database/client";
 
 type Event = {
   id: number;
   content: string;
-  category: string;
+  category: number;
   picture: string;
   created_at?: Date;
   title: string;
   place: string;
   calendar: string;
-  user_id?: number;
+  time: string;
+  userId?: number;
 };
 
 type User = {
@@ -28,8 +33,8 @@ type EventWithUser = Omit<Event, "user_id"> & {
 class EventRepository {
   async create(event: Omit<Event, "id">) {
     const [result] = await databaseClient.query<Result>(
-      `INSERT INTO event (content, category, picture, title, place, calendar, user_id) 
-      VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO event (content, category_id, picture, title, place, calendar, time, user_id) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         event.content,
         event.category,
@@ -37,7 +42,8 @@ class EventRepository {
         event.title,
         event.place,
         event.calendar,
-        event.user_id,
+        event.time,
+        event.userId,
       ],
     );
 
@@ -49,10 +55,11 @@ class EventRepository {
       SELECT 
         event.id AS event_id,
         event.content,
-        event.category,
+        category.name,
         event.picture,
         event.created_at,
         event.calendar,
+        event.time,
         event.title,
         event.place,
         user.id AS user_id,
@@ -71,6 +78,8 @@ class EventRepository {
       FROM event
       JOIN user
       ON event.user_id = user.id
+      JOIN category
+        ON event.category_id = category.id
       ORDER BY
         event.created_at DESC;
       `);
@@ -78,13 +87,14 @@ class EventRepository {
     const formattedRows: EventWithUser[] = rows.map((row) => ({
       id: row.event_id,
       content: row.content,
-      category: row.category,
+      category: row.name,
       picture: row.picture,
       title: row.title,
       place: row.place,
       totalComments: row.total_comments,
       totalParticipations: row.total_participations,
-      calendar: formattedTimestamp(new Date(row.calendar)),
+      calendar: formattedDate(row.calendar),
+      time: formattedTime(row.time),
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,
@@ -99,7 +109,7 @@ class EventRepository {
   async update(event: Event) {
     const [result] = await databaseClient.query<Result>(
       `UPDATE event
-      SET content = ?, category = ?, picture = ?, title = ?, place = ?, calendar = ? 
+      SET content = ?, category = ?, picture = ?, title = ?, place = ?, calendar = ?, time = ? 
       WHERE id = ?`,
       [
         event.content,
@@ -108,6 +118,7 @@ class EventRepository {
         event.title,
         event.place,
         event.calendar,
+        event.time,
         event.id,
       ],
     );

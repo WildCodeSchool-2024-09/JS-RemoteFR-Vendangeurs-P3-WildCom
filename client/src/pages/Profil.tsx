@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { CardPost } from "../components/CardPost";
+import { useUpdate } from "../contexts/UpdateContext";
 import type { Post } from "../types/type";
 
 type User = {
@@ -18,6 +19,7 @@ function Profil() {
   const { id } = useParams();
   const [users, setUsers] = useState([] as User[]);
   const [posts, setPosts] = useState([] as Post[]);
+  const { updatePost } = useUpdate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -47,8 +49,12 @@ function Profil() {
       }
     };
 
+    if (updatePost) {
+      fetchPosts();
+    }
+
     fetchPosts();
-  }, [id]);
+  }, [id, updatePost]);
 
   return (
     <>

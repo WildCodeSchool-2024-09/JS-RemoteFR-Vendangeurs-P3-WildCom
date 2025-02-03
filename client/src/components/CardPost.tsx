@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiCog } from "react-icons/bi";
-import { FaHeart, FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaPen, FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useUpdate } from "../contexts/UpdateContext";
 import type { Post } from "../types/type";
 import { CommentPost } from "./CommentPost";
+import ModalButton from "./ModalButton";
 import { CommentInputPost } from "./PostComment/CommentInputPost";
 
 interface CardPostProps {
@@ -20,15 +22,12 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
     [key: number]: boolean;
   }>({});
 
-  const [menuPostVisible, setMenuPostVisible] = useState<{
-    [key: number]: boolean;
-  }>({});
+  const [menuPostVisible, setMenuPostVisible] = useState<number | null>(null);
+  const [isExpanded, setIsExpanded] = useState<{ [key: number]: boolean }>({});
+  const { setUpdateLike, setUpdatePost } = useUpdate();
 
   const toggleMenu = (postId: number) => {
-    setMenuPostVisible((prev) => ({
-      ...prev,
-      [postId]: !prev[postId],
-    }));
+    setMenuPostVisible((prev) => (prev === postId ? null : postId));
   };
 
   useEffect(() => {
@@ -40,6 +39,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             data: {
               userId: user?.id,
             },
+            withCredentials: true,
           },
         );
 
@@ -76,6 +76,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
     } catch (error) {
       console.error("Erreur lors de la suppression du post", error);
     }
+    setUpdatePost((prev) => prev + 1);
   };
 
   const handleLike = async (postId: number) => {
@@ -87,6 +88,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             data: {
               userId: user?.id,
             },
+            withCredentials: true,
           },
         );
       } else {
@@ -96,6 +98,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             data: {
               userId: user?.id,
             },
+            withCredentials: true,
           },
         );
       }
@@ -105,10 +108,19 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
         [postId]: !prev[postId],
       }));
     } catch (error) {}
+
+    setUpdateLike((prev) => prev + 1);
   };
 
   const handleShowComments = (postId: number) => {
     setCommentsVisibility((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
+
+  const toggleExpansion = (postId: number) => {
+    setIsExpanded((prev) => ({
       ...prev,
       [postId]: !prev[postId],
     }));
@@ -137,28 +149,39 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             </Link>
 
             <section className="flex items-center gap-4">
-              {post.category && (
+              {post.categoryName && (
                 <span className="text-sm font-normal px-3 bg-[#176b1d] border-2 border-accent-primary rounded">
-                  {post.category}
+                  {post.categoryName}
                 </span>
               )}
-              <div className="relative">
+              <div className="relative flex items-center">
                 <button type="button" onClick={() => toggleMenu(post.id)}>
                   <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
                     <BiCog className="text-text-secondary size-5" />
                   </figure>
                 </button>
-                {menuPostVisible[post.id] && (
+                {menuPostVisible === post.id && (
                   <div className="absolute z-50 w-40 bg-white border lg:-top-1 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] right-0 ">
                     {(user?.id === post.user.id || user?.role === "admin") && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeletePost(post.id)}
-                        className="right-0 flex w-full gap-2 px-4 py-2 text-sm text-left hover:text-text-red"
-                      >
-                        <MdDeleteOutline className="size-5 text-text-red " />
-                        Supprimer
-                      </button>
+                      <>
+                        <ModalButton type="editPost" postId={post.id}>
+                          <button
+                            type="button"
+                            className="flex w-full gap-4 px-4 py-2 text-sm text-left hover:text-accent-primary"
+                          >
+                            <FaPen className="text-accent-primary" />
+                            Modifier
+                          </button>
+                        </ModalButton>
+                        <button
+                          type="button"
+                          onClick={() => handleDeletePost(post.id)}
+                          className="right-0 flex w-full gap-2 px-4 py-2 text-sm text-left hover:text-text-red"
+                        >
+                          <MdDeleteOutline className="size-5 text-text-red " />
+                          Supprimer
+                        </button>
+                      </>
                     )}
                   </div>
                 )}
@@ -176,7 +199,23 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
                 />
               </figure>
             )}
-            <p className="mt-6 text-sm">{post.content}</p>
+            <div>
+              <p className="mt-6 text-sm break-words whitespace-pre-line">
+                {isExpanded[post.id]
+                  ? post.content
+                  : `${post.content.slice(0, 600)} ${post.content.length < 600 ? "" : "..."}`}
+              </p>
+              {post.content.length > 600 && (
+                <button
+                  type="button"
+                  onClick={() => toggleExpansion(post.id)}
+                  className="w-full mt-2 text-sm text-end font-text hover:text-accent-primary"
+                >
+                  {isExpanded[post.id] ? "Réduire" : "Lire la suite"}
+                </button>
+              )}
+            </div>
+
             <hr className="mt-6 mb-4 border-accent-primary drop-shadow-[0_3px_2px_rgba(65,242,77,1)]" />
             <div className="flex justify-between">
               <p className="flex gap-1 text-xs ">{post.timestamp}</p>

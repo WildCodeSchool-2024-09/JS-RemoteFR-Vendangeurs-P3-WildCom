@@ -7,20 +7,22 @@ import type { Category } from "../types/type";
 
 interface PostModalProps {
   closeModal: () => void;
+  postId: number;
 }
 
-function PostModal({ closeModal }: PostModalProps) {
-  const { user } = useAuth();
-  const [newPost, setNewPost] = useState({
-    userId: user?.id as number | undefined,
-    content: "",
-    category: "",
-  });
+interface DataPost {
+  id?: number;
+  content?: string;
+  categoryId?: number;
+  categoryName?: string;
+}
 
+function EditPostModal({ closeModal, postId }: PostModalProps) {
+  const { user } = useAuth();
   const { setUpdatePost } = useUpdate();
-  const [missContent, setMissContent] = useState("");
-  const [missCategory, setMissCategory] = useState("");
+
   const [categories, setCategories] = useState<Category[]>([]);
+  const [dataPost, setDataPost] = useState<DataPost | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -35,52 +37,53 @@ function PostModal({ closeModal }: PostModalProps) {
       }
     };
 
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/post/${postId}`,
+        );
+
+        setDataPost(response.data[0]);
+      } catch (error) {
+        console.error(
+          "Erreur lors de la récupération de la publication",
+          error,
+        );
+      }
+    };
+
     fetchCategories();
-  }, []);
+    fetchPost();
+  }, [postId]);
 
-  const handlePostChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newContent = e.target.value;
+  const handleInputsChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
 
-    setNewPost({
-      ...newPost,
-      content: newContent,
-    });
+    setDataPost((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setNewPost({ ...newPost, category: e.target.value });
-  };
-
-  const handlePublish = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (newPost.content === "") {
-      setMissContent("Veuillez rédiger une publication");
-      return;
-    }
-    if (newPost.category === "") {
-      setMissCategory("Veuillez choisir une catégorie");
-      if (missContent) {
-        setMissContent("");
-      }
-      return;
-    }
-
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/posts`,
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/posts/${postId}/edit`,
+        dataPost,
         {
-          newPost,
+          withCredentials: true,
         },
-        { withCredentials: true },
       );
 
+      setUpdatePost((prev) => prev + 1);
       closeModal();
     } catch (error) {
-      console.error("Erreur lors de la publication", error);
+      console.error("Erreur lors de la modification de la publication", error);
     }
-
-    setUpdatePost((prev) => prev + 1);
   };
 
   return (
@@ -92,7 +95,7 @@ function PostModal({ closeModal }: PostModalProps) {
       />
       <div className="fixed z-20 flex flex-col w-full h-auto gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
         <h2 className="flex justify-center text-xl text-text-primary font-title">
-          Créer une publication
+          Modifier une publication
         </h2>
         <header className="flex items-center justify-between">
           <section className="flex items-center gap-2">
@@ -104,40 +107,37 @@ function PostModal({ closeModal }: PostModalProps) {
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
         </header>
-        <form className="flex flex-col gap-4" action="">
-          {missContent && (
-            <p className="text-xs text-text-red">{missContent}</p>
-          )}
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <TextareaAutosize
             maxLength={65535}
-            minRows={6}
-            className={`${missContent ? " border-2 border-text-red " : ""}w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary`}
-            placeholder="Rédigez une publication"
-            onChange={handlePostChange}
+            name="content"
+            className="w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary"
+            value={dataPost?.content}
+            onChange={handleInputsChange}
           />
-          {missCategory && (
-            <p className="text-xs text-text-red">{missCategory}</p>
-          )}
+
           <select
-            name="category"
-            id="category"
-            className={`${missCategory ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl`}
-            onChange={handleCategoryChange}
+            name="categoryId"
+            className="px-3 py-2 rounded-xl"
+            onChange={handleInputsChange}
           >
-            <option value="">Choisissez une catégorie</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
+            <option value={dataPost?.categoryId}>
+              {dataPost?.categoryName}
+            </option>
+            {categories
+              .filter((category) => category.id !== dataPost?.categoryId)
+              .map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
           </select>
           <div className="flex items-center justify-center gap-8">
             <button
-              onClick={handlePublish}
               type="submit"
               className="self-center px-6 py-2 mt-4 text-xl text-text-secondary bg-accent-primary hover:bg-accent-primaryhover w-fit rounded-xl font-text"
             >
-              Publier
+              Modifier
             </button>
             <button
               className="self-center px-6 py-2 mt-4 text-xl border text-accent-primary border-accent-primary hover:text-accent-primaryhover hover:border-accent-primaryhover w-fit rounded-xl font-text"
@@ -161,4 +161,4 @@ function PostModal({ closeModal }: PostModalProps) {
   );
 }
 
-export default PostModal;
+export default EditPostModal;

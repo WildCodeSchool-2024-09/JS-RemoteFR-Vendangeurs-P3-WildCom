@@ -1,10 +1,11 @@
 import databaseClient from "../../../database/client";
 import type { Result, Rows } from "../../../database/client";
-import formattedTimestamp from "../../utils/formattedTimestamp";
+import { formattedTimestamp } from "../../utils/formattedTimestamp";
 
 type Post = {
   id: number;
-  category?: string;
+  categoryId?: number;
+  categoryName: string;
   picture?: string | null;
   content: string;
   timestamp?: string;
@@ -25,7 +26,7 @@ class PostRepository {
   async create(content: string, category: string, userId: number) {
     const [result] = await databaseClient.query<Result>(
       `
-      INSERT INTO post (content, category, user_id)
+      INSERT INTO post (content, category_id, user_id)
       VALUES (?, ?, ?)
       `,
       [content, category, userId],
@@ -39,7 +40,7 @@ class PostRepository {
       `
       SELECT 
         post.id AS post_id, 
-        post.category, 
+        category.name,
         post.picture, 
         post.content, 
         post.created_at,
@@ -59,6 +60,8 @@ class PostRepository {
       FROM post
       JOIN user 
         ON post.user_id = user.id
+      JOIN category
+        ON post.category_id = category.id
       ORDER BY
         post.created_at DESC;
       `,
@@ -66,7 +69,7 @@ class PostRepository {
 
     const formattedRows: PostWithUser[] = rows.map((row) => ({
       id: row.post_id,
-      category: row.category,
+      categoryName: row.name,
       picture: row.picture,
       content: row.content,
       totalComments: row.total_comments,
@@ -81,12 +84,69 @@ class PostRepository {
 
     return formattedRows;
   }
+
+  async read(postId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+      SELECT 
+        post.id AS post_id, 
+        category.name AS category_name, 
+        category.id AS category_id,
+        post.picture, 
+        post.content, 
+        post.created_at,
+        user.id AS user_id, 
+        CONCAT (user.firstname,' ', user.lastname) AS username,
+        user.avatar
+      FROM post
+      JOIN user
+        ON post.user_id = user.id
+      JOIN category
+        ON post.category_id = category.id
+      WHERE post.id = ?
+      `,
+      [postId],
+    );
+
+    const formattedRows: PostWithUser[] = rows.map((row) => ({
+      id: row.post_id,
+      categoryName: row.category_name,
+      categoryId: row.category_id,
+      picture: row.picture,
+      content: row.content,
+      user: {
+        id: row.user_id,
+        username: row.username,
+        avatar: row.avatar,
+      },
+    }));
+
+    return formattedRows;
+  }
+
   async delete(id: number) {
     const [result] = await databaseClient.query<Result>(
       "DELETE FROM post WHERE id = ?",
 
       [id],
     );
+    return result.affectedRows;
+  }
+
+  async update(updatedPost: {
+    content: string;
+    categoryId: number;
+    postId: number;
+  }) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      UPDATE post
+      SET content = ?, category_id = ?
+      WHERE id = ?
+      `,
+      [updatedPost.content, updatedPost.categoryId, updatedPost.postId],
+    );
+
     return result.affectedRows;
   }
 }

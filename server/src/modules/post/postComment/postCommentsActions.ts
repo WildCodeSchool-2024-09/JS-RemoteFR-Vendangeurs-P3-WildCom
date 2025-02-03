@@ -27,4 +27,22 @@ const add: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, add };
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    const post = {
+      id: Number.parseInt(req.params.id),
+      content: req.body.content,
+    };
+
+    const affectedRows = await postCommentsRepository.update(post);
+
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    }
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { browse, add, edit };

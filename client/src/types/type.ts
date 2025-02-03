@@ -6,7 +6,7 @@ export type User = {
 
 export type Post = {
   id: number;
-  category: string;
+  categoryName: string;
   picture: string | null;
   content: string;
   timestamp: string;
@@ -24,6 +24,7 @@ export type Event = {
   title: string;
   place: string;
   calendar: string;
+  time: string;
   totalComments: number;
   totalParticipations: number;
   user: User;
@@ -38,4 +39,9 @@ export type Comment = {
 
 export type LocationProps = {
   location: string;
+};
+
+export type Category = {
+  id: number;
+  name: string;
 };
