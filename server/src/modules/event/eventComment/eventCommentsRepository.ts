@@ -86,7 +86,7 @@ class EventCommentRepository {
 
     return result.affectedRows;
   }
-  async delete(postId: number) {
+  async delete(eventId: number) {
     const [result] = await databaseClient.query<Result>(
       `
       DELETE
@@ -94,7 +94,7 @@ class EventCommentRepository {
       comment
       WHERE id = ?
       `,
-      [postId],
+      [eventId],
     );
 
     return result.affectedRows;

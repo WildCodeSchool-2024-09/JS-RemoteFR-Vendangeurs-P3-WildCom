@@ -46,8 +46,8 @@ const edit: RequestHandler = async (req, res, next) => {
 };
 const destroy: RequestHandler = async (req, res, next) => {
   try {
-    const postId = Number.parseInt(req.params.id);
-    const affectedRows = await eventCommentsRepository.delete(postId);
+    const eventId = Number.parseInt(req.params.id);
+    const affectedRows = await eventCommentsRepository.delete(eventId);
 
     if (affectedRows === 0) {
       res.sendStatus(404);
