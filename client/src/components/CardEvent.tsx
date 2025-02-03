@@ -193,11 +193,11 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                     <RxCalendar className="size-5 text-accent-primary" />
                     <p>Le {event.calendar}</p>
                   </div>
-                  <div className="flex items-center justify-start order-3 space-x-2 lg:order-2">
+                  <div className="flex items-center justify-start order-3 space-x-2 md:order-2">
                     <FaRegClock className="size-5 text-accent-primary" />
                     <p>à {event.time}</p>
                   </div>
-                  <div className="flex items-center justify-start order-2 space-x-2 lg:order-3">
+                  <div className="flex items-center justify-start order-2 space-x-2 md:order-3">
                     <MdWhereToVote className="size-6 text-accent-primary" />
                     <p className="text-sm font-text">
                       à <span>{event.place}</span>

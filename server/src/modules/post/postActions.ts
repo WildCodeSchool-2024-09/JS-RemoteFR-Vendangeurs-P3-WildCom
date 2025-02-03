@@ -46,17 +46,20 @@ const destroy: RequestHandler = async (req, res, next) => {
 
 const edit: RequestHandler = async (req, res, next) => {
   try {
-    const postId = Number(req.params.id);
-    const { content, category } = req.body.postData;
+    const updatedPost = {
+      postId: Number.parseInt(req.params.id),
+      content: req.body.content,
+      categoryId: Number.parseInt(req.body.categoryId),
+    };
 
-    if (!content || !category) {
+    if (!updatedPost.content || !updatedPost.categoryId) {
       res
         .status(400)
         .json({ message: "Le contenu ou la catégorie ne peuvent être vide" });
       return;
     }
 
-    await postRepository.update(postId, content, category);
+    await postRepository.update(updatedPost);
     res.sendStatus(204);
   } catch (error) {
     next(error);

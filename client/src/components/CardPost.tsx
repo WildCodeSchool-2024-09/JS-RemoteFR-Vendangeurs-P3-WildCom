@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiCog } from "react-icons/bi";
-import { FaHeart, FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaPen, FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Post } from "../types/type";
 import { CommentPost } from "./CommentPost";
+import ModalButton from "./ModalButton";
 import { CommentInputPost } from "./PostComment/CommentInputPost";
 
 interface CardPostProps {
@@ -148,9 +149,9 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             </Link>
 
             <section className="flex items-center gap-4">
-              {post.category && (
+              {post.categoryName && (
                 <span className="text-sm font-normal px-3 bg-[#176b1d] border-2 border-accent-primary rounded">
-                  {post.category}
+                  {post.categoryName}
                 </span>
               )}
               <div className="relative flex items-center">
@@ -162,14 +163,25 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
                 {menuPostVisible === post.id && (
                   <div className="absolute z-50 w-40 bg-white border lg:-top-1 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] right-0 ">
                     {(user?.id === post.user.id || user?.role === "admin") && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeletePost(post.id)}
-                        className="right-0 flex w-full gap-2 px-4 py-2 text-sm text-left hover:text-text-red"
-                      >
-                        <MdDeleteOutline className="size-5 text-text-red " />
-                        Supprimer
-                      </button>
+                      <>
+                        <ModalButton type="editPost" postId={post.id}>
+                          <button
+                            type="button"
+                            className="flex w-full gap-4 px-4 py-2 text-sm text-left hover:text-accent-primary"
+                          >
+                            <FaPen className="text-accent-primary" />
+                            Modifier
+                          </button>
+                        </ModalButton>
+                        <button
+                          type="button"
+                          onClick={() => handleDeletePost(post.id)}
+                          className="right-0 flex w-full gap-2 px-4 py-2 text-sm text-left hover:text-text-red"
+                        >
+                          <MdDeleteOutline className="size-5 text-text-red " />
+                          Supprimer
+                        </button>
+                      </>
                     )}
                   </div>
                 )}

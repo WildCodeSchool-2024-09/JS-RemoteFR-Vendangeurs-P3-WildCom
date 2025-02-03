@@ -13,7 +13,7 @@ type Post = {
   content: string;
   picture: string;
   timestamp: string;
-  category: string;
+  categoryName: string;
 };
 type PostWithUser = Omit<Post, "user_id"> & {
   user: User;
@@ -39,7 +39,7 @@ class UserPostRepository {
 
     const formattedRows: PostWithUser[] = rows.map((row) => ({
       id: row.post_id,
-      category: row.name,
+      categoryName: row.name,
       picture: row.picture,
       content: row.content,
       totalComments: row.total_comments,

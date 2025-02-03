@@ -6,7 +6,7 @@ export type User = {
 
 export type Post = {
   id: number;
-  category: string;
+  categoryName: string;
   picture: string | null;
   content: string;
   timestamp: string;
