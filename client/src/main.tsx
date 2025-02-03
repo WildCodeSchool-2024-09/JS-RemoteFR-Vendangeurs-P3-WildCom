@@ -13,6 +13,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { UpdateProvider } from "./contexts/UpdateContext";
 import Admin from "./pages/Admin";
 import { AuthPage } from "./pages/AuthPage";
+import EditProfile from "./pages/EditProfile";
 import Events from "./pages/Events";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil";
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "profile/:id",
         element: <Profil />,
+      },
+      {
+        path: "profile/edit/:id",
+        element: <EditProfile />,
       },
     ],
   },

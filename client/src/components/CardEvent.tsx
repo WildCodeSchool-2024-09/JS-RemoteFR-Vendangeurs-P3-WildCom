@@ -25,7 +25,9 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
   const [commentsVisibility, setCommentsVisibility] = useState<{
     [key: number]: boolean;
   }>({});
+  const [isExpanded, setIsExpanded] = useState<{ [key: number]: boolean }>({});
   const { setUpdateParticipation, setUpdateEvent } = useUpdate();
+  const [menuEventVisible, setMenuEventVisible] = useState<number | null>(null);
 
   useEffect(() => {
     const getParticipations = async () => {
@@ -70,6 +72,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             data: {
               userId: user?.id,
             },
+            withCredentials: true,
           },
         );
       } else {
@@ -79,6 +82,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             data: {
               userId: user?.id,
             },
+            withCredentials: true,
           },
         );
       }
@@ -111,12 +115,12 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
     setUpdateEvent((prev) => prev + 1);
   };
 
-  const [menuEventVisible, setMenuEventVisible] = useState<{
-    [key: number]: boolean;
-  }>({});
+  const toggleMenu = (eventId: number) => {
+    setMenuEventVisible((prev) => (prev === eventId ? null : eventId));
+  };
 
-  const toggleMenu = (postId: number) => {
-    setMenuEventVisible((prev) => ({
+  const toggleExpansion = (postId: number) => {
+    setIsExpanded((prev) => ({
       ...prev,
       [postId]: !prev[postId],
     }));
@@ -156,8 +160,8 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                     <BiCog className="size-5 text-text-secondary" />
                   </figure>
                 </button>
-                {menuEventVisible[event.id] && (
-                  <div className="absolute z-50 w-40 bg-white border lg:-top-1 right-0 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] text-sm">
+                {menuEventVisible === event.id && (
+                  <div className="absolute z-50 w-40 bg-white border lg:-top-1 right-0 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] ">
                     {(user?.id === event.user.id || user?.role === "admin") && (
                       <>
                         <div className="flex w-full gap-2 px-4 py-2 text-left hover:text-accent-primary">
@@ -189,22 +193,20 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                   <img src={event.picture} alt="" className="mb-4 rounded-md" />
                 </figure>
               )}
-              <article
-                className={`${event.picture ? "lg:w-2/3" : "w-full"} space-y-3`}
-              >
+              <article className="w-full space-y-3">
                 <h2 className="text-xl font-semibold font-title">
                   {event.title}
                 </h2>
-                <div className="grid items-center justify-start grid-cols-2 gap-2 text-sm lg:gap-4 lg:flex lg:flex-row">
+                <div className="flex flex-wrap items-center justify-start gap-4 text-sm">
                   <div className="flex items-center order-1 space-x-2 lg:order-1">
                     <RxCalendar className="size-5 text-accent-primary" />
                     <p>Le {event.calendar}</p>
                   </div>
-                  <div className="flex items-center justify-start order-3 space-x-2 lg:order-2">
+                  <div className="flex items-center justify-start order-3 space-x-2 md:order-2">
                     <FaRegClock className="size-5 text-accent-primary" />
                     <p>à {event.time}</p>
                   </div>
-                  <div className="flex items-center justify-start order-2 space-x-2 lg:order-3">
+                  <div className="flex items-center justify-start order-2 space-x-2 md:order-3">
                     <MdWhereToVote className="size-6 text-accent-primary" />
                     <p className="text-sm font-text">
                       à <span>{event.place}</span>
@@ -213,7 +215,20 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                 </div>
               </article>
             </section>
-            <p className="mt-6 text-sm">{event.content}</p>
+            <p className="mt-6 text-sm break-words whitespace-pre-line">
+              {isExpanded[event.id]
+                ? event.content
+                : `${event.content.slice(0, 600)} ${event.content.length < 600 ? "" : "..."}`}
+            </p>
+            {event.content.length > 600 && (
+              <button
+                type="button"
+                className="w-full mt-2 text-sm text-end font-text hobver:text-accent-primary"
+                onClick={() => toggleExpansion(event.id)}
+              >
+                {isExpanded[event.id] ? "Réduire" : "Lire la suite"}
+              </button>
+            )}
 
             <hr className="mt-6 mb-4 border-accent-primary drop-shadow-[0_3px_2px_rgba(65,242,77,1)]" />
             <div className="flex justify-between">

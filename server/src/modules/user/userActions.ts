@@ -16,6 +16,21 @@ const read: RequestHandler = async (req, res, next) => {
   }
 };
 
+const readUserInfos: RequestHandler = async (req, res, next) => {
+  try {
+    const parsedId = Number.parseInt(req.params.id);
+    const user = await userRepository.readUserInfo(parsedId);
+
+    if (user == null) {
+      res.sendStatus(404);
+    } else {
+      res.json(user);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 const update: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -26,4 +41,4 @@ const update: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { read, update };
+export default { read, update, readUserInfos };

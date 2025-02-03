@@ -6,13 +6,6 @@ const router = express.Router();
 // Define Your API Routes Here
 /* ************************************************************************* */
 
-// Define item-related routes
-import itemActions from "./modules/item/itemActions";
-
-router.get("/api/items", itemActions.browse);
-router.get("/api/items/:id", itemActions.read);
-router.post("/api/items", itemActions.add);
-
 /* ************************************************************************* */
 // Define auth-related routes
 import { checkAuthDatas } from "./middlewares/checkAuthDatas";
@@ -29,6 +22,7 @@ import userActions from "./modules/user/userActions";
 
 router.get("/api/user/:id", userActions.read);
 router.put("/api/user/:id", userActions.update);
+router.get("/api/user/:id/edit", userActions.readUserInfos);
 
 import userPostAction from "./modules/user/userPost/userPostAction";
 
@@ -50,6 +44,7 @@ import postCommentsActions from "./modules/post/postComment/postCommentsActions"
 router.get("/api/posts/:id/comments", postCommentsActions.browse);
 router.post("/api/posts/:id/comments", postCommentsActions.add);
 router.put("/api/posts/comments/:id", postCommentsActions.edit);
+router.delete("/api/posts/comments/:id", postCommentsActions.destroy);
 
 import postLikesActions from "./modules/post/postLike/postLikesActions";
 
@@ -73,6 +68,7 @@ import eventCommentActions from "./modules/event/eventComment/eventCommentAction
 router.post("/api/events/:id/comments", eventCommentActions.add);
 router.get("/api/events/:id/comments", eventCommentActions.browse);
 router.put("/api/events/comments/:id", eventCommentActions.edit);
+router.delete("/api/events/comments/:id", eventCommentActions.destroy);
 
 import eventParticipationActions from "./modules/event/eventParticipation/eventParticipationActions";
 
