@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { IoSendSharp } from "react-icons/io5";
+import { MdDeleteOutline } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { SlOptions } from "react-icons/sl";
 import { Link } from "react-router-dom";
@@ -23,7 +24,7 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
   const [isEditingComment, setIsEditingComment] = useState<number | null>(null);
   const [editedCommentContent, setEditedCommentContent] = useState<string>("");
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const { updateComment } = useUpdate();
+  const { updateComment, setUpdateComment } = useUpdate();
 
   useEffect(() => {
     const fetchCommentEvents = async () => {
@@ -101,6 +102,22 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
       console.error("Erreur lors de la modification du commentaire", error);
     }
   };
+
+  const deleteComment = async (commentId: number) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/posts/comments/${commentId}`,
+        { withCredentials: true },
+      );
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.id !== commentId),
+      );
+    } catch (error) {
+      console.error("Erreur lors de la suppression du commentaire", error);
+    }
+    setUpdateComment((prev) => prev + 1);
+  };
+
   return (
     <div>
       {comments.length === 0 ? (
@@ -136,19 +153,31 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
                   {selectedCommentId === comment.id && (
                     <div
                       ref={menuRef}
-                      className="absolute flex items-center justify-center w-8 h-4 m-2 text-xs font-medium right-5 -top-3 text-text-secondary font-text"
+                      className="absolute flex items-center justify-center w-auto h-4 gap-3 m-2 text-xs font-medium right-5 -top-3 text-text-secondary font-text"
                     >
                       {(user?.id === comment.user.id ||
                         user?.role === "admin") && (
-                        <button
-                          type="button"
-                          className="flex items-center justify-center p-1 mx-1 rounded-md group hover:border border-bg_opacity-secondary"
-                          onClick={() =>
-                            startEditingComment(comment.id, comment.content)
-                          }
-                        >
-                          <FaPen className="size-3 group-hover:text-accent-primary" />
-                        </button>
+                        <>
+                          {/* Bouton Modifier */}
+                          <button
+                            type="button"
+                            className="flex items-center justify-center p-1 rounded-md group hover:border border-bg_opacity-secondary"
+                            onClick={() =>
+                              startEditingComment(comment.id, comment.content)
+                            }
+                          >
+                            <FaPen className="size-3 group-hover:text-accent-primary" />
+                          </button>
+
+                          {/* Bouton Supprimer */}
+                          <button
+                            type="button"
+                            className="flex items-center justify-center p-1 rounded-md group hover:border border-bg_opacity-secondary"
+                            onClick={() => deleteComment(comment.id)}
+                          >
+                            <MdDeleteOutline className="size-4 group-hover:text-text-red" />
+                          </button>
+                        </>
                       )}
                     </div>
                   )}
