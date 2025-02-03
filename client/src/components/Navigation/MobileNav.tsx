@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { FaRegUser } from "react-icons/fa";
 import { FiLogOut, FiMenu } from "react-icons/fi";
 import { RxCalendar, RxDashboard, RxHome } from "react-icons/rx";
+import { SlEqualizer } from "react-icons/sl";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { RightNav } from "./RightNav";
@@ -57,7 +58,7 @@ const MobileNav = () => {
       {MenuOpen &&
         createPortal(
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-primary">
-            <div className="flex flex-col items-center w-full gap-24 p-6 rounded-lg ">
+            <div className="flex flex-col items-center w-full gap-16 p-6 rounded-lg ">
               <button
                 type="button"
                 className="absolute top-0 self-end text-4xl right-4 text-text-primary"
@@ -98,7 +99,7 @@ const MobileNav = () => {
                     <NavLink
                       to={`/user/profile/${user?.id}`}
                       className={({ isActive }: { isActive: boolean }) =>
-                        `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
+                        `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
                       }
                       onClick={toggleMenu}
                     >
@@ -106,10 +107,23 @@ const MobileNav = () => {
                       Mon Profil
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink
+                      onClick={toggleMenu}
+                      to={`/user/profile/edit/${user?.id}`}
+                      className={({ isActive }: { isActive: boolean }) =>
+                        `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
+                      }
+                    >
+                      <SlEqualizer className=" size-7 drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]size-7 text-accent-primary hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]" />
+                      Mes informations
+                    </NavLink>
+                  </li>
 
                   <li>
                     {user?.role === "admin" && (
                       <NavLink
+                        onClick={toggleMenu}
                         to="/admin/dashboard"
                         className={({ isActive }) =>
                           `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
