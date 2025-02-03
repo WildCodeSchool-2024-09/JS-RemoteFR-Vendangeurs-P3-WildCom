@@ -88,5 +88,8 @@ import categoryActions from "./modules/category/categoryActions";
 
 router.get("/api/categories/posts", categoryActions.readByTypePost);
 router.get("/api/categories/events", categoryActions.readByTypeEvent);
+router.put("/api/categories/:id", categoryActions.edit);
+router.post("/api/categories", categoryActions.add);
+router.delete("/api/categories/:id", categoryActions.destroy);
 
 export default router;

@@ -30,6 +30,43 @@ class CategoryRepository {
 
     return rows;
   }
+
+  async update(id: number, name: string) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      UPDATE category
+      SET name = ?
+      WHERE id = ? 
+      `,
+      [name, id],
+    );
+
+    return result;
+  }
+
+  async create(name: string, type: string) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      INSERT INTO category (name, type)
+      VALUES (?, ?)
+      `,
+      [name, type],
+    );
+
+    return result;
+  }
+
+  async delete(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      `
+      DELETE FROM category
+      WHERE id = ?
+      `,
+      [id],
+    );
+
+    return result;
+  }
 }
 
 export default new CategoryRepository();
