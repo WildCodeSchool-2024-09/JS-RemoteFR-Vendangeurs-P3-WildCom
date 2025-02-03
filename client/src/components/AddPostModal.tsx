@@ -5,37 +5,28 @@ import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Category } from "../types/type";
 
-interface EventModalProps {
+interface PostModalProps {
   closeModal: () => void;
 }
 
-function EventModal({ closeModal }: EventModalProps) {
+function AddPostModal({ closeModal }: PostModalProps) {
   const { user } = useAuth();
-  const { setUpdateEvent } = useUpdate();
-
-  const [newEvent, setNewEvent] = useState({
+  const [newPost, setNewPost] = useState({
     userId: user?.id as number | undefined,
     content: "",
     category: "",
-    title: "",
-    place: "",
-    calendar: "",
-    time: "",
   });
 
+  const { setUpdatePost } = useUpdate();
   const [missContent, setMissContent] = useState("");
   const [missCategory, setMissCategory] = useState("");
-  const [missDate, setMissDate] = useState("");
-  const [missTime, setMissTime] = useState("");
-  const [missPlace, setMissPlace] = useState("");
-  const [missTitle, setMissTitle] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/categories/events`,
+          `${import.meta.env.VITE_API_URL}/api/categories/posts`,
         );
 
         setCategories(response.data);
@@ -47,68 +38,39 @@ function EventModal({ closeModal }: EventModalProps) {
     fetchCategories();
   }, []);
 
-  const handleEventChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handlePostChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
 
-    setNewEvent({
-      ...newEvent,
+    setNewPost({
+      ...newPost,
       content: newContent,
     });
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setNewEvent({ ...newEvent, category: e.target.value });
-  };
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEvent({ ...newEvent, title: e.target.value });
-  };
-
-  const handlePlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEvent({ ...newEvent, place: e.target.value });
-  };
-
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEvent({ ...newEvent, calendar: e.target.value });
-  };
-
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEvent({ ...newEvent, time: e.target.value });
+    setNewPost({ ...newPost, category: e.target.value });
   };
 
   const handlePublish = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (newEvent.title === "") {
-      setMissTitle("Veuillez choisir un titre");
-      return;
-    }
-    if (newEvent.place === "") {
-      setMissPlace("Veuillez choisir un lieu");
-      return;
-    }
-    if (newEvent.calendar === "") {
-      setMissDate("Veuillez choisir une date");
-      return;
-    }
-    if (newEvent.time === "") {
-      setMissTime("Veuillez choisir une heure");
-      return;
-    }
-    if (newEvent.content === "") {
+    if (newPost.content === "") {
       setMissContent("Veuillez rédiger une publication");
       return;
     }
-    if (newEvent.category === "") {
+    if (newPost.category === "") {
       setMissCategory("Veuillez choisir une catégorie");
+      if (missContent) {
+        setMissContent("");
+      }
       return;
     }
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/events`,
+        `${import.meta.env.VITE_API_URL}/api/posts`,
         {
-          newEvent,
+          newPost,
         },
         { withCredentials: true },
       );
@@ -118,7 +80,7 @@ function EventModal({ closeModal }: EventModalProps) {
       console.error("Erreur lors de la publication", error);
     }
 
-    setUpdateEvent((prev) => prev + 1);
+    setUpdatePost((prev) => prev + 1);
   };
 
   return (
@@ -130,7 +92,7 @@ function EventModal({ closeModal }: EventModalProps) {
       />
       <div className="fixed z-20 flex flex-col w-full h-auto gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
         <h2 className="flex justify-center text-xl text-text-primary font-title">
-          Créer un événement
+          Créer une publication
         </h2>
         <header className="flex items-center justify-between">
           <section className="flex items-center gap-2">
@@ -143,38 +105,6 @@ function EventModal({ closeModal }: EventModalProps) {
           </section>
         </header>
         <form className="flex flex-col gap-4" action="">
-          {missTitle && <p className="text-xs text-text-red">{missTitle}</p>}
-          <input
-            type="text"
-            placeholder="Titre de l'événement"
-            className={`${missTitle ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl w-full`}
-            onChange={handleTitleChange}
-          />
-          {missPlace && <p className="text-xs text-text-red">{missPlace}</p>}
-          <input
-            type="text"
-            placeholder="Lieu"
-            className={`${missPlace ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl w-full`}
-            onChange={handlePlaceChange}
-          />
-          <div className="flex gap-3">
-            <div className="flex-col flex-1 space-y-3">
-              {missDate && <p className="text-xs text-text-red">{missDate}</p>}
-              <input
-                type="date"
-                className={`${missDate ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl w-full`}
-                onChange={handleDateChange}
-              />
-            </div>
-            <div className="flex-col flex-1 space-y-3">
-              {missTime && <p className="text-xs text-text-red">{missTime}</p>}
-              <input
-                type="time"
-                className={`${missTime ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl w-full`}
-                onChange={handleTimeChange}
-              />
-            </div>
-          </div>
           {missContent && (
             <p className="text-xs text-text-red">{missContent}</p>
           )}
@@ -183,7 +113,7 @@ function EventModal({ closeModal }: EventModalProps) {
             minRows={6}
             className={`${missContent ? " border-2 border-text-red " : ""}w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary`}
             placeholder="Rédigez une publication"
-            onChange={handleEventChange}
+            onChange={handlePostChange}
           />
           {missCategory && (
             <p className="text-xs text-text-red">{missCategory}</p>
@@ -231,4 +161,4 @@ function EventModal({ closeModal }: EventModalProps) {
   );
 }
 
-export default EventModal;
+export default AddPostModal;

@@ -58,6 +58,7 @@ router.delete("/api/posts/:id/likes", postLikesActions.destroy);
 import eventActions from "./modules/event/eventActions";
 
 router.get("/api/events", eventActions.browse);
+router.get("/api/events/:id", eventActions.read);
 router.put("/api/events/:id", eventActions.edit);
 router.post("/api/events", eventActions.add);
 router.delete("/api/events/:id", eventActions.destroy);

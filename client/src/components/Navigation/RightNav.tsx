@@ -51,7 +51,7 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
 
   if (location === "/user/home") {
     return (
-      <section className="flex items-center justify-center w-auto h-1/4">
+      <section className="flex items-center justify-center w-auto h-1/4 xl:text-xl text-base">
         <div className="group">
           <ModalButton type={"post"}>
             <IoMdAdd className="transition-transform duration-300 rounded-full bg-accent-primary text-text-secondary size-7 group-hover:rotate-90" />
@@ -63,7 +63,7 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
   }
   if (location === "/user/events") {
     return (
-      <section className="flex items-center justify-center w-auto h-1/4">
+      <section className="flex items-center justify-center w-auto h-1/4 xl:text-xl text-base">
         <div className="group">
           <ModalButton type={"event"}>
             <IoMdAdd className="transition-transform duration-300 rounded-full bg-accent-primary text-text-secondary size-7 group-hover:rotate-90" />
