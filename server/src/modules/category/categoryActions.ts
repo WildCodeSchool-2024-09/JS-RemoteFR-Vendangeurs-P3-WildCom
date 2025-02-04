@@ -64,6 +64,13 @@ const edit: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ message: "Catégorie modifiée" });
   } catch (error) {
+    const err = error as { code: string };
+    if (err.code === "ER_DUP_ENTRY") {
+      res.status(400).json({
+        message: "Cette catégorie existe déjà sur ce type de publication",
+      });
+      return;
+    }
     next(error);
   }
 };

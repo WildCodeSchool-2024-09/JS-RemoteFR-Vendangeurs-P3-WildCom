@@ -21,6 +21,27 @@ export const CategoryDetails = () => {
     getCategory();
   }, [id]);
 
+  const handleModify = async () => {
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/categories/${id}`,
+        category,
+        { withCredentials: true },
+      );
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/admin/categories");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          toast.error(error.response.data.message);
+        }
+      }
+    }
+  };
+
   return (
     <div className=" relative z-10 w-screen flex flex-col h-auto gap-10 p-10  font-light border-2 lg:w-2/3 lg:mx-auto bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]">
       <h2 className="text-lg text-center font-title lg:text-xl">
@@ -43,6 +64,7 @@ export const CategoryDetails = () => {
         <button
           type="button"
           className="px-3 py-1 rounded-lg bg-accent-primary hover:bg-accent-primaryhover "
+          onClick={handleModify}
         >
           Modifier
         </button>

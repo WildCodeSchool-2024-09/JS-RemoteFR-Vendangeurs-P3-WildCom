@@ -93,12 +93,11 @@ export default function CategoryIndex() {
 
         <ul className="flex flex-wrap gap-5 ">
           {categories.events.map((category) => (
-            <li
-              key={category.id}
-              className="text-sm font-normal px-2 bg-[#176b1d] border-2 border-accent-primary rounded"
-            >
-              {category.name}
-            </li>
+            <Link to={`/admin/categories/${category.id}`} key={category.id}>
+              <li className="text-sm font-normal px-2 bg-[#176b1d] border-2 border-accent-primary rounded">
+                {category.name}
+              </li>
+            </Link>
           ))}
         </ul>
         <CategoryForm
