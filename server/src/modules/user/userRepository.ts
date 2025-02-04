@@ -64,6 +64,15 @@ class userRepository {
 
     return updatedUser;
   }
+
+  async destroy(id: number): Promise<boolean> {
+    const [result] = await databaseClient.query<ResultSetHeader>(
+      "DELETE FROM user WHERE id = ?",
+      [id],
+    );
+
+    return result.affectedRows > 0;
+  }
 }
 
 export default new userRepository();

@@ -26,8 +26,8 @@ create table post (
   created_at timestamp default current_timestamp not null,
   category_id int unsigned not null,
   user_id int unsigned not null,
-  constraint fk_post_user foreign key (user_id) references user(id),
-  constraint fk_post_category foreign key (category_id) references category(id) on delete restrict
+  constraint fk_post_user foreign key (user_id) references user(id) ON DELETE CASCADE,
+  constraint fk_post_category foreign key (category_id) references category(id) on delete restrict 
 );
 
 create table event (
@@ -41,7 +41,7 @@ create table event (
   calendar date not null,
   time time not null,
   user_id int unsigned not null,
-  constraint fk_event_user foreign key (user_id) references user(id),
+  constraint fk_event_user foreign key (user_id) references user(id) ON DELETE CASCADE,
   constraint fk_event_category foreign key (category_id) references category(id) on delete restrict
 );
 

@@ -23,6 +23,7 @@ import userActions from "./modules/user/userActions";
 router.get("/api/user/:id", userActions.read);
 router.put("/api/user/:id", userActions.update);
 router.get("/api/user/:id/edit", userActions.readUserInfos);
+router.delete("/api/user/:id", userActions.destroy);
 
 import userPostAction from "./modules/user/userPost/userPostAction";
 
