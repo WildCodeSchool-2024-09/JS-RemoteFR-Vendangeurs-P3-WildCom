@@ -120,11 +120,11 @@ const MobileNav = () => {
                     </NavLink>
                   </li>
 
-                  <li>
-                    {user?.role === "admin" && (
+                  {user?.role === "admin" && (
+                    <li>
                       <NavLink
                         onClick={toggleMenu}
-                        to="/admin/dashboard"
+                        to="/admin/categories"
                         className={({ isActive }) =>
                           `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
                         }
@@ -132,8 +132,8 @@ const MobileNav = () => {
                         <RxDashboard className="size-7 text-accent-primary " />
                         Administrateur
                       </NavLink>
-                    )}
-                  </li>
+                    </li>
+                  )}
                 </ul>
               </nav>
               <section className="items-center lg:flex-col lg:flex text-text-primary">

@@ -36,7 +36,7 @@ export const LeftNav = () => {
         <li>
           {user?.role === "admin" && (
             <NavLink
-              to="/admin/dashboard"
+              to="/admin/categories"
               className={({ isActive }) =>
                 `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 lg:items-center font-text text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
               }

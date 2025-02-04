@@ -17,6 +17,8 @@ type UpdateContextType = {
   setUpdateParticipation: React.Dispatch<React.SetStateAction<number>>;
   updateUser: number;
   setUpdateUser: React.Dispatch<React.SetStateAction<number>>;
+  updateCategories: number;
+  setUpdateCategories: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const UpdateContext = createContext<UpdateContextType | undefined>(undefined);
@@ -28,6 +30,7 @@ export const UpdateProvider = ({ children }: UpdateProviderType) => {
   const [updateEvent, setUpdateEvent] = useState(0);
   const [updateParticipation, setUpdateParticipation] = useState(0);
   const [updateUser, setUpdateUser] = useState(0);
+  const [updateCategories, setUpdateCategories] = useState(0);
 
   return (
     <UpdateContext.Provider
@@ -44,6 +47,8 @@ export const UpdateProvider = ({ children }: UpdateProviderType) => {
         setUpdateParticipation,
         updateUser,
         setUpdateUser,
+        updateCategories,
+        setUpdateCategories,
       }}
     >
       {children}
