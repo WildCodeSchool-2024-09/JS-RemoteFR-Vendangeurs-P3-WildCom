@@ -5,6 +5,7 @@ import { FaRegUser } from "react-icons/fa";
 import type { LocationProps } from "../../types/type";
 
 import { IoMdAdd } from "react-icons/io";
+import { MdOutlineCategory } from "react-icons/md";
 import { SlEqualizer } from "react-icons/sl";
 import { useAuth } from "../../contexts/AuthContext";
 import ModalButton from "../ModalButton";
@@ -49,9 +50,10 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
     );
   }
 
+  // User home
   if (location === "/user/home") {
     return (
-      <section className="flex items-center justify-center w-auto h-1/4 xl:text-xl text-base">
+      <section className="flex items-center justify-center w-auto text-base h-1/4 xl:text-xl">
         <div className="group">
           <ModalButton type={"post"}>
             <IoMdAdd className="transition-transform duration-300 rounded-full bg-accent-primary text-text-secondary size-7 group-hover:rotate-90" />
@@ -61,9 +63,11 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
       </section>
     );
   }
+
+  // User events
   if (location === "/user/events") {
     return (
-      <section className="flex items-center justify-center w-auto h-1/4 xl:text-xl text-base">
+      <section className="flex items-center justify-center w-auto text-base h-1/4 xl:text-xl">
         <div className="group">
           <ModalButton type={"event"}>
             <IoMdAdd className="transition-transform duration-300 rounded-full bg-accent-primary text-text-secondary size-7 group-hover:rotate-90" />
@@ -71,6 +75,30 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
           </ModalButton>
         </div>
       </section>
+    );
+  }
+
+  // Admin
+  if (user?.role === "admin" && location === "/admin/categories") {
+    return (
+      <nav
+        className="flex items-center justify-center w-full gap-10 h-1/4 "
+        aria-label="navigation secondaire"
+      >
+        <ul className="flex flex-col justify-start gap-10">
+          <li>
+            <NavLink
+              to="/admin/categories"
+              className={({ isActive }: { isActive: boolean }) =>
+                `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
+              }
+            >
+              <MdOutlineCategory className="size-7 text-accent-primary" />
+              Catégories
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
     );
   }
 
