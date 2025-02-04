@@ -90,4 +90,19 @@ import categoryActions from "./modules/category/categoryActions";
 router.get("/api/categories/posts", categoryActions.readByTypePost);
 router.get("/api/categories/events", categoryActions.readByTypeEvent);
 
+/* ************************************************************************* */
+
+// Define uploads-related routes
+import { adjustFilePath, upload } from "./middlewares/multerUpload.";
+import { verifyUser } from "./middlewares/verifyUser";
+import uploadActions from "./modules/upload/uploadActions";
+
+router.post(
+  "/api/files/upload",
+  verifyUser,
+  upload,
+  adjustFilePath,
+  uploadActions.upload,
+);
+
 export default router;

@@ -75,6 +75,14 @@ CREATE TABLE event_participation (
   UNIQUE (user_id, event_id)
 );
 
+CREATE TABLE avatar (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  filename VARCHAR(255) NOT NULL,
+  path VARCHAR(255) NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  constraint fk_avatar_user foreign key (user_id) references user(id) on delete CASCADE
+);
+
 insert into user(id, email, firstname, lastname, password, avatar, linkedin, github, site, biography, role)
 values
   (1, "example@mail.com","Admin", "Istrateur", "$argon2id$v=19$m=65536,t=3,p=4$MEZfaWwCSctWWpxE1hPm/g$EQxm4Q2ULXL+lL9F0pSBOuwR++rMzdk68Jh1yX+a6A8", "http://localhost:3000/src/assets/images/pictureprofil.webp", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "admin"),
@@ -149,3 +157,11 @@ VALUES
 (2, 2 , 2),
 (3, 3 , 3),
 (4, 4 , 1);
+
+INSERT INTO avatar
+(filename, path, user_id)
+VALUES (
+        "logo.png",
+        "assets/images/logo.png",
+        1
+    );
