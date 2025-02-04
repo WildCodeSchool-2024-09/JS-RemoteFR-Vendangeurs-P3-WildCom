@@ -12,8 +12,9 @@ import { AuthAdmin } from "./components/Auth/AuthAdmin";
 import { AuthUser } from "./components/Auth/AuthUser";
 import { AuthProvider } from "./contexts/AuthContext";
 import { UpdateProvider } from "./contexts/UpdateContext";
-import Admin from "./pages/Admin";
 import { AuthPage } from "./pages/AuthPage";
+import { CategoryDetails } from "./pages/CategoryDetails";
+import CategoryIndex from "./pages/CategoryIndex";
 import EditProfile from "./pages/EditProfile";
 import Events from "./pages/Events";
 import Home from "./pages/Home";
@@ -53,8 +54,12 @@ const router = createBrowserRouter([
     element: <AuthAdmin />,
     children: [
       {
-        path: "dashboard",
-        element: <Admin />,
+        path: "categories",
+        element: <CategoryIndex />,
+      },
+      {
+        path: "categories/:id",
+        element: <CategoryDetails />,
       },
     ],
   },
