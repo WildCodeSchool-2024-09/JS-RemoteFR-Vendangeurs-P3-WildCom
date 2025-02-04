@@ -7,6 +7,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // Import the main app component
 
+import { ToastContainer } from "react-toastify";
 import { AuthAdmin } from "./components/Auth/AuthAdmin";
 import { AuthUser } from "./components/Auth/AuthUser";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -73,6 +74,7 @@ createRoot(rootElement).render(
     <AuthProvider>
       <UpdateProvider>
         <RouterProvider router={router} />
+        <ToastContainer />
       </UpdateProvider>
     </AuthProvider>
   </StrictMode>,

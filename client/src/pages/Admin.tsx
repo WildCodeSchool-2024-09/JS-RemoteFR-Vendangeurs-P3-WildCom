@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { CategoryForm } from "../components/Categories/CategoryForm";
 import { useUpdate } from "../contexts/UpdateContext";
 
@@ -60,13 +61,25 @@ export default function Admin() {
           ))}
         </ul>
         <CategoryForm
-          onSubmit={(postCategoriesData) => {
-            setUpdateCategories((prev) => prev + 1);
-            axios.post(
-              `${import.meta.env.VITE_API_URL}/api/categories`,
-              postCategoriesData,
-              { withCredentials: true },
-            );
+          onSubmit={async (postCategoriesData) => {
+            try {
+              const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/categories`,
+                postCategoriesData,
+                { withCredentials: true },
+              );
+
+              if (response.status === 200) {
+                toast.success(response.data.message);
+                setUpdateCategories((prev) => prev + 1);
+              }
+            } catch (error) {
+              if (axios.isAxiosError(error)) {
+                if (error.response && error.response.status === 400) {
+                  toast.error(error.response.data.message);
+                }
+              }
+            }
           }}
           type="post"
         />
@@ -89,13 +102,25 @@ export default function Admin() {
           ))}
         </ul>
         <CategoryForm
-          onSubmit={(postCategoriesData) => {
-            setUpdateCategories((prev) => prev + 1);
-            axios.post(
-              `${import.meta.env.VITE_API_URL}/api/categories`,
-              postCategoriesData,
-              { withCredentials: true },
-            );
+          onSubmit={async (postCategoriesData) => {
+            try {
+              const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/categories`,
+                postCategoriesData,
+                { withCredentials: true },
+              );
+
+              if (response.status === 200) {
+                toast.success(response.data.message);
+                setUpdateCategories((prev) => prev + 1);
+              }
+            } catch (error) {
+              if (axios.isAxiosError(error)) {
+                if (error.response && error.response.status === 400) {
+                  toast.error(error.response.data.message);
+                }
+              }
+            }
           }}
           type="event"
         />
