@@ -7,6 +7,18 @@ type Category = {
 };
 
 class CategoryRepository {
+  async readById(categoryId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+      SELECT * 
+      FROM category
+      WHERE id = ?
+      `,
+      [categoryId],
+    );
+
+    return rows[0];
+  }
   async readByTypePost() {
     const [rows] = await databaseClient.query<Rows>(
       `
