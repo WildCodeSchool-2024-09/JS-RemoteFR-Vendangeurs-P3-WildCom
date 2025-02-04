@@ -125,7 +125,7 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
       ) : (
         comments.map((comment) => (
           <div key={comment.id} className="flex flex-col my-4">
-            <p className="self-end text-xs">{comment.timestamp}</p>
+            <p className="self-end mr-2 text-xs">{comment.timestamp}</p>
             <div className="flex gap-4">
               <figure className="w-14">
                 <Link to={`/user/profile/${comment.user.id}`}>
@@ -161,7 +161,7 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
                           {/* Bouton Modifier */}
                           <button
                             type="button"
-                            className="flex items-center justify-center p-1 rounded-md group hover:border border-bg_opacity-secondary"
+                            className="flex items-center justify-center p-1 border rounded-md group border-bg-secondary hover:border-bg_opacity-secondary"
                             onClick={() =>
                               startEditingComment(comment.id, comment.content)
                             }
@@ -172,7 +172,7 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
                           {/* Bouton Supprimer */}
                           <button
                             type="button"
-                            className="flex items-center justify-center p-1 rounded-md group hover:border border-bg_opacity-secondary"
+                            className="flex items-center justify-center p-1 border rounded-md group border-bg-secondary hover:border-bg_opacity-secondary"
                             onClick={() => deleteComment(comment.id)}
                           >
                             <MdDeleteOutline className="size-4 group-hover:text-text-red" />

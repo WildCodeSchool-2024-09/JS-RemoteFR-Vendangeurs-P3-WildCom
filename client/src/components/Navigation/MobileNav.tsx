@@ -161,7 +161,10 @@ const MobileNav = () => {
                     </span>
                   </p>
 
-                  <a className="" href="mailto:creamedoc@gmail.com">
+                  <a
+                    className=""
+                    href="https://mail.google.com/mail/?view=cm&to=nimda.wildcom@gmail.com"
+                  >
                     Contactez nous
                   </a>
                 </section>

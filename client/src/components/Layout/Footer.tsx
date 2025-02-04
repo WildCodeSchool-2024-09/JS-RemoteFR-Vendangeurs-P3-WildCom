@@ -20,7 +20,7 @@ export const Footer: React.FC<LocationProps> = ({ location }) => {
 
           <a
             className="hover:text-accent-primary"
-            href="mailto:creamedoc@gmail.com"
+            href="https://mail.google.com/mail/?view=cm&to=nimda.wildcom@gmail.com"
           >
             Contactez nous
           </a>
