@@ -41,4 +41,14 @@ const update: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { read, update, readUserInfos };
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const parsedId = Number.parseInt(req.params.id);
+    await userRepository.destroy(parsedId);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { read, update, readUserInfos, destroy };
