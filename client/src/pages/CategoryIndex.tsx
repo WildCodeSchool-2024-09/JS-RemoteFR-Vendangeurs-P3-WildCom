@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { CategoryForm } from "../components/Categories/CategoryForm";
 import { useUpdate } from "../contexts/UpdateContext";
@@ -9,7 +10,7 @@ type Category = {
   name: string;
 };
 
-export default function Admin() {
+export default function CategoryIndex() {
   const { updateCategories, setUpdateCategories } = useUpdate();
   const [categories, setCategories] = useState({
     posts: [] as Category[],
@@ -52,12 +53,11 @@ export default function Admin() {
 
         <ul className="flex flex-wrap gap-5 ">
           {categories.posts.map((category) => (
-            <li
-              key={category.id}
-              className="text-sm font-normal px-2 bg-[#176b1d] border-2 border-accent-primary rounded"
-            >
-              {category.name}
-            </li>
+            <Link to={`/admin/categories/${category.id}`} key={category.id}>
+              <li className="text-sm font-normal px-2 bg-[#176b1d] border-2 border-accent-primary rounded">
+                {category.name}
+              </li>
+            </Link>
           ))}
         </ul>
         <CategoryForm
