@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { IoSendSharp } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
@@ -23,7 +23,6 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
   );
   const [isEditingComment, setIsEditingComment] = useState<number | null>(null);
   const [editedCommentContent, setEditedCommentContent] = useState<string>("");
-  const menuRef = useRef<HTMLDivElement | null>(null);
   const { updateComment, setUpdateComment } = useUpdate();
 
   useEffect(() => {
@@ -58,20 +57,6 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
     setIsEditingComment(null);
     setEditedCommentContent("");
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setSelectedCommentId(null);
-        setIsEditingComment(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const submitEditedComment = async (e: React.FormEvent, commentId: number) => {
     e.preventDefault();
@@ -151,10 +136,7 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
 
                   {/* Menu d'actions */}
                   {selectedCommentId === comment.id && (
-                    <div
-                      ref={menuRef}
-                      className="absolute flex items-center justify-center w-auto h-4 gap-3 m-2 text-xs font-medium right-5 -top-3 text-text-secondary font-text"
-                    >
+                    <div className="absolute flex items-center justify-center w-auto h-4 gap-3 m-2 text-xs font-medium right-5 -top-3 text-text-secondary font-text">
                       {(user?.id === comment.user.id ||
                         user?.role === "admin") && (
                         <>

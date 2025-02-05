@@ -10,10 +10,24 @@ interface ModalButtonProps {
   postId?: number;
   eventId?: number;
   type: string;
+  onClose?: () => void;
 }
 
-function ModalButton({ children, type, postId, eventId }: ModalButtonProps) {
+function ModalButton({
+  children,
+  type,
+  postId,
+  eventId,
+  onClose,
+}: ModalButtonProps) {
   const [showModal, setShowModal] = useState(false);
+
+  const handleClose = () => {
+    setShowModal(false);
+    if (onClose) {
+      onClose();
+    }
+  };
   return (
     <>
       <button
@@ -26,22 +40,15 @@ function ModalButton({ children, type, postId, eventId }: ModalButtonProps) {
       {showModal &&
         createPortal(
           <>
-            {type === "post" && (
-              <AddPostModal closeModal={() => setShowModal(false)} />
-            )}
-            {type === "event" && (
-              <AddEventModal closeModal={() => setShowModal(false)} />
-            )}
+            {type === "post" && <AddPostModal closeModal={handleClose} />}
+            {type === "event" && <AddEventModal closeModal={handleClose} />}
             {type === "editEvent" && (
-              <EditEventModal
-                eventId={eventId}
-                closeModal={() => setShowModal(false)}
-              />
+              <EditEventModal eventId={eventId} closeModal={handleClose} />
             )}
             {type === "editPost" && (
               <EditPostModal
                 postId={postId ? postId : 0}
-                closeModal={() => setShowModal(false)}
+                closeModal={handleClose}
               />
             )}
           </>,

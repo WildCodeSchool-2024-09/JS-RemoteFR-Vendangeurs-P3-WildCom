@@ -64,7 +64,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
 
   const handleDeletePost = async (postId: number) => {
     try {
-      await axios.delete(
+      const response = await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/posts/${postId}`,
         {
           data: {
@@ -73,10 +73,14 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
           withCredentials: true,
         },
       );
+
+      if (response.status === 200) {
+        toggleMenu(postId);
+        setUpdatePost((prev) => prev + 1);
+      }
     } catch (error) {
       console.error("Erreur lors de la suppression du post", error);
     }
-    setUpdatePost((prev) => prev + 1);
   };
 
   const handleLike = async (postId: number) => {
@@ -154,38 +158,37 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
                   {post.categoryName}
                 </span>
               )}
-              <div className="relative flex items-center">
-                <button type="button" onClick={() => toggleMenu(post.id)}>
-                  <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
-                    <BiCog className="text-text-secondary size-5" />
-                  </figure>
-                </button>
-                {menuPostVisible === post.id && (
-                  <div className="absolute z-50 w-40 bg-white border lg:-top-1 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] right-0 ">
-                    {(user?.id === post.user.id || user?.role === "admin") && (
-                      <>
-                        <ModalButton type="editPost" postId={post.id}>
-                          <button
-                            type="button"
-                            className="flex w-full gap-4 px-4 py-2 text-sm text-left hover:text-accent-primary"
-                          >
-                            <FaPen className="text-accent-primary" />
-                            Modifier
-                          </button>
-                        </ModalButton>
-                        <button
-                          type="button"
-                          onClick={() => handleDeletePost(post.id)}
-                          className="right-0 flex w-full gap-2 px-4 py-2 text-sm text-left hover:text-text-red"
-                        >
-                          <MdDeleteOutline className="size-5 text-text-red " />
-                          Supprimer
-                        </button>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
+              {(user?.id === post.user.id || user?.role === "admin") && (
+                <div className="relative flex items-center">
+                  <button type="button" onClick={() => toggleMenu(post.id)}>
+                    <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
+                      <BiCog className="text-text-secondary size-5" />
+                    </figure>
+                  </button>
+                  {menuPostVisible === post.id && (
+                    <div className="absolute z-50 w-40 bg-white border lg:-top-1 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] right-0 text-sm">
+                      <ModalButton
+                        type="editPost"
+                        postId={post.id}
+                        onClose={() => setMenuPostVisible(null)}
+                      >
+                        <span className="flex w-full gap-4 px-4 py-2 text-left hover:text-accent-primary">
+                          <FaPen className="text-accent-primary" />
+                          Modifier
+                        </span>
+                      </ModalButton>
+                      <button
+                        type="button"
+                        onClick={() => handleDeletePost(post.id)}
+                        className="right-0 flex w-full gap-2 px-4 py-2 text-left hover:text-text-red"
+                      >
+                        <MdDeleteOutline className="size-5 text-text-red " />
+                        Supprimer
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </section>
           </header>
 

@@ -87,7 +87,7 @@ class EventRepository {
       created_at: row.created_at,
       title: row.title,
       place: row.place,
-      calendar: row.calendar,
+      calendar: new Date(row.calendar).toISOString().split("T")[0],
       time: row.time,
       user: {
         id: row.user_id,

@@ -86,6 +86,10 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
     }
   };
 
+  const sortedCategories = categories.sort((a, b) =>
+    a.id === dataPost?.categoryId ? -1 : b.id === dataPost?.categoryId ? 1 : 0,
+  );
+
   return (
     <>
       <div
@@ -120,17 +124,13 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
             name="categoryId"
             className="px-3 py-2 rounded-xl"
             onChange={handleInputsChange}
+            value={dataPost?.categoryId || ""}
           >
-            <option value={dataPost?.categoryId}>
-              {dataPost?.categoryName}
-            </option>
-            {categories
-              .filter((category) => category.id !== dataPost?.categoryId)
-              .map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
+            {sortedCategories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
           </select>
           <div className="flex items-center justify-center gap-8">
             <button
