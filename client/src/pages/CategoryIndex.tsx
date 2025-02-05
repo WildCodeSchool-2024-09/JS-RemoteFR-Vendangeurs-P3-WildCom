@@ -48,7 +48,7 @@ export default function CategoryIndex() {
     <>
       <AdminMobileNav />
 
-      <div className="flex flex-col justify-center gap-4">
+      <div className="flex flex-col items-center justify-center gap-4 my-auto h-2/3">
         {/* Publications */}
         <div className=" relative z-10 w-screen flex flex-col h-auto gap-10 p-10  font-light border-2 lg:w-2/3 lg:mx-auto bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]">
           <h2 className="text-lg text-center font-title lg:text-xl">
@@ -58,7 +58,7 @@ export default function CategoryIndex() {
           <ul className="flex flex-wrap gap-5 ">
             {categories.posts.map((category) => (
               <Link to={`/admin/categories/${category.id}`} key={category.id}>
-                <li className="text-sm font-normal px-2 bg-[#176b1d] border-2 border-accent-primary rounded">
+                <li className="text-sm font-normal px-2 bg-[#176b1d] border-2 border-accent-primary rounded hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]">
                   {category.name}
                 </li>
               </Link>
@@ -98,7 +98,7 @@ export default function CategoryIndex() {
           <ul className="flex flex-wrap gap-5 ">
             {categories.events.map((category) => (
               <Link to={`/admin/categories/${category.id}`} key={category.id}>
-                <li className="text-sm font-normal px-2 bg-[#176b1d] border-2 border-accent-primary rounded">
+                <li className="text-sm font-normal px-2 bg-[#176b1d] border-2 border-accent-primary rounded hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]">
                   {category.name}
                 </li>
               </Link>

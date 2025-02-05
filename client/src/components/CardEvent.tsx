@@ -154,22 +154,26 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
               <span className="text-xs lg:text-sm font-normal px-3 bg-[#176b1d]  border-2 border-accent-primary rounded">
                 {event.categoryName}
               </span>
-              <div className="relative flex items-center">
-                <button onClick={() => toggleMenu(event.id)} type="button">
-                  <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
-                    <BiCog className="size-5 text-text-secondary" />
-                  </figure>
-                </button>
-                {menuEventVisible === event.id && (
-                  <div className="absolute z-50 w-40 bg-white border lg:-top-1 right-0 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] ">
-                    {(user?.id === event.user.id || user?.role === "admin") && (
+              {(user?.id === event.user.id || user?.role === "admin") && (
+                <div className="relative flex items-center">
+                  <button onClick={() => toggleMenu(event.id)} type="button">
+                    <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
+                      <BiCog className="size-5 text-text-secondary" />
+                    </figure>
+                  </button>
+                  {menuEventVisible === event.id && (
+                    <div className="absolute z-50 w-40 bg-white border lg:-top-1 right-0 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-sm text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] ">
                       <>
-                        <div className="flex w-full gap-2 px-4 py-2 text-left hover:text-accent-primary">
+                        <span className="flex w-full gap-2 px-4 py-2 text-left hover:text-accent-primary">
                           <FaPen className="w-5 text-accent-primary" />
-                          <ModalButton eventId={event.id} type={"editEvent"}>
+                          <ModalButton
+                            eventId={event.id}
+                            type={"editEvent"}
+                            onClose={() => setMenuEventVisible(null)}
+                          >
                             Modifier
                           </ModalButton>
-                        </div>
+                        </span>
                         <button
                           type="button"
                           onClick={() => handleDeleteEvent(event.id)}
@@ -179,10 +183,10 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                           Supprimer
                         </button>
                       </>
-                    )}
-                  </div>
-                )}
-              </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </section>
           </header>
 

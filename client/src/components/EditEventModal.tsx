@@ -93,6 +93,14 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
     }
   };
 
+  const sortedCategories = categories.sort((a, b) =>
+    a.id === dataEvent?.categoryId
+      ? -1
+      : b.id === dataEvent?.categoryId
+        ? 1
+        : 0,
+  );
+
   return (
     <>
       <div
@@ -118,7 +126,7 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
           <input
             type="text"
             placeholder="Titre de l'événement"
-            className="px-3 py-2 rounded-xl w-full"
+            className="w-full px-3 py-2 rounded-xl"
             onChange={handleInputChange}
             value={dataEvent?.title}
             name="title"
@@ -127,7 +135,7 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
           <input
             type="text"
             placeholder="Lieu"
-            className="px-3 py-2 rounded-xl w-full"
+            className="w-full px-3 py-2 rounded-xl"
             onChange={handleInputChange}
             name="place"
             value={dataEvent?.place}
@@ -138,7 +146,7 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
               <input
                 type="date"
                 min={new Date().toISOString().split("T")[0]}
-                className="px-3 py-2 rounded-xl w-full"
+                className="w-full px-3 py-2 rounded-xl"
                 onChange={handleInputChange}
                 name="calendar"
                 value={
@@ -152,7 +160,7 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
             <div className="flex-col flex-1 space-y-3">
               <input
                 type="time"
-                className="px-3 py-2 rounded-xl w-full"
+                className="w-full px-3 py-2 rounded-xl"
                 onChange={handleInputChange}
                 name="time"
                 value={dataEvent?.time}
@@ -174,17 +182,13 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
             name="categoryId"
             className="px-3 py-2 rounded-xl"
             onChange={handleInputChange}
+            value={dataEvent?.categoryId || ""}
           >
-            <option value={dataEvent?.categoryId}>
-              {dataEvent?.categoryName}
-            </option>
-            {categories
-              .filter((category) => category.id !== dataEvent?.categoryId)
-              .map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
+            {sortedCategories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
           </select>
           <div className="flex items-center justify-center gap-8">
             <button
