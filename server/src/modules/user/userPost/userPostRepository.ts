@@ -13,6 +13,8 @@ type Post = {
   content: string;
   picture: string;
   timestamp: string;
+  totalComments: number;
+  totalLikes: number;
   categoryName: string;
 };
 type PostWithUser = Omit<Post, "user_id"> & {
@@ -26,6 +28,11 @@ class UserPostRepository {
       ,(SELECT count (*) 
       FROM comment
       WHERE comment.post_id = post.id) AS total_comments,
+      (
+        SELECT COUNT(*)
+        FROM post_like AS pl
+        WHERE pl.post_id = post.id
+      ) AS total_likes,
       user.id AS user_id, user.avatar, 
       CONCAT(user.firstname, ' ', user.lastname) AS username
       FROM post
@@ -43,6 +50,7 @@ class UserPostRepository {
       picture: row.picture,
       content: row.content,
       totalComments: row.total_comments,
+      totalLikes: row.total_likes,
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,

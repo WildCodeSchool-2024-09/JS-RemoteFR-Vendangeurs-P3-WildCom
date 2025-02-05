@@ -9,6 +9,8 @@ type Post = {
   picture?: string | null;
   content: string;
   timestamp?: string;
+  totalComments?: number;
+  totalLikes?: number;
   userId: number;
 };
 
