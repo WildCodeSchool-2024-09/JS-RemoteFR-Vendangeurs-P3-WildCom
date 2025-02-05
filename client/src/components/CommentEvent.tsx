@@ -6,6 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 import { SlOptions } from "react-icons/sl";
 import { Link } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
+import defaultProfilePicture from "../assets/images/profil_neutral.webp";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Comment } from "../types/type";
@@ -112,11 +113,19 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
             <div className="flex gap-4">
               <figure className="w-14">
                 <Link to={`/user/profile/${comment.user.id}`}>
-                  <img
-                    src={comment.user.avatar}
-                    alt={`Avatar de ${comment.user.username}`}
-                    className="object-cover rounded-full size-12"
-                  />
+                  {comment.user.avatar ? (
+                    <img
+                      src={`${import.meta.env.VITE_API_URL}/${comment.user.avatar}`}
+                      alt={`Avatar de ${comment.user.username}`}
+                      className="object-cover rounded-full size-12"
+                    />
+                  ) : (
+                    <img
+                      src={defaultProfilePicture}
+                      alt={`Avatar de ${comment.user.username}`}
+                      className="object-cover rounded-full size-12"
+                    />
+                  )}
                 </Link>
               </figure>
 

@@ -4,6 +4,7 @@ import { BiCog } from "react-icons/bi";
 import { FaHeart, FaPen, FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
+import defaultProfilePicture from "../assets/images/profil_neutral.webp";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Post } from "../types/type";
@@ -137,12 +138,19 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             <Link to={`/user/profile/${post.user.id}`}>
               <section className="flex items-center gap-4">
                 <figure>
-                  <img
-                    src={post.user.avatar}
-                    alt=""
-                    aria-labelledby="username"
-                    className="object-cover rounded-full size-12"
-                  />
+                  {post.user.avatar ? (
+                    <img
+                      src={`${import.meta.env.VITE_API_URL}/${post.user.avatar}`}
+                      alt={`Avatar de ${user?.username}`}
+                      className="object-cover rounded-full size-12"
+                    />
+                  ) : (
+                    <img
+                      src={defaultProfilePicture}
+                      alt={`Avatar de ${user?.username}`}
+                      className="object-cover rounded-full size-12"
+                    />
+                  )}
                 </figure>
                 <h2 id="username">{post.user.username}</h2>
               </section>

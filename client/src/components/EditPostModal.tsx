@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import defaultProfilePicture from "../../assets/images/profil_neutral.webp";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Category } from "../types/type";
@@ -99,11 +100,19 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
         </h2>
         <header className="flex items-center justify-between">
           <section className="flex items-center gap-2">
-            <img
-              src={user?.avatar}
-              alt={user?.username}
-              className="object-cover rounded-full text-text-primary size-9"
-            />
+            {user?.path ? (
+              <img
+                src={`${import.meta.env.VITE_API_URL}/${user?.path}`}
+                alt={user?.username}
+                className="object-cover rounded-full text-text-primary size-9"
+              />
+            ) : (
+              <img
+                src={defaultProfilePicture}
+                alt={user?.username}
+                className="object-cover rounded-full text-text-primary size-9"
+              />
+            )}
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
         </header>

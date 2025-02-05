@@ -67,12 +67,14 @@ class EventRepository {
       category.id AS category_id,
       user.id AS user_id,
       CONCAT (user.firstname, ' ', user.lastname) AS username,
-      user.avatar
+      avatar.path AS avatar_path
       FROM event
       JOIN user
       ON event.user_id = user.id
       JOIN category
       ON event.category_id = category.id
+      JOIN avatar
+      ON avatar.user_id = user.id
       WHERE event.id = ?
       `,
       [eventId],
@@ -92,7 +94,7 @@ class EventRepository {
       user: {
         id: row.user_id,
         username: row.username,
-        avatar: row.avatar,
+        avatar: row.avatar_path,
       },
     }));
 
@@ -113,7 +115,7 @@ class EventRepository {
         event.place,
         user.id AS user_id,
         CONCAT (user.firstname, ' ', user.lastname) AS username,
-        user.avatar,
+        avatar.path AS avatar_path,
         (
           SELECT COUNT(*)
           FROM comment
@@ -129,6 +131,8 @@ class EventRepository {
       ON event.user_id = user.id
       JOIN category
         ON event.category_id = category.id
+      JOIN avatar
+        ON avatar.user_id = user.id
       ORDER BY
         event.created_at DESC;
       `);
@@ -148,7 +152,7 @@ class EventRepository {
       user: {
         id: row.user_id,
         username: row.username,
-        avatar: row.avatar,
+        avatar: row.avatar_path,
       },
     }));
 

@@ -4,7 +4,6 @@ create table user (
   firstname varchar(255) not null,
   lastname varchar(255) not null,
   password varchar(255) not null,
-  avatar varchar(255) null,
   github VARCHAR(255) NULL,
   linkedin VARCHAR(255) NULL,
   site VARCHAR(255) NULL,
@@ -83,12 +82,12 @@ CREATE TABLE avatar (
   constraint fk_avatar_user foreign key (user_id) references user(id) on delete CASCADE
 );
 
-insert into user(id, email, firstname, lastname, password, avatar, linkedin, github, site, biography, role)
+insert into user(id, email, firstname, lastname, password, linkedin, github, site, biography, role)
 values
-  (1, "example@mail.com","Admin", "Istrateur", "$argon2id$v=19$m=65536,t=3,p=4$MEZfaWwCSctWWpxE1hPm/g$EQxm4Q2ULXL+lL9F0pSBOuwR++rMzdk68Jh1yX+a6A8", "http://localhost:3000/src/assets/images/pictureprofil.webp", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "admin"),
-  (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "$argon2id$v=19$m=65536,t=3,p=4$XEraD/BNcArp3WUwG3N/LQ$ZHbE7iOLtctLKNoaiFCGCprbj0MLJyNccQdTQr18NaA", "http://localhost:3000/src/assets/images/demo/woman1.jpg", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user"),
-  (3, "adrien.morel@mail.com", "Adrien", "Morel", "$argon2id$v=19$m=65536,t=3,p=4$5F8ilwCFIjwEpUSKYJ7Zfw$LcUOU1ufJi3O2uYcAVrprMMJjVYJc8hkLRPakfK+FfI", "http://localhost:3000/src/assets/images/demo/man.jpg", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user"),
-  (4, "clara.duval@mail.com", "Clara", "Duval", "$argon2id$v=19$m=65536,t=3,p=4$XYAZxeYMvxLBwMDRGcQWHw$A2rXfVNG6j9uwBBmETWtWuhFxXvy3sqDrSwoKz7gCsM", "http://localhost:3000/src/assets/images/demo/woman2.jpg", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user");
+  (1, "example@mail.com","Admin", "Istrateur", "$argon2id$v=19$m=65536,t=3,p=4$MEZfaWwCSctWWpxE1hPm/g$EQxm4Q2ULXL+lL9F0pSBOuwR++rMzdk68Jh1yX+a6A8", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "admin"),
+  (2, "sophie.lambert@mail.com", "Sophie", "Lambert", "$argon2id$v=19$m=65536,t=3,p=4$XEraD/BNcArp3WUwG3N/LQ$ZHbE7iOLtctLKNoaiFCGCprbj0MLJyNccQdTQr18NaA", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user"),
+  (3, "adrien.morel@mail.com", "Adrien", "Morel", "$argon2id$v=19$m=65536,t=3,p=4$5F8ilwCFIjwEpUSKYJ7Zfw$LcUOU1ufJi3O2uYcAVrprMMJjVYJc8hkLRPakfK+FfI", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user"),
+  (4, "clara.duval@mail.com", "Clara", "Duval", "$argon2id$v=19$m=65536,t=3,p=4$XYAZxeYMvxLBwMDRGcQWHw$A2rXfVNG6j9uwBBmETWtWuhFxXvy3sqDrSwoKz7gCsM", "https://linkedin.com/exemple", "https://github.com/exemple", "monsupersite.com", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, soluta. Corrupti consectetur quod dolore velit quis. Assumenda vitae, optio nemo sint iure totam maxime, aliquid et quod omnis officia, quia quos quasi natus? Molestias explicabo accusamus officia optio veritatis, alias deserunt necessitatibus modi, facere vero suscipit atque doloremque provident ut!", "user");
 
 INSERT INTO category(id, name, type)
 VALUES 
@@ -160,8 +159,8 @@ VALUES
 
 INSERT INTO avatar
 (filename, path, user_id)
-VALUES (
-        "logo.png",
-        "assets/images/logo.png",
-        1
-    );
+VALUES 
+    ("pictureprofil.webp", "assets/uploads/avatars/pictureprofil.webp", 1),
+    ("woman1.jpg", "assets/uploads/avatars/woman1.jpg", 2),
+    ("man.jpg", "assets/uploads/avatars/man.jpg", 3),
+    ("woman2.jpg", "assets/uploads/avatars/woman2.jpg", 4);

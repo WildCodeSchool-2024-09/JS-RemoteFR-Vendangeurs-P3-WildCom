@@ -17,15 +17,17 @@ class userRepository {
     const [rows] = await databaseClient.query<Rows>(
       `
       SELECT 
-      id,
+      user.id,
       CONCAT (firstname, ' ' ,lastname) as username,
-      avatar,
+      avatar.path,
       github,
       linkedin,
       site,
       biography 
       FROM user 
-      WHERE id = ?`,
+      JOIN avatar
+      ON avatar.user_id = user.id
+      WHERE user.id = ?`,
       [id],
     );
     return rows as User[];
@@ -37,13 +39,15 @@ class userRepository {
       SELECT 
       firstname,
       lastname,
-      avatar,
+      avatar.path,
       github,
       linkedin,
       site,
       biography 
       FROM user 
-      WHERE id = ?`,
+      JOIN avatar
+      ON avatar.user_id = user.id
+      WHERE user.id = ?`,
       [id],
     );
     return rows as User[];

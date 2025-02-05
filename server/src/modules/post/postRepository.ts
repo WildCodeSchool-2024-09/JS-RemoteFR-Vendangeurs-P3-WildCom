@@ -46,7 +46,7 @@ class PostRepository {
         post.created_at,
         user.id AS user_id, 
         CONCAT (user.firstname,' ', user.lastname) AS username,
-        user.avatar,
+        avatar.path AS avatar_path,
         (
           SELECT COUNT(*)
           FROM comment
@@ -62,6 +62,8 @@ class PostRepository {
         ON post.user_id = user.id
       JOIN category
         ON post.category_id = category.id
+      JOIN avatar
+        ON avatar.user_id = user.id
       ORDER BY
         post.created_at DESC;
       `,
@@ -78,7 +80,7 @@ class PostRepository {
       user: {
         id: row.user_id,
         username: row.username,
-        avatar: row.avatar,
+        avatar: row.avatar_path,
       },
     }));
 
@@ -97,12 +99,14 @@ class PostRepository {
         post.created_at,
         user.id AS user_id, 
         CONCAT (user.firstname,' ', user.lastname) AS username,
-        user.avatar
+        avatar.path AS avatar_path
       FROM post
       JOIN user
         ON post.user_id = user.id
       JOIN category
         ON post.category_id = category.id
+      JOIN avatar
+        ON avatar.user_id = user.id
       WHERE post.id = ?
       `,
       [postId],
@@ -117,7 +121,7 @@ class PostRepository {
       user: {
         id: row.user_id,
         username: row.username,
-        avatar: row.avatar,
+        avatar: row.avatar_path,
       },
     }));
 

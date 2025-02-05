@@ -6,6 +6,8 @@ import { CardPost } from "../components/CardPost";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Post } from "../types/type";
 
+import defaultProfilePicture from "../assets/images/profil_neutral.webp";
+
 type User = {
   id: number;
   username: string;
@@ -13,7 +15,7 @@ type User = {
   linkedin: string | null;
   site: string | null;
   biography: string | null;
-  avatar: string | null;
+  path: string | null;
 };
 function Profil() {
   const { id } = useParams();
@@ -65,12 +67,19 @@ function Profil() {
         >
           <div className="flex flex-col gap-6 mx-4 md:flex-row ">
             <figure className="self-center w-52">
-              <img
-                className="object-cover w-48 h-48 rounded-full "
-                src={user.avatar ?? ""}
-                alt=""
-                aria-labelledby="username"
-              />
+              {user.path ? (
+                <img
+                  className="object-cover w-48 h-48 rounded-full "
+                  src={`${import.meta.env.VITE_API_URL}/${user.path}`}
+                  alt={`Avatar de ${user?.username}`}
+                />
+              ) : (
+                <img
+                  className="object-cover w-48 h-48 rounded-full "
+                  src={defaultProfilePicture}
+                  alt={`Avatar de ${user?.username}`}
+                />
+              )}
             </figure>
 
             <p

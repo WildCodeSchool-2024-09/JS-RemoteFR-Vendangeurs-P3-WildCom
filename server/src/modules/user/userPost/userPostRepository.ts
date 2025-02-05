@@ -26,11 +26,13 @@ class UserPostRepository {
       ,(SELECT count (*) 
       FROM comment
       WHERE comment.post_id = post.id) AS total_comments,
-      user.id AS user_id, user.avatar, 
+      user.id AS user_id, avatar.path AS avatar_path , 
       CONCAT(user.firstname, ' ', user.lastname) AS username
       FROM post
       JOIN user ON post.user_id = user.id
       JOIN category ON post.category_id = category.id
+      JOIN avatar
+      ON avatar.user_id = user.id
       WHERE user.id = ? 
 
       `,
@@ -46,7 +48,7 @@ class UserPostRepository {
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,
-        avatar: row.avatar,
+        avatar: row.avatar_path,
         username: row.username,
       },
     }));
