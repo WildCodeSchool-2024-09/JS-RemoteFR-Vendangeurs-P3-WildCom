@@ -29,6 +29,10 @@ import userPostAction from "./modules/user/userPost/userPostAction";
 
 router.get("/api/user/:id/posts", userPostAction.browse);
 
+import userEventActions from "./modules/user/userEvent/userEventActions";
+
+router.get("/api/user/:id/events", userEventActions.browse);
+
 /* ************************************************************************* */
 
 // Define posts-related routes
