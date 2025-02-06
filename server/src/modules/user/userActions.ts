@@ -4,6 +4,7 @@ import userRepository from "./userRepository";
 const read: RequestHandler = async (req, res, next) => {
   try {
     const parsedId = Number.parseInt(req.params.id);
+
     const user = await userRepository.read(parsedId);
 
     if (user == null) {
@@ -19,6 +20,7 @@ const read: RequestHandler = async (req, res, next) => {
 const readUserInfos: RequestHandler = async (req, res, next) => {
   try {
     const parsedId = Number.parseInt(req.params.id);
+
     const user = await userRepository.readUserInfo(parsedId);
 
     if (user == null) {
@@ -34,7 +36,9 @@ const readUserInfos: RequestHandler = async (req, res, next) => {
 const update: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
+
     const updatedUser = await userRepository.update(id, req.body);
+
     res.json(updatedUser);
   } catch (err) {
     next(err);
@@ -44,8 +48,11 @@ const update: RequestHandler = async (req, res, next) => {
 const destroy: RequestHandler = async (req, res, next) => {
   try {
     const parsedId = Number.parseInt(req.params.id);
+
     await userRepository.destroy(parsedId);
-    res.sendStatus(204);
+
+    res.status(200).json({ message: "Utilisateur supprimé" });
+    return;
   } catch (err) {
     next(err);
   }
