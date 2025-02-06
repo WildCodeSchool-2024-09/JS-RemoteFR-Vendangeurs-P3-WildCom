@@ -9,7 +9,8 @@ create table user (
   linkedin VARCHAR(255) NULL,
   site VARCHAR(255) NULL,
   biography text NULL,
-  role VARCHAR(255) NOT NULL DEFAULT "user"
+  role VARCHAR(255) NOT NULL DEFAULT "user",
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE category (

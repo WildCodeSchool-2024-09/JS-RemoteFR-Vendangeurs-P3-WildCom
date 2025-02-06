@@ -1,6 +1,7 @@
 import type { ResultSetHeader } from "mysql2";
 import type { Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
+import { formattedDate } from "../../utils/formattedTimestamp";
 
 type User = {
   id: number;
@@ -13,6 +14,29 @@ type User = {
 };
 
 class userRepository {
+  async browse() {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+      SELECT 
+      id,
+      CONCAT (firstname, ' ' ,lastname) as username,
+      created_at,
+      avatar
+      FROM user
+      WHERE role = 'user'
+      `,
+    );
+
+    const fomrattedRows = rows.map((row) => ({
+      id: row.id,
+      username: row.username,
+      avatar: row.avatar,
+      createdAt: formattedDate(row.created_at),
+    }));
+
+    return fomrattedRows;
+  }
+
   async read(id: number) {
     const [rows] = await databaseClient.query<Rows>(
       `
