@@ -43,8 +43,8 @@ import postActions from "./modules/post/postActions";
 
 router.get("/api/posts", postActions.browse);
 router.get("/api/post/:id", postActions.read);
-router.post("/api/posts", postActions.add);
-router.put("/api/posts/:id/edit", postActions.edit);
+router.post("/api/posts", validatePost, postActions.add);
+router.put("/api/posts/:id", validatePost, postActions.edit);
 router.delete("/api/posts/:id", postActions.destroy);
 
 import postCommentsActions from "./modules/post/postComment/postCommentsActions";
@@ -93,6 +93,7 @@ router.delete(
 /* ************************************************************************* */
 
 // Define categories-related routes
+import { validatePost } from "./middlewares/checkPostDatas";
 import categoryActions from "./modules/category/categoryActions";
 
 router.get("/api/categories/posts", categoryActions.readByTypePost);

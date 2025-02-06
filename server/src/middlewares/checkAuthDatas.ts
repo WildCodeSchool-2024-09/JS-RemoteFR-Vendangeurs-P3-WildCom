@@ -7,8 +7,17 @@ const checkAuthDatas = (
   next: NextFunction,
 ): void => {
   const schema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(3).required(),
+    email: Joi.string()
+      .email({ minDomainSegments: 2, allowUnicode: false })
+      .required()
+      .messages({
+        "string.email": "Veuillez entrer un email valide",
+        "string.empty": "L'email est obligatoire",
+      }),
+    password: Joi.string().min(8).required().messages({
+      "string.min": "Le mot de passe doit contenir au moins 8 caractères",
+      "string.empty": "Le mot de passe est obligatoire",
+    }),
   });
 
   if (!req.body) {
@@ -16,9 +25,9 @@ const checkAuthDatas = (
     return;
   }
 
-  const { error } = schema.validate(req.body);
+  const { error } = schema.validate(req.body, { abortEarly: false });
   if (error) {
-    res.status(400).json({ error: error.details[0].message });
+    res.status(400).json({ error: error.details.map((err) => err.message) });
     return;
   }
 

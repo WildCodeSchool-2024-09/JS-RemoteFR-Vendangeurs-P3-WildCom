@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 
 export const LoginForm = () => {
@@ -24,24 +25,38 @@ export const LoginForm = () => {
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const result = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/auth/login`,
-      login,
-      { withCredentials: true },
-    );
+    try {
+      const result = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        login,
+        { withCredentials: true },
+      );
 
-    const currentUser = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/auth/find/${result.data.userId}`,
-      { withCredentials: true },
-    );
-    setUser(currentUser.data);
+      const currentUser = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/auth/find/${result.data.userId}`,
+        { withCredentials: true },
+      );
+      setUser(currentUser.data);
 
-    setLogin({
-      email: "",
-      password: "",
-    });
+      setLogin({
+        email: "",
+        password: "",
+      });
 
-    navigate("/user/home");
+      navigate("/user/home");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 401) {
+          toast.error(error.response.data.message);
+        }
+        if (error.response && error.response.status === 500) {
+          toast.error(error.response.data.message);
+        }
+        if (error.response && error.response.status === 400) {
+          toast.warn(error.response.data.error[0]);
+        }
+      }
+    }
   };
 
   return (
@@ -57,7 +72,6 @@ export const LoginForm = () => {
           className="self-center w-2/3 px-3 py-2 rounded-lg lg:w-1/2"
           value={login.email}
           onChange={handleInputsChange}
-          required
         />
 
         <input
@@ -67,7 +81,6 @@ export const LoginForm = () => {
           className="self-center w-2/3 px-3 py-2 rounded-lg lg:w-1/2 "
           value={login.password}
           onChange={handleInputsChange}
-          required
         />
 
         <button
