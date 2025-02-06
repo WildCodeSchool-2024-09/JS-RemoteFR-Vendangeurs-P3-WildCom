@@ -22,6 +22,7 @@ router.post("/api/auth/register", checkRegister, authActions.register);
 // Define profiles-related routes
 import userActions from "./modules/user/userActions";
 
+router.get("/api/users", userActions.browse);
 router.get("/api/user/:id", userActions.read);
 router.put("/api/user/:id", userActions.update);
 router.get("/api/user/:id/edit", userActions.readUserInfos);

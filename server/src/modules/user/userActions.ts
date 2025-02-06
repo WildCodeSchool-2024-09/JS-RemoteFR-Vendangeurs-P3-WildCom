@@ -1,6 +1,18 @@
 import type { RequestHandler } from "express";
 import userRepository from "./userRepository";
 
+const browse: RequestHandler = async (req, res, next) => {
+  try {
+    const users = await userRepository.browse();
+
+    if (users) {
+      res.json(users);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 const read: RequestHandler = async (req, res, next) => {
   try {
     const parsedId = Number.parseInt(req.params.id);
@@ -51,4 +63,4 @@ const destroy: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { read, update, readUserInfos, destroy };
+export default { browse, read, update, readUserInfos, destroy };
