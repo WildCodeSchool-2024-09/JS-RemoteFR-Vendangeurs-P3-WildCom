@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa";
+import { IoMdCheckmark } from "react-icons/io";
 import { IoSendSharp } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import { RxCross2 } from "react-icons/rx";
+import { RxCross1, RxCross2 } from "react-icons/rx";
 import { SlOptions } from "react-icons/sl";
 import { Link } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
@@ -21,6 +22,10 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
     null,
   );
+  const [isDeleteMode, setIsDeleteMode] = useState<{ [key: number]: boolean }>(
+    {},
+  );
+  const [isExpanded, setIsExpanded] = useState<{ [key: number]: boolean }>({});
   const [isEditingComment, setIsEditingComment] = useState<number | null>(null);
   const [editedCommentContent, setEditedCommentContent] = useState<string>("");
   const { updateComment, setUpdateComment } = useUpdate();
@@ -45,6 +50,8 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
 
   const toggleCommentMenu = (commentId: number) => {
     setSelectedCommentId((prevId) => (prevId === commentId ? null : commentId));
+
+    setIsDeleteMode({});
   };
 
   const startEditingComment = (commentId: number, content: string) => {
@@ -103,6 +110,17 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
     setUpdateComment((prev) => prev + 1);
   };
 
+  const toggleDeleteMode = (commentId: number) => {
+    setIsDeleteMode((prev) => ({ ...prev, [commentId]: !prev[commentId] }));
+  };
+
+  const toggleExpansion = (postId: number) => {
+    setIsExpanded((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
+
   return (
     <div>
       {comments.length === 0 ? (
@@ -127,41 +145,66 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
                   <p className="font-bold">{comment.user.username}</p>
 
                   {/* Bouton d'options */}
-                  <button
-                    type="button"
-                    onClick={() => toggleCommentMenu(comment.id)}
-                  >
-                    <SlOptions />
-                  </button>
-
-                  {/* Menu d'actions */}
-                  {selectedCommentId === comment.id && (
-                    <div className="absolute flex items-center justify-center w-auto h-4 gap-3 m-2 text-xs font-medium right-5 -top-3 text-text-secondary font-text">
-                      {(user?.id === comment.user.id ||
-                        user?.role === "admin") && (
-                        <>
-                          {/* Bouton Modifier */}
+                  {(user?.id === comment.user.id || user?.role === "admin") && (
+                    <>
+                      {/* Menu d'actions */}
+                      {isDeleteMode[comment.id] ? (
+                        <div className="absolute flex gap-1 right-6 -top-1 ">
+                          <p className="self-center mr-1">Suppirmer ?</p>
                           <button
                             type="button"
-                            className="flex items-center justify-center p-1 border rounded-md group border-bg-secondary hover:border-bg_opacity-secondary"
-                            onClick={() =>
-                              startEditingComment(comment.id, comment.content)
-                            }
-                          >
-                            <FaPen className="size-3 group-hover:text-accent-primary" />
-                          </button>
-
-                          {/* Bouton Supprimer */}
-                          <button
-                            type="button"
-                            className="flex items-center justify-center p-1 border rounded-md group border-bg-secondary hover:border-bg_opacity-secondary"
                             onClick={() => deleteComment(comment.id)}
+                            className="p-1 border rounded-lg border-bg-secondary hover:border-bg_opacity-secondary hover:text-text-red"
                           >
-                            <MdDeleteOutline className="size-4 group-hover:text-text-red" />
+                            <IoMdCheckmark />
                           </button>
-                        </>
+                          <button
+                            type="button"
+                            onClick={() => toggleDeleteMode(comment.id)}
+                            className="p-1 border rounded-lg border-bg-secondary hover:border-bg_opacity-secondary hover:text-accent-primary"
+                          >
+                            <RxCross1 />
+                          </button>
+                        </div>
+                      ) : (
+                        <div>
+                          {selectedCommentId === comment.id && (
+                            <div className="absolute flex items-center justify-center w-auto h-4 gap-1 m-2 text-xs font-medium right-4 -top-3 text-text-secondary font-text">
+                              {/* Bouton Modifier */}
+                              <button
+                                type="button"
+                                className="flex items-center justify-center p-1 border rounded-md group border-bg-secondary hover:border-bg_opacity-secondary"
+                                onClick={() =>
+                                  startEditingComment(
+                                    comment.id,
+                                    comment.content,
+                                  )
+                                }
+                              >
+                                <FaPen className="size-3 group-hover:text-accent-primary" />
+                              </button>
+
+                              {/* Bouton Supprimer */}
+                              <button
+                                type="button"
+                                className="flex items-center justify-center p-1 border rounded-md group border-bg-secondary hover:border-bg_opacity-secondary"
+                                onClick={() => toggleDeleteMode(comment.id)}
+                              >
+                                <MdDeleteOutline className="size-4 group-hover:text-text-red" />
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       )}
-                    </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          toggleCommentMenu(comment.id);
+                        }}
+                      >
+                        <SlOptions />
+                      </button>
+                    </>
                   )}
                 </header>
 
@@ -198,7 +241,22 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
                       </div>
                     </form>
                   ) : (
-                    <p className="break-all">{comment.content}</p>
+                    <>
+                      <p className="break-words whitespace-pre-line">
+                        {isExpanded[comment.id]
+                          ? comment.content
+                          : `${comment.content.slice(0, 400)} ${comment.content.length > 400 ? "..." : ""}`}
+                      </p>
+                      {comment.content.length > 400 && (
+                        <button
+                          type="button"
+                          onClick={() => toggleExpansion(comment.id)}
+                          className="w-full mt-2 text-sm text-end hover:text-accent-primary"
+                        >
+                          {isExpanded[comment.id] ? "Réduire" : "Lire la suite"}
+                        </button>
+                      )}
+                    </>
                   )}
                 </main>
               </article>
