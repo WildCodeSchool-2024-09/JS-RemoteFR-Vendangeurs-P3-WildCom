@@ -16,7 +16,11 @@ export const AuthPage = () => {
       <section
         className={`z-10 flex w-96 lg:w-[950px]  lg:border-2 rounded-lg lg:border-bg_opacity-secondary h-full lg:h-2/3 lg:bg-bg_opacity-primary ${isRegister ? "flex-col-reverse lg:flex-row-reverse" : "flex-col-reverse lg:flex-row"}`}
       >
-        {isRegister ? <RegisterForm /> : <LoginForm />}
+        {isRegister ? (
+          <RegisterForm setIsRegister={setIsRegister} />
+        ) : (
+          <LoginForm />
+        )}
 
         <aside className="z-20 flex flex-col items-center justify-center w-full lg:justify-start lg:w-1/2 h-1/2 lg:h-full lg:bg-bg_opacity-secondary ">
           <header className="flex lg:items-start h-1/2 lg:h-20 lg:my-10">

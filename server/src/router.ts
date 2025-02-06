@@ -9,11 +9,13 @@ const router = express.Router();
 /* ************************************************************************* */
 // Define auth-related routes
 import { checkAuthDatas } from "./middlewares/checkAuthDatas";
+import { checkRegister } from "./middlewares/checkRegister";
 import authActions from "./modules/auth/authActions";
 
 router.post("/api/auth/login", checkAuthDatas, authActions.login);
 router.get("/api/auth/find/:id", authActions.findCurrentUser);
 router.post("/api/auth/logout", authActions.logout);
+router.post("/api/auth/register", checkRegister, authActions.register);
 
 /* ************************************************************************* */
 

@@ -24,4 +24,16 @@ const errorToast = (message: string) => {
   });
 };
 
-export { successToast, errorToast };
+const warnToast = (message: string) => {
+  toast.warn(message, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
+};
+
+export { errorToast, successToast, warnToast };
