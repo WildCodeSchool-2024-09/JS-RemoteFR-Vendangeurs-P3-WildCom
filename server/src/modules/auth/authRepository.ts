@@ -1,5 +1,5 @@
+import type { Result, Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
-import type { Rows } from "../../../database/client";
 
 type User = {
   id: number;
@@ -31,6 +31,30 @@ class AuthRepository {
       WHERE id = ? 
       `,
       [userId],
+    );
+    return rows[0];
+  }
+
+  async create(
+    firstName: string,
+    lastName: string,
+    email: string,
+    hashPassword: string,
+  ) {
+    const [result] = await databaseClient.query<Result>(
+      `
+          INSERT INTO user (firstname, lastname, email, password)
+          VALUES (?, ?, ?, ?)
+          `,
+      [firstName, lastName, email, hashPassword],
+    );
+    const [rows] = await databaseClient.query<Rows>(
+      `
+          SELECT id, email
+          FROM user
+          WHERE id = ?
+          `,
+      [result.insertId],
     );
 
     return rows[0] as User;

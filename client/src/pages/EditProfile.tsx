@@ -202,7 +202,7 @@ function EditProfile() {
           <button
             className="self-center px-6 py-2 mt-4 text-xl border text-accent-primary border-accent-primary hover:text-accent-primaryhover hover:border-accent-primaryhover w-fit rounded-xl font-text"
             type="button"
-            onClick={() => navigate(`/user/editprofile/${user?.id}`)}
+            onClick={() => navigate(`/user/profile/${user?.id}`)}
           >
             Annuler
           </button>
