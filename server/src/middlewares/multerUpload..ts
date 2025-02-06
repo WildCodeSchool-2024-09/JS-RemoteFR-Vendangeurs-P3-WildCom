@@ -2,12 +2,28 @@ import path from "node:path";
 import type { NextFunction, Request, Response } from "express";
 import multer, { type StorageEngine } from "multer";
 
-const DBPath = "assets/uploads/avatars";
-const serverPath: string = path.join(__dirname, "../../public", DBPath);
+const AvatarPath = "assets/uploads/avatars";
+const serverAvatarPath: string = path.join(
+  __dirname,
+  "../../public",
+  AvatarPath,
+);
+const PicturePath = "assets/uploads/pictures";
+const serverPicturePath: string = path.join(
+  __dirname,
+  "../../public",
+  PicturePath,
+);
 
-const storage: StorageEngine = multer.diskStorage({
+const storageImage: StorageEngine = multer.diskStorage({
   destination: (req: Request, file, cb) => {
-    cb(null, serverPath);
+    if (file.fieldname === "avatar") {
+      cb(null, serverAvatarPath);
+    } else if (file.fieldname === "picture") {
+      cb(null, serverPicturePath);
+    } else {
+      cb(null, "../../public");
+    }
   },
   filename: (req: Request, file, cb) => {
     const date = Date.now();
@@ -38,15 +54,24 @@ const fileFilter = (
   }
 };
 
-const upload = multer({ storage, fileFilter }).single("avatar");
+const uploadImage = multer({ storage: storageImage, fileFilter });
 
-const adjustFilePath = (req: Request, res: Response, next: NextFunction) => {
+const adjustAvatarPath = (req: Request, res: Response, next: NextFunction) => {
   if (!req.file) {
     return next();
   }
 
-  req.file.path = `${DBPath}/${req.file.filename}`;
+  req.file.path = `${AvatarPath}/${req.file.filename}`;
   next();
 };
 
-export { adjustFilePath, upload };
+const adjustPicturePath = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.file) {
+    return next();
+  }
+
+  req.file.path = `${PicturePath}/${req.file.filename}`;
+  next();
+};
+
+export { adjustAvatarPath, adjustPicturePath, uploadImage };

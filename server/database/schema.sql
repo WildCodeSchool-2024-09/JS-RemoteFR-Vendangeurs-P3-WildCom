@@ -21,7 +21,6 @@ CREATE TABLE category (
 create table post (
   id int unsigned primary key auto_increment not null,
   content text not null,
-  picture varchar(255) null,
   created_at timestamp default current_timestamp not null,
   category_id int unsigned not null,
   user_id int unsigned not null,
@@ -33,7 +32,6 @@ create table event (
   id int unsigned primary key auto_increment not null,
   content text not null,
   category_id int unsigned not null,
-  picture varchar(255) null,
   created_at timestamp default current_timestamp not null,
   title varchar(255) not null,
   place varchar(255) not null,
@@ -75,11 +73,22 @@ CREATE TABLE event_participation (
 );
 
 CREATE TABLE avatar (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   filename VARCHAR(255) NOT NULL,
   path VARCHAR(255) NOT NULL,
   user_id INT UNSIGNED NOT NULL,
   constraint fk_avatar_user foreign key (user_id) references user(id) on delete CASCADE
+);
+
+CREATE TABLE picture (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  filename VARCHAR(255) NOT NULL,
+  path VARCHAR(255) NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  post_id INT UNSIGNED DEFAULT NULL,
+  event_id INT UNSIGNED DEFAULT NULL,
+  constraint fk_picture_post foreign key (post_id) references post(id) on delete CASCADE,
+  constraint fk_picture_event foreign key (event_id) references event(id) on delete CASCADE
 );
 
 insert into user(id, email, firstname, lastname, password, linkedin, github, site, biography, role)
@@ -100,17 +109,17 @@ VALUES
 (7, "Démo day", "event"),
 (8, "Hackathon", "event");
 
-insert into post(id, content, picture, category_id, user_id)
+insert into post(id, content, category_id, user_id)
 values
-  (1,"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus deserunt amet modi error officia! Commodi, corporis tenetur aspernatur quisquam nostrum aliquid dignissimos quo molestiae, ipsum, odio alias ad delectus vitae expedita. Molestias itaque facere architecto modi beatae ut dignissimos officiis numquam cumque vero adipisci, necessitatibus sequi dolor voluptatum?", "http://localhost:3000/src/assets/images/demo/fog.jpg",  2, 2),
-  (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", "",  4, 3),
-  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur eos consequuntur maiores minima repellendus. Dicta, voluptatum ut?", "http://localhost:3000/src/assets/images/demo/landscape.jpg",  3, 4);
+  (1,"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus deserunt amet modi error officia! Commodi, corporis tenetur aspernatur quisquam nostrum aliquid dignissimos quo molestiae, ipsum, odio alias ad delectus vitae expedita. Molestias itaque facere architecto modi beatae ut dignissimos officiis numquam cumque vero adipisci, necessitatibus sequi dolor voluptatum?", 2, 2),
+  (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", 4, 3),
+  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur eos consequuntur maiores minima repellendus. Dicta, voluptatum ut?", 3, 4);
 
-insert into event(id, content, category_id, picture, title, place, calendar, time, user_id)
+insert into event(id, content, category_id, title, place, calendar, time, user_id)
 values
-  (1, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 5, "http://localhost:3000/src/assets/images/demo/fog.jpg", "Super event de ouf", "Nogent le retrou", "2024-04-01", "18:20:00", 1),
-  (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", 7, "", "Boire un coup ou deux", "Bordeaux", "2026-06-15", "18:20:00", 2),
-  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur", 8, "http://localhost:3000/src/assets/images/demo/landscape.jpg", "Viens on est bien", "Nantes", "2042-07-30", "18:20:00", 3);
+  (1, "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellendus temporibus dolores, eaque laudantium eius architecto quae autem rerum ratione, culpa incidunt sunt non eum animi atque corrupti vero tempore excepturi doloribus", 5, "Super event de ouf", "Nogent le retrou", "2024-04-01", "18:20:00", 1),
+  (2, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis blanditiis vero magnam quos eligendi esse neque sed quae quaerat distinctio cum reprehenderit nisi ipsum, ducimus nemo culpa! Corrupti, eaque voluptatem saepe facilis laborum molestias. Laudantium sit repellendus tenetur a dignissimos veniam laboriosam possimus esse repudiandae!", 7, "Boire un coup ou deux", "Bordeaux", "2026-06-15", "18:20:00", 2),
+  (3, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque quidem reiciendis tempore facere omnis aperiam sunt tempora libero. Iusto mollitia sunt aspernatur", 8, "Viens on est bien", "Nantes", "2042-07-30", "18:20:00", 3);
 
 
 
@@ -164,3 +173,12 @@ VALUES
     ("woman1.jpg", "assets/uploads/avatars/woman1.jpg", 2),
     ("man.jpg", "assets/uploads/avatars/man.jpg", 3),
     ("woman2.jpg", "assets/uploads/avatars/woman2.jpg", 4);
+
+
+INSERT INTO picture
+(filename, path, user_id, post_id, event_id)
+VALUES
+     ("fog.jpg", "assets/uploads/pictures/fog.jpg", 2, 1, NULL),
+     ("fog.jpg", "assets/uploads/pictures/fog.jpg", 1, NULL, 1),
+     ("landscape.jpg", "assets/uploads/pictures/landscape.jpg", 4, 3, NULL),
+     ("landscape.jpg", "assets/uploads/pictures/landscape.jpg", 2, NULL, 3);

@@ -93,16 +93,26 @@ router.get("/api/categories/events", categoryActions.readByTypeEvent);
 /* ************************************************************************* */
 
 // Define uploads-related routes
-import { adjustFilePath, upload } from "./middlewares/multerUpload.";
+import {
+  adjustAvatarPath,
+  adjustPicturePath,
+  uploadImage,
+} from "./middlewares/multerUpload.";
 import { verifyUser } from "./middlewares/verifyUser";
 import uploadActions from "./modules/upload/uploadActions";
 
 router.post(
-  "/api/files/upload",
+  "/api/uploads/avatars",
   verifyUser,
-  upload,
-  adjustFilePath,
-  uploadActions.upload,
+  uploadImage.single("avatar"),
+  adjustAvatarPath,
+  uploadActions.uploadAvatar,
 );
-
+router.post(
+  "/api/uploads/pictures/:id",
+  verifyUser,
+  uploadImage.single("picture"),
+  adjustPicturePath,
+  uploadActions.uploadPicture,
+);
 export default router;
