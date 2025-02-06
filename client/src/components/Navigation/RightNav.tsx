@@ -7,6 +7,7 @@ import type { LocationProps } from "../../types/type";
 import { IoMdAdd } from "react-icons/io";
 import { MdOutlineCategory } from "react-icons/md";
 import { SlEqualizer } from "react-icons/sl";
+import { TbUsersGroup } from "react-icons/tb";
 import { useAuth } from "../../contexts/AuthContext";
 import ModalButton from "../ModalButton";
 
@@ -79,7 +80,10 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
   }
 
   // Admin
-  if (user?.role === "admin" && location === "/admin/categories") {
+  if (
+    (user?.role === "admin" && location === "/admin/categories") ||
+    location === "/admin/users"
+  ) {
     return (
       <nav
         className="flex items-center justify-center w-full gap-10 h-1/4 "
@@ -95,6 +99,17 @@ export const RightNav: React.FC<LocationProps> = ({ location }) => {
             >
               <MdOutlineCategory className="size-7 text-accent-primary" />
               Catégories
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/admin/users"
+              className={({ isActive }: { isActive: boolean }) =>
+                `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-xl hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
+              }
+            >
+              <TbUsersGroup className="size-7 text-accent-primary" />
+              Utilisateurs
             </NavLink>
           </li>
         </ul>

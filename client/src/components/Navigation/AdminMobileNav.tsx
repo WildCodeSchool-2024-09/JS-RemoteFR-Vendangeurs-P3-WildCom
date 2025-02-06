@@ -1,4 +1,5 @@
 import { MdOutlineCategory } from "react-icons/md";
+import { TbUsersGroup } from "react-icons/tb";
 import { NavLink } from "react-router-dom";
 
 export const AdminMobileNav = () => {
@@ -17,6 +18,17 @@ export const AdminMobileNav = () => {
           >
             <MdOutlineCategory className="size-6 text-accent-primary" />
             Catégories
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/admin/users"
+            className={({ isActive }: { isActive: boolean }) =>
+              `${isActive ? "drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)] text-accent-primary" : "text-text-primary"} flex gap-4 items-center text-lg hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]`
+            }
+          >
+            <TbUsersGroup className="size-6 text-accent-primary" />
+            Utilisateurs
           </NavLink>
         </li>
       </ul>

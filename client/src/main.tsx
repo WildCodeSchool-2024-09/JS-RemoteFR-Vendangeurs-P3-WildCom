@@ -19,6 +19,7 @@ import EditProfile from "./pages/EditProfile";
 import Events from "./pages/Events";
 import Home from "./pages/Home";
 import Profil from "./pages/Profil";
+import { UserManagement } from "./pages/UserManagement";
 
 /* ************************************************************************* */
 
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: "categories/:id",
         element: <CategoryDetails />,
+      },
+      {
+        path: "users",
+        element: <UserManagement />,
       },
     ],
   },
