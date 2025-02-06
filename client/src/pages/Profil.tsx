@@ -23,7 +23,13 @@ function Profil() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [activeTab, setActiveTab] = useState<"posts" | "events">("posts");
-  const { updatePost, updateEvent } = useUpdate();
+  const {
+    updatePost,
+    updateEvent,
+    updateComment,
+    updateLike,
+    updateParticipation,
+  } = useUpdate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -65,17 +71,24 @@ function Profil() {
       }
     };
 
-    if (updateEvent) {
+    if (updateEvent || updateComment || updateParticipation) {
       fetchEvents();
     }
 
-    if (updatePost) {
+    if (updatePost || updateComment || updateLike) {
       fetchPosts();
     }
 
     fetchPosts();
     fetchEvents();
-  }, [id, updatePost, updateEvent]);
+  }, [
+    id,
+    updatePost,
+    updateEvent,
+    updateComment,
+    updateLike,
+    updateParticipation,
+  ]);
 
   return (
     <>

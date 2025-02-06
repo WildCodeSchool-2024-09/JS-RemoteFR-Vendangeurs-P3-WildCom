@@ -51,7 +51,7 @@ const add: RequestHandler = async (req, res, next) => {
   try {
     const newEvent = {
       content: req.body.newEvent.content,
-      category: req.body.newEvent.category,
+      categoryId: req.body.newEvent.category,
       picture: req.body.newEvent.picture,
       title: req.body.newEvent.title,
       place: req.body.newEvent.place,

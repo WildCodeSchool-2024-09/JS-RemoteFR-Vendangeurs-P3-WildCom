@@ -17,6 +17,7 @@ interface CardPostProps {
 
 export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
   const { user } = useAuth();
+  const [isDeleteMode, setIsDeleteMode] = useState<boolean>(false);
   const [liked, setLiked] = useState<{ [key: number]: boolean }>({});
   const [commentsVisibility, setCommentsVisibility] = useState<{
     [key: number]: boolean;
@@ -73,9 +74,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
           withCredentials: true,
         },
       );
-
-      if (response.status === 200) {
-        toggleMenu(postId);
+      if (response.status === 204) {
         setUpdatePost((prev) => prev + 1);
       }
     } catch (error) {
@@ -160,31 +159,64 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
               )}
               {(user?.id === post.user.id || user?.role === "admin") && (
                 <div className="relative flex items-center">
-                  <button type="button" onClick={() => toggleMenu(post.id)}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      toggleMenu(post.id);
+                      setIsDeleteMode(false);
+                    }}
+                  >
                     <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
                       <BiCog className="text-text-secondary size-5" />
                     </figure>
                   </button>
                   {menuPostVisible === post.id && (
                     <div className="absolute z-50 w-40 bg-white border lg:-top-1 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] right-0 text-sm">
-                      <ModalButton
-                        type="editPost"
-                        postId={post.id}
-                        onClose={() => setMenuPostVisible(null)}
-                      >
-                        <span className="flex w-full gap-4 px-4 py-2 text-left hover:text-accent-primary">
-                          <FaPen className="text-accent-primary" />
-                          Modifier
-                        </span>
-                      </ModalButton>
-                      <button
-                        type="button"
-                        onClick={() => handleDeletePost(post.id)}
-                        className="right-0 flex w-full gap-2 px-4 py-2 text-left hover:text-text-red"
-                      >
-                        <MdDeleteOutline className="size-5 text-text-red " />
-                        Supprimer
-                      </button>
+                      {!isDeleteMode ? (
+                        <>
+                          <ModalButton
+                            type="editPost"
+                            postId={post.id}
+                            onClose={() => setMenuPostVisible(null)}
+                          >
+                            <span className="flex w-full gap-4 px-4 py-2 text-left hover:text-accent-primary">
+                              <FaPen className="text-accent-primary" />
+                              Modifier
+                            </span>
+                          </ModalButton>
+                          <button
+                            type="button"
+                            className="right-0 flex w-full gap-2 px-4 py-2 text-left hover:text-text-red"
+                            onClick={() => setIsDeleteMode(true)}
+                          >
+                            <MdDeleteOutline className="size-5 text-text-red " />
+                            Supprimer
+                          </button>
+                        </>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center gap-4 p-4">
+                          <p className="text-center">
+                            Voulez vous vraiment supprimer ?
+                          </p>
+                          <div className="flex justify-center gap-4">
+                            <button
+                              type="button"
+                              onClick={() => handleDeletePost(post.id)}
+                              className="px-3 py-1 rounded-lg bg-text-red"
+                            >
+                              Oui
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => setIsDeleteMode(false)}
+                              className="px-3 py-1 border rounded-lg border-accent-primary hover:text-accent-primary"
+                            >
+                              Non
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

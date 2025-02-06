@@ -19,6 +19,7 @@ interface CardEventProps {
 
 export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
   const { user } = useAuth();
+  const [isDeleteMode, setIsDeleteMode] = useState<boolean>(false);
   const [participated, setParticipated] = useState<{ [key: number]: boolean }>(
     {},
   );
@@ -156,33 +157,64 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
               </span>
               {(user?.id === event.user.id || user?.role === "admin") && (
                 <div className="relative flex items-center">
-                  <button onClick={() => toggleMenu(event.id)} type="button">
+                  <button
+                    onClick={() => {
+                      toggleMenu(event.id);
+                      setIsDeleteMode(false);
+                    }}
+                    type="button"
+                  >
                     <figure className="p-1 transition-colors rounded-md bg-accent-secondary hover:bg-accent-primary">
                       <BiCog className="size-5 text-text-secondary" />
                     </figure>
                   </button>
                   {menuEventVisible === event.id && (
                     <div className="absolute z-50 w-40 bg-white border lg:-top-1 right-0 lg:-right-60 bg-text-secondary lg:bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-sm text-text-primary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] ">
-                      <>
-                        <span className="flex w-full gap-2 px-4 py-2 text-left hover:text-accent-primary">
-                          <FaPen className="w-5 text-accent-primary" />
-                          <ModalButton
-                            eventId={event.id}
-                            type={"editEvent"}
-                            onClose={() => setMenuEventVisible(null)}
+                      {!isDeleteMode ? (
+                        <>
+                          <span className="flex w-full gap-2 px-4 py-2 text-left hover:text-accent-primary">
+                            <FaPen className="w-5 text-accent-primary" />
+                            <ModalButton
+                              eventId={event.id}
+                              type={"editEvent"}
+                              onClose={() => setMenuEventVisible(null)}
+                            >
+                              Modifier
+                            </ModalButton>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setIsDeleteMode(true)}
+                            className="flex w-full gap-2 px-4 py-2 text-left hover:text-text-red"
                           >
-                            Modifier
-                          </ModalButton>
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteEvent(event.id)}
-                          className="flex w-full gap-2 px-4 py-2 text-left hover:text-text-red"
-                        >
-                          <MdDeleteOutline className="size-5 text-text-red " />
-                          Supprimer
-                        </button>
-                      </>
+                            <MdDeleteOutline className="size-5 text-text-red " />
+                            Supprimer
+                          </button>
+                        </>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center gap-4 p-4">
+                          <p className="text-center">
+                            Voulez vous vraiment supprimer ?
+                          </p>
+                          <div className="flex justify-center gap-4">
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteEvent(event.id)}
+                              className="px-3 py-1 rounded-lg bg-text-red"
+                            >
+                              Oui
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => setIsDeleteMode(false)}
+                              className="px-3 py-1 border rounded-lg border-accent-primary hover:text-accent-primary"
+                            >
+                              Non
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
