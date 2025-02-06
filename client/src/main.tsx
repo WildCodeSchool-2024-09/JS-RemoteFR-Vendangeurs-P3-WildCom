@@ -12,6 +12,7 @@ import { AuthAdmin } from "./components/Auth/AuthAdmin";
 import { AuthUser } from "./components/Auth/AuthUser";
 import { AuthProvider } from "./contexts/AuthContext";
 import { UpdateProvider } from "./contexts/UpdateContext";
+import NotFound from "./pages/404";
 import { AuthPage } from "./pages/AuthPage";
 import { CategoryDetails } from "./pages/CategoryDetails";
 import CategoryIndex from "./pages/CategoryIndex";
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
         element: <UserManagement />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
