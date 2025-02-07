@@ -15,19 +15,25 @@ const checkUserDatas = (
       "string.empty": "Le nom est obligatoire",
       "string.min": "Le nom doit contenir au moins 2 caractères",
     }),
-    avatar: Joi.string().allow(null).optional(),
+    avatar: Joi.string().allow("").optional(),
     github: Joi.string()
+      .trim()
       .uri()
       .optional()
+      .allow("")
       .messages({ "string.uri": "Le champ GitHub doit être une URL valide" }),
     linkedin: Joi.string()
+      .trim()
       .uri()
       .optional()
+      .allow("")
       .messages({ "string.uri": "Le champ LinkedIn doit être une URL valide" }),
-    biography: Joi.string().optional(),
+    biography: Joi.string().trim().optional().allow(""),
     site: Joi.string()
+      .trim()
       .uri()
       .optional()
+      .allow("")
       .messages({ "string.uri": "Le champ Site web doit être une URL valide" }),
   });
 
