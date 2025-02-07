@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 
@@ -58,26 +59,39 @@ function EditProfile() {
 
   const handleSave = async () => {
     try {
-      await axios.put(
+      const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/user/${user?.id}`,
         dataUser,
         { withCredentials: true },
       );
-      setUpdateUser((prev) => prev + 1);
 
-      navigate(`/user/profile/${user?.id}`);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setUpdateUser((prev) => prev + 1);
+        navigate(`/user/profile/${user?.id}`);
+      }
     } catch (error) {
-      console.error(error);
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          if (error.response.data.error) {
+            toast.warn(error.response.data.error[0]);
+          }
+        }
+      }
     }
   };
 
   const handleDelete = async () => {
     try {
-      await axios.delete(
+      const response = await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/user/${user?.id}`,
         { withCredentials: true },
       );
-      navigate("/");
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/");
+      }
     } catch (error) {
       console.error("Erreur lors de la suppression du compte", error);
     }

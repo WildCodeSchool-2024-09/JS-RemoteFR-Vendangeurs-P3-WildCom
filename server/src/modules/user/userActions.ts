@@ -51,7 +51,7 @@ const update: RequestHandler = async (req, res, next) => {
 
     const updatedUser = await userRepository.update(id, req.body);
 
-    res.json(updatedUser);
+    res.status(200).json({ updatedUser, message: "Utilisateur mis à jour" });
   } catch (err) {
     next(err);
   }

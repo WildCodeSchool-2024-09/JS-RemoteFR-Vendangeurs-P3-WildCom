@@ -16,9 +16,10 @@ const validateEvent = (
       "string.empty": "Le lieu est obligatoire",
       "any.required": "Le lieu est obligatoire",
     }),
-    calendar: Joi.date().required().messages({
+    calendar: Joi.date().greater("now").required().messages({
       "date.base": "La date est obligatoire",
       "any.required": "La date est obligatoire",
+      "date.greater": "La date ne peut pas être antérieure à la date actuelle",
     }),
     time: Joi.string().trim().required().messages({
       "string.empty": "L'heure est obligatoire",

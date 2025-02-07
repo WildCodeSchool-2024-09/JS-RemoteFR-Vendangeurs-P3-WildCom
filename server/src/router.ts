@@ -20,11 +20,12 @@ router.post("/api/auth/register", checkRegister, authActions.register);
 /* ************************************************************************* */
 
 // Define profiles-related routes
+import { checkUserDatas } from "./middlewares/checkUserDatas";
 import userActions from "./modules/user/userActions";
 
 router.get("/api/users", userActions.browse);
 router.get("/api/user/:id", userActions.read);
-router.put("/api/user/:id", userActions.update);
+router.put("/api/user/:id", checkUserDatas, userActions.update);
 router.get("/api/user/:id/edit", userActions.readUserInfos);
 router.delete("/api/user/:id", userActions.destroy);
 
