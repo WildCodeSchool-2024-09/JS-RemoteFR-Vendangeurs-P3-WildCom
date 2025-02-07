@@ -104,6 +104,8 @@ function AddPostModal({ closeModal }: PostModalProps) {
           <TextareaAutosize
             maxLength={65535}
             minRows={6}
+            name="content"
+            id="content"
             className={
               "w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary"
             }

@@ -63,6 +63,8 @@ export const RegisterForm = ({ setIsRegister }: RegisterFormProps) => {
         <input
           type="text"
           name="firstName"
+          id="firstName"
+          autoComplete="given-name"
           value={register.firstName}
           onChange={handleInputsChange}
           placeholder="Prénom"
@@ -72,6 +74,8 @@ export const RegisterForm = ({ setIsRegister }: RegisterFormProps) => {
         <input
           type="text"
           name="lastName"
+          id="lastName"
+          autoComplete="family-name"
           onChange={handleInputsChange}
           value={register.lastName}
           placeholder="Nom"
@@ -81,6 +85,8 @@ export const RegisterForm = ({ setIsRegister }: RegisterFormProps) => {
         <input
           type="email"
           name="email"
+          id="email"
+          autoComplete="email"
           onChange={handleInputsChange}
           value={register.email}
           placeholder="Email"
@@ -90,6 +96,8 @@ export const RegisterForm = ({ setIsRegister }: RegisterFormProps) => {
         <input
           type="password"
           name="password"
+          id="password"
+          autoComplete="new-password"
           value={register.password}
           onChange={handleInputsChange}
           placeholder="Mot de passe"

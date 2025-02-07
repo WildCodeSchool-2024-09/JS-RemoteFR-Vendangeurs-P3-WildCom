@@ -24,13 +24,9 @@ const edit: RequestHandler = async (req, res, next) => {
       time: req.body.time,
     };
 
-    const affectedRows = await eventRepository.update(event);
+    await eventRepository.update(event);
 
-    if (affectedRows === 0) {
-      res.sendStatus(404);
-    } else {
-      res.sendStatus(204);
-    }
+    res.status(201).json({ message: "Événement modifié" });
   } catch (err) {
     next(err);
   }
@@ -62,7 +58,7 @@ const add: RequestHandler = async (req, res, next) => {
 
     const insertId = await eventRepository.create(newEvent);
 
-    res.status(201).json({ insertId });
+    res.status(201).json({ insertId, message: "Événement ajouté" });
   } catch (err) {
     next(err);
   }
@@ -73,7 +69,8 @@ const destroy: RequestHandler = async (req, res, next) => {
     const eventId = Number(req.params.id);
 
     await eventRepository.delete(eventId);
-    res.sendStatus(204);
+
+    res.status(200).json({ message: "Événement supprimé" });
   } catch (err) {
     next(err);
   }

@@ -6,6 +6,7 @@ import { LuCalendar, LuCalendarCheck2 } from "react-icons/lu";
 import { MdDeleteOutline, MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Event } from "../types/type";
@@ -106,14 +107,18 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
 
   const handleDeleteEvent = async (eventId: number) => {
     try {
-      await axios.delete(
+      const response = await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/events/${eventId}`,
         { withCredentials: true },
       );
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        setUpdateEvent((prev) => prev + 1);
+      }
     } catch (error) {
-      console.error(error);
+      toast.error("Erreur lors de la suppression de l'événement");
     }
-    setUpdateEvent((prev) => prev + 1);
   };
 
   const toggleMenu = (eventId: number) => {

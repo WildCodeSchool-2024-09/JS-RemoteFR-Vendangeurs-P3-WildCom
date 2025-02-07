@@ -231,6 +231,8 @@ export const CommentPost: React.FC<CommentPostProps> = ({ postId }) => {
                           setEditedCommentContent(e.target.value)
                         }
                         value={editedCommentContent}
+                        name="content"
+                        id="content"
                         autoFocus
                       />
 

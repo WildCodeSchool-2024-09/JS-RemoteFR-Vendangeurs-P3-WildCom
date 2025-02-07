@@ -231,6 +231,8 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
                           setEditedCommentContent(e.target.value)
                         }
                         value={editedCommentContent}
+                        name="content"
+                        id="content"
                         autoFocus
                       />
 

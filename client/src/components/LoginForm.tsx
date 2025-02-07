@@ -68,6 +68,8 @@ export const LoginForm = () => {
         <input
           type="email"
           name="email"
+          id="email"
+          autoComplete="email"
           placeholder="Email"
           className="self-center w-2/3 px-3 py-2 rounded-lg lg:w-1/2"
           value={login.email}
@@ -77,6 +79,8 @@ export const LoginForm = () => {
         <input
           type="password"
           name="password"
+          autoComplete="current-password"
+          id="password"
           placeholder="Mot de passe"
           className="self-center w-2/3 px-3 py-2 rounded-lg lg:w-1/2 "
           value={login.password}

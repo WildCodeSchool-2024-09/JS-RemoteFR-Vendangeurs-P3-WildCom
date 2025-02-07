@@ -39,6 +39,7 @@ router.get("/api/user/:id/events", userEventActions.browse);
 /* ************************************************************************* */
 
 // Define posts-related routes
+import { validatePost } from "./middlewares/checkPostDatas";
 import postActions from "./modules/post/postActions";
 
 router.get("/api/posts", postActions.browse);
@@ -71,14 +72,16 @@ router.delete("/api/posts/:id/likes", postLikesActions.destroy);
 /* ************************************************************************* */
 
 // Define events-related routes
+import { validateEvent } from "./middlewares/checkEventDatas";
 import eventActions from "./modules/event/eventActions";
 
 router.get("/api/events", eventActions.browse);
 router.get("/api/events/:id", eventActions.read);
-router.put("/api/events/:id", eventActions.edit);
-router.post("/api/events", eventActions.add);
+router.put("/api/events/:id", validateEvent, eventActions.edit);
+router.post("/api/events", validateEvent, eventActions.add);
 router.delete("/api/events/:id", eventActions.destroy);
 
+import { validateComment } from "./middlewares/checkCommentDatas";
 import eventCommentActions from "./modules/event/eventComment/eventCommentActions";
 
 router.post(
@@ -109,8 +112,6 @@ router.delete(
 /* ************************************************************************* */
 
 // Define categories-related routes
-import { validateComment } from "./middlewares/checkCommentDatas";
-import { validatePost } from "./middlewares/checkPostDatas";
 import categoryActions from "./modules/category/categoryActions";
 
 router.get("/api/categories/posts", categoryActions.readByTypePost);
