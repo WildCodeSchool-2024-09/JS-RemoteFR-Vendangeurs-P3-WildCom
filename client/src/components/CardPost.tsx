@@ -4,6 +4,7 @@ import { BiCog } from "react-icons/bi";
 import { FaHeart, FaPen, FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Post } from "../types/type";
@@ -74,11 +75,12 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
           withCredentials: true,
         },
       );
-      if (response.status === 204) {
+      if (response.status === 200) {
+        toast.success(response.data.message);
         setUpdatePost((prev) => prev + 1);
       }
     } catch (error) {
-      console.error("Erreur lors de la suppression du post", error);
+      toast.error("Erreur lors de la suppression du post");
     }
   };
 

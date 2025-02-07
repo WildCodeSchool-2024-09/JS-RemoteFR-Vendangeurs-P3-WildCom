@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import { IoSendSharp } from "react-icons/io5";
+import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
 import { useUpdate } from "../../contexts/UpdateContext";
 
@@ -14,9 +15,8 @@ export const CommentInputPost: React.FC<CommentInputProps> = ({ postId }) => {
     content: "",
   });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const { user } = useAuth();
   const { setUpdateComment } = useUpdate();
+  const { user } = useAuth();
 
   const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
     const textarea = e.target as HTMLTextAreaElement;
@@ -35,28 +35,34 @@ export const CommentInputPost: React.FC<CommentInputProps> = ({ postId }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (comment.content.trim()) {
-      if (comment.content !== "") {
-        try {
-          await axios.post(
-            `${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments`,
-            comment,
-            { withCredentials: true },
-          );
-        } catch (error) {
-          console.error(error);
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/posts/${postId}/comments`,
+        comment,
+        { withCredentials: true },
+      );
+
+      if (response.status === 201) {
+        toast.success(response.data.message);
+
+        setUpdateComment((prev) => prev + 1);
+
+        setComment({
+          userId: 0,
+          content: "",
+        });
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          toast.warn(error.response.data.error[0]);
         }
       }
-
-      setComment({
-        userId: 0,
-        content: "",
-      });
 
       if (textareaRef.current) {
         textareaRef.current.style.height = "auto";
       }
-      setUpdateComment((prev) => prev + 1);
     }
   };
 

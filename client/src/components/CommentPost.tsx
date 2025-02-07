@@ -8,6 +8,7 @@ import { RxCross1, RxCross2 } from "react-icons/rx";
 import { SlOptions } from "react-icons/sl";
 import { Link } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Comment } from "../types/type";
@@ -68,44 +69,53 @@ export const CommentPost: React.FC<CommentPostProps> = ({ postId }) => {
   const submitEditedComment = async (e: React.FormEvent, commentId: number) => {
     e.preventDefault();
 
-    if (editedCommentContent.length <= 0) {
-      return;
-    }
-
     try {
-      await axios.put(
+      const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/posts/comments/${commentId}`,
         { content: editedCommentContent },
         { withCredentials: true },
       );
 
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment.id === commentId
-            ? { ...comment, content: editedCommentContent }
-            : comment,
-        ),
-      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
 
-      setSelectedCommentId(null);
+        setComments((prevComments) =>
+          prevComments.map((comment) =>
+            comment.id === commentId
+              ? { ...comment, content: editedCommentContent }
+              : comment,
+          ),
+        );
+
+        setSelectedCommentId(null);
+      }
 
       cancelEditingComment();
     } catch (error) {
-      console.error("Erreur lors de la modification du commentaire", error);
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          toast.warn(error.response.data.error[0]);
+        }
+      }
     }
   };
 
   const deleteComment = async (commentId: number) => {
     try {
-      await axios.delete(
+      const response = await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/posts/comments/${commentId}`,
         { withCredentials: true },
       );
-      setComments((prevComments) =>
-        prevComments.filter((comment) => comment.id !== commentId),
-      );
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+
+        setComments((prevComments) =>
+          prevComments.filter((comment) => comment.id !== commentId),
+        );
+      }
     } catch (error) {
-      console.error("Erreur lors de la suppression du commentaire", error);
+      toast.error("Erreur lors de la suppression du commentaire");
     }
     setUpdateComment((prev) => prev + 1);
   };
@@ -221,6 +231,8 @@ export const CommentPost: React.FC<CommentPostProps> = ({ postId }) => {
                           setEditedCommentContent(e.target.value)
                         }
                         value={editedCommentContent}
+                        name="content"
+                        id="content"
                         autoFocus
                       />
 

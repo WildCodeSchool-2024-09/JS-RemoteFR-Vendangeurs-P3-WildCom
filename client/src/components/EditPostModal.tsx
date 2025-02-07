@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Category } from "../types/type";
@@ -71,18 +72,26 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
     e.preventDefault();
 
     try {
-      await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/posts/${postId}/edit`,
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/posts/${postId}`,
         dataPost,
         {
           withCredentials: true,
         },
       );
 
+      if (response.status === 201) {
+        toast.success(response.data.message);
+      }
+
       setUpdatePost((prev) => prev + 1);
       closeModal();
     } catch (error) {
-      console.error("Erreur lors de la modification de la publication", error);
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          toast.warn(error.response.data.error[0]);
+        }
+      }
     }
   };
 
@@ -115,6 +124,7 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
           <TextareaAutosize
             maxLength={65535}
             name="content"
+            id="content"
             className="w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary"
             value={dataPost?.content}
             onChange={handleInputsChange}

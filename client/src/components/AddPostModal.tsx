@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Category } from "../types/type";
@@ -18,8 +19,7 @@ function AddPostModal({ closeModal }: PostModalProps) {
   });
 
   const { setUpdatePost } = useUpdate();
-  const [missContent, setMissContent] = useState("");
-  const [missCategory, setMissCategory] = useState("");
+
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
@@ -54,20 +54,8 @@ function AddPostModal({ closeModal }: PostModalProps) {
   const handlePublish = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (newPost.content === "") {
-      setMissContent("Veuillez rédiger une publication");
-      return;
-    }
-    if (newPost.category === "") {
-      setMissCategory("Veuillez choisir une catégorie");
-      if (missContent) {
-        setMissContent("");
-      }
-      return;
-    }
-
     try {
-      await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/posts`,
         {
           newPost,
@@ -75,9 +63,17 @@ function AddPostModal({ closeModal }: PostModalProps) {
         { withCredentials: true },
       );
 
+      if (response.status === 201) {
+        toast.success(response.data.message);
+      }
+
       closeModal();
     } catch (error) {
-      console.error("Erreur lors de la publication", error);
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          toast.warn(error.response.data.error[0]);
+        }
+      }
     }
 
     setUpdatePost((prev) => prev + 1);
@@ -105,23 +101,22 @@ function AddPostModal({ closeModal }: PostModalProps) {
           </section>
         </header>
         <form className="flex flex-col gap-4" action="">
-          {missContent && (
-            <p className="text-xs text-text-red">{missContent}</p>
-          )}
           <TextareaAutosize
             maxLength={65535}
             minRows={6}
-            className={`${missContent ? " border-2 border-text-red " : ""}w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary`}
+            name="content"
+            id="content"
+            className={
+              "w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary"
+            }
             placeholder="Rédigez une publication"
             onChange={handlePostChange}
           />
-          {missCategory && (
-            <p className="text-xs text-text-red">{missCategory}</p>
-          )}
+
           <select
             name="category"
             id="category"
-            className={`${missCategory ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl`}
+            className={"px-3 py-2 rounded-xl"}
             onChange={handleCategoryChange}
           >
             <option value="">Choisissez une catégorie</option>

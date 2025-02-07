@@ -52,15 +52,15 @@ export const UserManagement = () => {
         setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
       }
     } catch (error) {
-      console.error("Erreur lors de la suppression de l'utilisateur", error);
+      toast.error("Erreur lors de la suppression de l'utilisateur");
     }
   };
 
   return (
     <>
       <AdminMobileNav />
-      <section className="relative z-10 w-screen flex flex-col h-auto gap-5 px-10 py-4  border-2 lg:w-4/5 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text  shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] mx-auto">
-        <p className="my-4 text-xl text-center font-title text-text-primary">
+      <section className="relative z-10 w-screen flex flex-col h-auto gap-5 px-10 py-10  border-2 lg:w-4/5 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text  shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)] mx-auto">
+        <p className="my-4 text-2xl text-center font-title text-text-primary">
           Gestion des utilisateurs
         </p>
         <form className="flex items-center justify-center mb-2">
@@ -87,7 +87,7 @@ export const UserManagement = () => {
               <img
                 src={user.avatar}
                 alt={`Avatar de ${user.username}`}
-                className="rounded-full size-12"
+                className="object-cover rounded-full size-12"
               />
               <p>{user.username}</p>
             </Link>

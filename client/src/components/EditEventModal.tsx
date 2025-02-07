@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Category } from "../types/type";
@@ -11,22 +12,31 @@ interface EventModalProps {
 }
 
 interface DataEvent {
-  userId: number | undefined;
-  content?: string;
-  title?: string;
-  place?: string;
-  calendar?: string;
-  time?: string;
-  categoryId?: number;
-  categoryName?: string;
+  userId: number;
+  content: string;
+  title: string;
+  place: string;
+  calendar: string;
+  time: string;
+  categoryId: number;
+  categoryName: string;
 }
 
 function EditEventModal({ closeModal, eventId }: EventModalProps) {
   const { user } = useAuth();
   const { setUpdateEvent } = useUpdate();
 
-  const [dataEvent, setDataEvent] = useState<DataEvent | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [dataEvent, setDataEvent] = useState<DataEvent>({
+    userId: user?.id as number,
+    content: "",
+    categoryId: 0,
+    title: "",
+    place: "",
+    calendar: "",
+    time: "",
+    categoryName: "",
+  });
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -70,7 +80,6 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
     setDataEvent((prev) => ({
       ...prev,
       [name]: value,
-      userId: prev?.userId,
     }));
   };
 
@@ -78,7 +87,7 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
     e.preventDefault();
 
     try {
-      await axios.put(
+      const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/events/${eventId}`,
         dataEvent,
         {
@@ -86,10 +95,18 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
         },
       );
 
+      if (response.status === 201) {
+        toast.success(response.data.message);
+      }
+
       setUpdateEvent((prev) => prev + 1);
       closeModal();
     } catch (error) {
-      console.error("Erreur lors de la modification de l'événement", error);
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          toast.warn(error.response.data.error[0]);
+        }
+      }
     }
   };
 
@@ -125,6 +142,7 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
         <form className="flex flex-col gap-4" action="">
           <input
             type="text"
+            id="title"
             placeholder="Titre de l'événement"
             className="w-full px-3 py-2 rounded-xl"
             onChange={handleInputChange}
@@ -134,6 +152,7 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
 
           <input
             type="text"
+            id="place"
             placeholder="Lieu"
             className="w-full px-3 py-2 rounded-xl"
             onChange={handleInputChange}
@@ -145,6 +164,7 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
             <div className="flex-col flex-1 space-y-3">
               <input
                 type="date"
+                id="calendar"
                 min={new Date().toISOString().split("T")[0]}
                 className="w-full px-3 py-2 rounded-xl"
                 onChange={handleInputChange}
@@ -160,6 +180,7 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
             <div className="flex-col flex-1 space-y-3">
               <input
                 type="time"
+                id="time"
                 className="w-full px-3 py-2 rounded-xl"
                 onChange={handleInputChange}
                 name="time"
@@ -175,11 +196,13 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
             placeholder="Rédigez une publication"
             onChange={handleInputChange}
             name="content"
+            id="content"
             value={dataEvent?.content}
           />
 
           <select
             name="categoryId"
+            id="categoryId"
             className="px-3 py-2 rounded-xl"
             onChange={handleInputChange}
             value={dataEvent?.categoryId || ""}

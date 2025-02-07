@@ -21,7 +21,7 @@ const add: RequestHandler = async (req, res, next) => {
 
     await postCommentsRepository.create(newPostComment);
 
-    res.status(201).json({ message: "Commentaire envoyé !" });
+    res.status(201).json({ message: "Commentaire envoyé" });
   } catch (err) {
     next(err);
   }
@@ -34,12 +34,9 @@ const edit: RequestHandler = async (req, res, next) => {
       content: req.body.content,
     };
 
-    const affectedRows = await postCommentsRepository.update(post);
+    await postCommentsRepository.update(post);
 
-    if (affectedRows === 0) {
-      res.sendStatus(404);
-    }
-    res.sendStatus(204);
+    res.status(200).json({ message: "Commentaire modifié" });
   } catch (error) {
     next(error);
   }
@@ -48,12 +45,10 @@ const edit: RequestHandler = async (req, res, next) => {
 const destroy: RequestHandler = async (req, res, next) => {
   try {
     const postId = Number.parseInt(req.params.id);
-    const affectedRows = await postCommentsRepository.delete(postId);
 
-    if (affectedRows === 0) {
-      res.sendStatus(404);
-    }
-    res.sendStatus(204);
+    await postCommentsRepository.delete(postId);
+
+    res.status(200).json({ message: "Commentaire supprimé" });
   } catch (error) {
     next(error);
   }

@@ -20,11 +20,12 @@ router.post("/api/auth/register", checkRegister, authActions.register);
 /* ************************************************************************* */
 
 // Define profiles-related routes
+import { checkUserDatas } from "./middlewares/checkUserDatas";
 import userActions from "./modules/user/userActions";
 
 router.get("/api/users", userActions.browse);
 router.get("/api/user/:id", userActions.read);
-router.put("/api/user/:id", userActions.update);
+router.put("/api/user/:id", checkUserDatas, userActions.update);
 router.get("/api/user/:id/edit", userActions.readUserInfos);
 router.delete("/api/user/:id", userActions.destroy);
 
@@ -39,19 +40,28 @@ router.get("/api/user/:id/events", userEventActions.browse);
 /* ************************************************************************* */
 
 // Define posts-related routes
+import { validatePost } from "./middlewares/checkPostDatas";
 import postActions from "./modules/post/postActions";
 
 router.get("/api/posts", postActions.browse);
 router.get("/api/post/:id", postActions.read);
-router.post("/api/posts", postActions.add);
-router.put("/api/posts/:id/edit", postActions.edit);
+router.post("/api/posts", validatePost, postActions.add);
+router.put("/api/posts/:id", validatePost, postActions.edit);
 router.delete("/api/posts/:id", postActions.destroy);
 
 import postCommentsActions from "./modules/post/postComment/postCommentsActions";
 
 router.get("/api/posts/:id/comments", postCommentsActions.browse);
-router.post("/api/posts/:id/comments", postCommentsActions.add);
-router.put("/api/posts/comments/:id", postCommentsActions.edit);
+router.post(
+  "/api/posts/:id/comments",
+  validateComment,
+  postCommentsActions.add,
+);
+router.put(
+  "/api/posts/comments/:id",
+  validateComment,
+  postCommentsActions.edit,
+);
 router.delete("/api/posts/comments/:id", postCommentsActions.destroy);
 
 import postLikesActions from "./modules/post/postLike/postLikesActions";
@@ -63,19 +73,29 @@ router.delete("/api/posts/:id/likes", postLikesActions.destroy);
 /* ************************************************************************* */
 
 // Define events-related routes
+import { validateEvent } from "./middlewares/checkEventDatas";
 import eventActions from "./modules/event/eventActions";
 
 router.get("/api/events", eventActions.browse);
 router.get("/api/events/:id", eventActions.read);
-router.put("/api/events/:id", eventActions.edit);
-router.post("/api/events", eventActions.add);
+router.put("/api/events/:id", validateEvent, eventActions.edit);
+router.post("/api/events", validateEvent, eventActions.add);
 router.delete("/api/events/:id", eventActions.destroy);
 
+import { validateComment } from "./middlewares/checkCommentDatas";
 import eventCommentActions from "./modules/event/eventComment/eventCommentActions";
 
-router.post("/api/events/:id/comments", eventCommentActions.add);
+router.post(
+  "/api/events/:id/comments",
+  validateComment,
+  eventCommentActions.add,
+);
 router.get("/api/events/:id/comments", eventCommentActions.browse);
-router.put("/api/events/comments/:id", eventCommentActions.edit);
+router.put(
+  "/api/events/comments/:id",
+  validateComment,
+  eventCommentActions.edit,
+);
 router.delete("/api/events/comments/:id", eventCommentActions.destroy);
 
 import eventParticipationActions from "./modules/event/eventParticipation/eventParticipationActions";

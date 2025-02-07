@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Category } from "../types/type";
@@ -13,6 +14,7 @@ function AddEventModal({ closeModal }: EventModalProps) {
   const { user } = useAuth();
   const { setUpdateEvent } = useUpdate();
 
+  const [categories, setCategories] = useState<Category[]>([]);
   const [newEvent, setNewEvent] = useState({
     userId: user?.id as number | undefined,
     content: "",
@@ -22,14 +24,6 @@ function AddEventModal({ closeModal }: EventModalProps) {
     calendar: "",
     time: "",
   });
-
-  const [missContent, setMissContent] = useState("");
-  const [missCategory, setMissCategory] = useState("");
-  const [missDate, setMissDate] = useState("");
-  const [missTime, setMissTime] = useState("");
-  const [missPlace, setMissPlace] = useState("");
-  const [missTitle, setMissTitle] = useState("");
-  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -47,65 +41,24 @@ function AddEventModal({ closeModal }: EventModalProps) {
     fetchCategories();
   }, []);
 
-  const handleEventChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newContent = e.target.value;
+  const handleInputsChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
+    const { name, value } = e.target;
 
-    setNewEvent({
-      ...newEvent,
-      content: newContent,
-    });
-  };
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setNewEvent({ ...newEvent, category: e.target.value });
-  };
-
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEvent({ ...newEvent, title: e.target.value });
-  };
-
-  const handlePlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEvent({ ...newEvent, place: e.target.value });
-  };
-
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEvent({ ...newEvent, calendar: e.target.value });
-  };
-
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEvent({ ...newEvent, time: e.target.value });
+    setNewEvent((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handlePublish = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (newEvent.title === "") {
-      setMissTitle("Veuillez choisir un titre");
-      return;
-    }
-    if (newEvent.place === "") {
-      setMissPlace("Veuillez choisir un lieu");
-      return;
-    }
-    if (newEvent.calendar === "") {
-      setMissDate("Veuillez choisir une date");
-      return;
-    }
-    if (newEvent.time === "") {
-      setMissTime("Veuillez choisir une heure");
-      return;
-    }
-    if (newEvent.content === "") {
-      setMissContent("Veuillez rédiger une publication");
-      return;
-    }
-    if (newEvent.category === "") {
-      setMissCategory("Veuillez choisir une catégorie");
-      return;
-    }
-
     try {
-      await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/events`,
         {
           newEvent,
@@ -113,12 +66,19 @@ function AddEventModal({ closeModal }: EventModalProps) {
         { withCredentials: true },
       );
 
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        setUpdateEvent((prev) => prev + 1);
+      }
+
       closeModal();
     } catch (error) {
-      console.error("Erreur lors de la publication", error);
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 400) {
+          toast.warn(error.response.data.error[0]);
+        }
+      }
     }
-
-    setUpdateEvent((prev) => prev + 1);
   };
 
   return (
@@ -143,57 +103,57 @@ function AddEventModal({ closeModal }: EventModalProps) {
           </section>
         </header>
         <form className="flex flex-col gap-4" action="">
-          {missTitle && <p className="text-xs text-text-red">{missTitle}</p>}
           <input
             type="text"
+            name="title"
             placeholder="Titre de l'événement"
-            className={`${missTitle ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl w-full`}
-            onChange={handleTitleChange}
+            className={"px-3 py-2 rounded-xl w-full"}
+            onChange={handleInputsChange}
           />
-          {missPlace && <p className="text-xs text-text-red">{missPlace}</p>}
           <input
             type="text"
+            name="place"
             placeholder="Lieu"
-            className={`${missPlace ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl w-full`}
-            onChange={handlePlaceChange}
+            className={"px-3 py-2 rounded-xl w-full"}
+            onChange={handleInputsChange}
           />
           <div className="flex gap-3">
             <div className="flex-col flex-1 space-y-3">
-              {missDate && <p className="text-xs text-text-red">{missDate}</p>}
               <input
                 type="date"
+                name="calendar"
                 min={new Date().toISOString().split("T")[0]}
-                className={`${missDate ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl w-full`}
-                onChange={handleDateChange}
+                className={"px-3 py-2 rounded-xl w-full"}
+                onChange={handleInputsChange}
               />
             </div>
             <div className="flex-col flex-1 space-y-3">
-              {missTime && <p className="text-xs text-text-red">{missTime}</p>}
               <input
+                name="time"
                 type="time"
-                className={`${missTime ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl w-full`}
-                onChange={handleTimeChange}
+                className={"px-3 py-2 rounded-xl w-full"}
+                onChange={handleInputsChange}
               />
             </div>
           </div>
-          {missContent && (
-            <p className="text-xs text-text-red">{missContent}</p>
-          )}
+
           <TextareaAutosize
             maxLength={65535}
             minRows={6}
-            className={`${missContent ? " border-2 border-text-red " : ""}w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary`}
+            name="content"
+            id="content"
+            className={
+              "w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary"
+            }
             placeholder="Rédigez une publication"
-            onChange={handleEventChange}
+            onChange={handleInputsChange}
           />
-          {missCategory && (
-            <p className="text-xs text-text-red">{missCategory}</p>
-          )}
+
           <select
             name="category"
             id="category"
-            className={`${missCategory ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl`}
-            onChange={handleCategoryChange}
+            className={"px-3 py-2 rounded-xl"}
+            onChange={handleInputsChange}
           >
             <option value="">Choisissez une catégorie</option>
             {categories.map((category) => (
