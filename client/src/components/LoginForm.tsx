@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
@@ -12,6 +13,8 @@ export const LoginForm = () => {
   const { setUser } = useAuth();
 
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleInputsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -76,16 +79,26 @@ export const LoginForm = () => {
           onChange={handleInputsChange}
         />
 
-        <input
-          type="password"
-          name="password"
-          autoComplete="current-password"
-          id="password"
-          placeholder="Mot de passe"
-          className="self-center w-2/3 px-3 py-2 rounded-lg lg:w-1/2 "
-          value={login.password}
-          onChange={handleInputsChange}
-        />
+        <div className="relative self-center w-2/3 lg:w-1/2">
+          <input
+            type={`${showPassword ? "text" : "password"}`}
+            name="password"
+            autoComplete="current-password"
+            id="password"
+            placeholder="Mot de passe"
+            className="w-full px-3 py-2 rounded-lg"
+            value={login.password}
+            onChange={handleInputsChange}
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute p-2 right-1 top-1 focus:outline-none text-text-secondary"
+          >
+            {showPassword ? <FiEye /> : <FiEyeOff />}
+          </button>
+        </div>
 
         <button
           type="submit"

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 type RegisterFormProps = {
@@ -7,6 +8,7 @@ type RegisterFormProps = {
 };
 
 export const RegisterForm = ({ setIsRegister }: RegisterFormProps) => {
+  const [showPassword, setShowPassword] = useState(false);
   const [register, setRegister] = useState({
     firstName: "",
     lastName: "",
@@ -93,16 +95,25 @@ export const RegisterForm = ({ setIsRegister }: RegisterFormProps) => {
           className="self-center w-2/3 px-3 py-2 rounded-lg lg:w-1/2"
         />
 
-        <input
-          type="password"
-          name="password"
-          id="password"
-          autoComplete="new-password"
-          value={register.password}
-          onChange={handleInputsChange}
-          placeholder="Mot de passe"
-          className="self-center w-2/3 px-3 py-2 rounded-lg lg:w-1/2"
-        />
+        <div className="relative self-center w-2/3 lg:w-1/2">
+          <input
+            type={`${showPassword ? "text" : "password"}`}
+            name="password"
+            id="password"
+            autoComplete="new-password"
+            value={register.password}
+            onChange={handleInputsChange}
+            placeholder="Mot de passe"
+            className="w-full px-3 py-2 rounded-lg "
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute p-2 right-1 top-1 focus:outline-none text-text-secondary"
+          >
+            {showPassword ? <FiEye /> : <FiEyeOff />}
+          </button>
+        </div>
 
         <button
           type="submit"
