@@ -199,11 +199,11 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
 
           <main className="flex flex-col">
             {post.picture && (
-              <figure>
+              <figure className="flex justify-center lg:h-96">
                 <img
                   src={`${import.meta.env.VITE_API_URL}/${post.picture}`}
                   alt=""
-                  className="object-cover rounded-md"
+                  className="object-contain rounded-xl"
                 />
               </figure>
             )}

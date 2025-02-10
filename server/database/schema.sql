@@ -76,7 +76,7 @@ CREATE TABLE avatar (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   filename VARCHAR(255) NOT NULL,
   path VARCHAR(255) NOT NULL,
-  user_id INT UNSIGNED NOT NULL,
+  user_id INT UNSIGNED NOT NULL UNIQUE,
   constraint fk_avatar_user foreign key (user_id) references user(id) on delete CASCADE
 );
 
@@ -85,8 +85,8 @@ CREATE TABLE picture (
   filename VARCHAR(255) NOT NULL,
   path VARCHAR(255) NOT NULL,
   user_id INT UNSIGNED NOT NULL,
-  post_id INT UNSIGNED DEFAULT NULL,
-  event_id INT UNSIGNED DEFAULT NULL,
+  post_id INT UNSIGNED DEFAULT NULL UNIQUE,
+  event_id INT UNSIGNED DEFAULT NULL UNIQUE,
   constraint fk_picture_post foreign key (post_id) references post(id) on delete CASCADE,
   constraint fk_picture_event foreign key (event_id) references event(id) on delete CASCADE
 );

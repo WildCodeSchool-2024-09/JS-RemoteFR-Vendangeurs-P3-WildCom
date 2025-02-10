@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { BiImageAdd } from "react-icons/bi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import TextareaAutosize from "react-textarea-autosize";
 import defaultProfilePicture from "../assets/images/profil_neutral.webp";
 import { useAuth } from "../contexts/AuthContext";
@@ -16,6 +18,7 @@ interface DataPost {
   content?: string;
   categoryId?: number;
   categoryName?: string;
+  picture?: string;
 }
 
 function EditPostModal({ closeModal, postId }: PostModalProps) {
@@ -24,6 +27,8 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [dataPost, setDataPost] = useState<DataPost | null>(null);
+  const [image, setImage] = useState<string | ArrayBuffer | File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -44,7 +49,10 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
           `${import.meta.env.VITE_API_URL}/api/post/${postId}`,
         );
 
-        setDataPost(response.data[0]);
+        if (response.data.length !== 0) {
+          setDataPost(response.data[0]);
+          setImage(response.data[0]?.picture);
+        }
       } catch (error) {
         console.error(
           "Erreur lors de la récupération de la publication",
@@ -72,18 +80,51 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
     e.preventDefault();
 
     try {
-      await axios.put(
+      const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/posts/${postId}/edit`,
         dataPost,
         {
           withCredentials: true,
         },
       );
-
-      setUpdatePost((prev) => prev + 1);
-      closeModal();
+      if (response.status === 204) {
+        if (image !== null) {
+          await uploadImage(postId);
+        }
+        setUpdatePost((prev) => prev + 1);
+        closeModal();
+      }
     } catch (error) {
       console.error("Erreur lors de la modification de la publication", error);
+    }
+  };
+
+  const uploadImage = async (postId: number) => {
+    const formData = new FormData();
+    formData.append("picture", image as File);
+    formData.append("type", "post");
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/uploads/pictures/${postId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        },
+      );
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de l'image", error);
+    }
+  };
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -98,8 +139,10 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
         <h2 className="flex justify-center text-xl text-text-primary font-title">
           Modifier une publication
         </h2>
-        <header className="flex items-center justify-between">
-          <section className="flex items-center gap-2">
+        <header
+          className={`${imagePreview || image ? "flex-col" : ""} flex items-start justify-between gap-4`}
+        >
+          <section className="flex items-center w-2/3 gap-2">
             {user?.path ? (
               <img
                 src={`${import.meta.env.VITE_API_URL}/${user?.path}`}
@@ -115,6 +158,54 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
             )}
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
+
+          <form className="flex w-full gap-3 " encType="multipart/form-data">
+            <div className="flex justify-center w-full ">
+              {imagePreview || image ? (
+                <div className="relative">
+                  <figure className="flex lg:h-96">
+                    <img
+                      src={
+                        imagePreview
+                          ? `${imagePreview}`
+                          : `${import.meta.env.VITE_API_URL}/${image}`
+                      }
+                      alt="Aperçu de l'image"
+                      className="object-contain rounded-xl"
+                    />
+                  </figure>
+
+                  <button
+                    onClick={() => {
+                      setImage(null);
+                      setImagePreview(null);
+                    }}
+                    type="button"
+                    className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-4 right-2 bg-bg-primary"
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex justify-end w-full">
+                  <label
+                    className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
+                    htmlFor="picture"
+                  >
+                    <BiImageAdd />
+                  </label>
+                  <input
+                    onChange={(e) => handleChange(e)}
+                    className="hidden"
+                    id="picture"
+                    name="picture"
+                    type="file"
+                    accept="image/*"
+                  />
+                </div>
+              )}
+            </div>
+          </form>
         </header>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <TextareaAutosize

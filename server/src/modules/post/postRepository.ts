@@ -120,7 +120,7 @@ class PostRepository {
       id: row.post_id,
       categoryName: row.category_name,
       categoryId: row.category_id,
-      picture: row.picture,
+      picture: row.picture_path,
       content: row.content,
       user: {
         id: row.user_id,
