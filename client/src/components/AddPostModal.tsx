@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { BiImageAdd } from "react-icons/bi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import TextareaAutosize from "react-textarea-autosize";
 import defaultProfilePicture from "../assets/images/profil_neutral.webp";
 import { useAuth } from "../contexts/AuthContext";
@@ -19,9 +21,9 @@ function AddPostModal({ closeModal }: PostModalProps) {
   });
 
   const { setUpdatePost } = useUpdate();
-  const [missContent, setMissContent] = useState("");
-  const [missCategory, setMissCategory] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
+  const [image, setImage] = useState<string | ArrayBuffer | File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -55,20 +57,8 @@ function AddPostModal({ closeModal }: PostModalProps) {
   const handlePublish = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (newPost.content === "") {
-      setMissContent("Veuillez rédiger une publication");
-      return;
-    }
-    if (newPost.category === "") {
-      setMissCategory("Veuillez choisir une catégorie");
-      if (missContent) {
-        setMissContent("");
-      }
-      return;
-    }
-
     try {
-      await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/posts`,
         {
           newPost,
@@ -76,12 +66,48 @@ function AddPostModal({ closeModal }: PostModalProps) {
         { withCredentials: true },
       );
 
-      closeModal();
+      if (response.status === 201) {
+        const postId = response.data.insertId;
+
+        if (image) {
+          await uploadImage(postId);
+        }
+
+        setUpdatePost((prev) => prev + 1);
+        closeModal();
+      }
     } catch (error) {
       console.error("Erreur lors de la publication", error);
     }
+  };
 
-    setUpdatePost((prev) => prev + 1);
+  const uploadImage = async (postId: number) => {
+    const formData = new FormData();
+    formData.append("picture", image as File);
+    formData.append("type", "post");
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/uploads/pictures/${postId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        },
+      );
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de l'image", error);
+    }
+  };
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   return (
@@ -95,7 +121,9 @@ function AddPostModal({ closeModal }: PostModalProps) {
         <h2 className="flex justify-center text-xl text-text-primary font-title">
           Créer une publication
         </h2>
-        <header className="flex items-center justify-between">
+        <header
+          className={`${imagePreview ? "flex-col" : ""} flex items-start justify-between gap-4`}
+        >
           <section className="flex items-center gap-2">
             {user?.path ? (
               <img
@@ -112,25 +140,64 @@ function AddPostModal({ closeModal }: PostModalProps) {
             )}
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
+          <form className="relative flex gap-3" encType="multipart/form-data">
+            {image !== null && (
+              <>
+                <figure className="object-cover w-full h-72 rounded-xl">
+                  <img
+                    src={imagePreview || ""}
+                    alt="Aperçu de l'image"
+                    className="object-cover w-full h-full rounded-xl"
+                  />
+                </figure>
+
+                <button
+                  onClick={() => {
+                    setImage(null);
+                    setImagePreview(null);
+                  }}
+                  type="button"
+                  className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-2 right-2 bg-bg-primary"
+                >
+                  <RiDeleteBin6Line />
+                </button>
+              </>
+            )}
+            {image === null && (
+              <>
+                <label
+                  className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
+                  htmlFor="picture"
+                >
+                  <BiImageAdd />
+                </label>
+                <input
+                  onChange={(e) => handleChange(e)}
+                  className="hidden"
+                  id="picture"
+                  name="picture"
+                  type="file"
+                  accept="image/*"
+                />
+              </>
+            )}
+          </form>
         </header>
         <form className="flex flex-col gap-4" action="">
-          {missContent && (
-            <p className="text-xs text-text-red">{missContent}</p>
-          )}
           <TextareaAutosize
             maxLength={65535}
             minRows={6}
-            className={`${missContent ? " border-2 border-text-red " : ""}w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary`}
+            className={
+              "w-full p-4 space-y-2 text-sm resize-none max-h-96 scrollbar-custom rounded-xl text-text-secondary"
+            }
             placeholder="Rédigez une publication"
             onChange={handlePostChange}
           />
-          {missCategory && (
-            <p className="text-xs text-text-red">{missCategory}</p>
-          )}
+
           <select
             name="category"
             id="category"
-            className={`${missCategory ? " border-2 border-text-red " : ""}px-3 py-2 rounded-xl`}
+            className={"px-3 py-2 rounded-xl"}
             onChange={handleCategoryChange}
           >
             <option value="">Choisissez une catégorie</option>

@@ -72,9 +72,9 @@ class EventRepository {
       ON event.user_id = user.id
       JOIN category
       ON event.category_id = category.id
-      JOIN avatar
+      LEFT JOIN avatar
       ON avatar.user_id = user.id
-      JOIN picture
+      LEFT JOIN picture
       On picture.event_id = event.id
       WHERE event.id = ?
       `,
@@ -132,9 +132,9 @@ class EventRepository {
       ON event.user_id = user.id
       JOIN category
         ON event.category_id = category.id
-      JOIN avatar
+      LEFT JOIN avatar
         ON avatar.user_id = user.id
-      JOIN picture
+      LEFT JOIN picture
         On picture.event_id = event.id
       ORDER BY
         event.created_at DESC;

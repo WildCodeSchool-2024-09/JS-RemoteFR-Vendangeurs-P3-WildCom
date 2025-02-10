@@ -28,7 +28,7 @@ class AuthRepository {
       `
       SELECT user.id, CONCAT(firstname, " ", lastname) AS username, role, avatar.path
       FROM user
-      JOIN avatar ON avatar.user_id = user.id
+      LEFT JOIN avatar ON avatar.user_id = user.id
       WHERE user.id = ? 
       `,
       [userId],

@@ -62,9 +62,9 @@ class PostRepository {
         ON post.user_id = user.id
       JOIN category
         ON post.category_id = category.id
-      JOIN avatar
+      LEFT JOIN avatar
         ON avatar.user_id = user.id
-      JOIN picture
+      LEFT JOIN picture
         On picture.post_id = post.id
       ORDER BY
         post.created_at DESC;
@@ -107,9 +107,9 @@ class PostRepository {
         ON post.user_id = user.id
       JOIN category
         ON post.category_id = category.id
-      JOIN avatar
+      LEFT JOIN avatar
         ON avatar.user_id = user.id
-      JOIN picture
+      LEFT JOIN picture
         On picture.post_id = post.id
       WHERE post.id = ?
       `,

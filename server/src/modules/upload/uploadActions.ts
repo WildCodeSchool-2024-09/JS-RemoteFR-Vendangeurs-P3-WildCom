@@ -48,15 +48,24 @@ const uploadPicture: RequestHandler = async (
   }
   const { filename, path } = req.file;
   const { userId } = req.user;
-  const postId = req.params.id ?? null;
-  const eventId = req.params.id ?? null;
+
+  let postId: number | null = null;
+  let eventId: number | null = null;
+
+  if (req.body.type === "post") {
+    postId = Number.parseInt(req.params.id ?? null);
+    eventId = null;
+  } else if (req.body.type === "event") {
+    eventId = Number.parseInt(req.params.id ?? null);
+    postId = null;
+  }
 
   await uploadRepository.createPicture(
     filename,
     path,
     userId,
-    Number(postId),
-    Number(eventId),
+    postId ?? null,
+    eventId ?? null,
   );
 
   res

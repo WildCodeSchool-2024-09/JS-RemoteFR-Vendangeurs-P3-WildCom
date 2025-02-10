@@ -201,7 +201,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
             {post.picture && (
               <figure>
                 <img
-                  src={post.picture}
+                  src={`${import.meta.env.VITE_API_URL}/${post.picture}`}
                   alt=""
                   className="object-cover rounded-md"
                 />

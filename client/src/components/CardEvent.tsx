@@ -198,7 +198,11 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             <section className="flex flex-col gap-3 lg:gap-0">
               {event.picture && (
                 <figure className="">
-                  <img src={event.picture} alt="" className="mb-4 rounded-md" />
+                  <img
+                    src={`${import.meta.env.VITE_API_URL}/${event.picture}`}
+                    alt=""
+                    className="mb-4 rounded-md"
+                  />
                 </figure>
               )}
               <article className="w-full space-y-3">

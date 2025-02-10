@@ -40,7 +40,7 @@ class EventCommentRepository {
       FROM comment
       JOIN user 
       ON comment.user_id = user.id
-      JOIN avatar
+      LEFT JOIN avatar
       ON avatar.user_id = user.id
       WHERE comment.event_id = ?
       `,
