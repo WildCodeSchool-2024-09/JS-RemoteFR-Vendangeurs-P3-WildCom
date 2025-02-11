@@ -115,4 +115,5 @@ router.post(
   adjustPicturePath,
   uploadActions.uploadPicture,
 );
+
 export default router;
