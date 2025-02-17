@@ -25,9 +25,14 @@ const read: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
-    const { content, category, userId } = req.body.newPost;
+    const { content, category, userId, pictureId } = req.body.newPost;
 
-    const insertId = await postRepository.create(content, category, userId);
+    const insertId = await postRepository.create(
+      content,
+      category,
+      userId,
+      pictureId,
+    );
 
     res.status(201).json({ insertId, message: "Publication ajoutée" });
   } catch (err) {

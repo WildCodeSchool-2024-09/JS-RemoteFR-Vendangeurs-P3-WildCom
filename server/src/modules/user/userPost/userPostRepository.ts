@@ -7,6 +7,7 @@ type User = {
   avatar: string;
   username: string;
 };
+
 type Post = {
   id: number;
   user_id: number;
@@ -17,6 +18,7 @@ type Post = {
   totalLikes: number;
   categoryName: string;
 };
+
 type PostWithUser = Omit<Post, "user_id"> & {
   user: User;
 };
@@ -24,21 +26,47 @@ type PostWithUser = Omit<Post, "user_id"> & {
 class UserPostRepository {
   async readAll(userId: number) {
     const [rows] = await databaseClient.query<Rows>(
-      `SELECT post.id AS post_id, category.name, post.picture, post.content, post.created_at
-      ,(SELECT count (*) 
-      FROM comment
-      WHERE comment.post_id = post.id) AS total_comments,
-      (
-        SELECT COUNT(*)
-        FROM post_like AS pl
-        WHERE pl.post_id = post.id
-      ) AS total_likes,
-      user.id AS user_id, user.avatar, 
-      CONCAT(user.firstname, ' ', user.lastname) AS username
+      `
+      SELECT
+        post.id AS post_id,
+        post_picture.path AS picture,
+        post.content,
+        post.created_at,
+
+        category.name,
+
+        (
+        SELECT count (*)
+        FROM comment
+        WHERE comment.post_id = post.id
+        ) AS total_comments,
+
+        (
+          SELECT COUNT(*)
+          FROM post_like AS pl
+          WHERE pl.post_id = post.id
+        ) AS total_likes,
+
+        user.id AS user_id,
+        CONCAT(user.firstname, ' ', user.lastname) AS username,
+
+        avatar.path AS avatar_path
+
       FROM post
-      JOIN user ON post.user_id = user.id
-      JOIN category ON post.category_id = category.id
-      WHERE user.id = ? 
+
+      JOIN user
+      ON post.user_id = user.id
+
+      JOIN category
+      ON post.category_id = category.id
+
+      LEFT JOIN post_picture
+      ON post_picture.id = post.picture_id
+
+      JOIN avatar
+      ON avatar.id = user.avatar_id
+
+      WHERE user.id = ?
 
       `,
       [userId],
@@ -54,7 +82,7 @@ class UserPostRepository {
       timestamp: formattedTimestamp(new Date(row.created_at)),
       user: {
         id: row.user_id,
-        avatar: row.avatar,
+        avatar: row.avatar_path,
         username: row.username,
       },
     }));

@@ -6,6 +6,7 @@ import { LeftNav } from "../Navigation/LeftNav";
 
 import { useEffect } from "react";
 import { FiLogOut } from "react-icons/fi";
+import defaultProfilePicture from "../../assets/images/profil_neutral.webp";
 import { useUpdate } from "../../contexts/UpdateContext";
 import { Logo } from "../Logo";
 import MobileNav from "../Navigation/MobileNav";
@@ -64,11 +65,19 @@ export const Header = () => {
           className="flex items-center justify-center gap-4 m-2 group "
           to={`/user/profile/${user?.id}`}
         >
-          <img
-            src={user?.avatar}
-            alt={`Avatar de ${user?.username}`}
-            className="object-cover rounded-full size-10"
-          />
+          {user?.path ? (
+            <img
+              src={`${import.meta.env.VITE_API_URL}/${user?.path}`}
+              alt={`Avatar de ${user?.username}`}
+              className="object-cover rounded-full size-10"
+            />
+          ) : (
+            <img
+              src={defaultProfilePicture}
+              alt={`Avatar de ${user?.username}`}
+              className="object-cover rounded-full size-10"
+            />
+          )}
 
           <p className="text-xs sm:text-lg group-hover:text-accent-primary font-text group-hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]">
             {user?.username}

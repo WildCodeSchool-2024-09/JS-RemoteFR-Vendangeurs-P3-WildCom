@@ -16,6 +16,7 @@ const validatePost = (
       "any.required": "La catégorie est obligatoire",
     }),
     userId: Joi.number().required(),
+    pictureId: Joi.number().allow(null),
   });
 
   const updateSchema = Joi.object({
@@ -30,6 +31,7 @@ const validatePost = (
     id: Joi.number().allow(null),
     categoryName: Joi.optional(),
     picture: Joi.optional(),
+    pictureId: Joi.number().allow(null),
     user: Joi.optional(),
   });
 

@@ -7,6 +7,7 @@ import { MdDeleteOutline, MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import defaultProfilePicture from "../assets/images/profil_neutral.webp";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Event } from "../types/type";
@@ -143,12 +144,19 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             <Link to={`/user/profile/${event.user.id}`}>
               <section className="flex items-center gap-2">
                 <figure>
-                  <img
-                    src={event.user.avatar}
-                    alt=""
-                    aria-labelledby="username"
-                    className="object-cover rounded-full size-10 lg:size-12"
-                  />
+                  {event.user.avatar ? (
+                    <img
+                      src={`${import.meta.env.VITE_API_URL}/${event.user.avatar}`}
+                      alt={`Avatar de ${user?.username}`}
+                      className="object-cover rounded-full size-10 lg:size-12"
+                    />
+                  ) : (
+                    <img
+                      src={defaultProfilePicture}
+                      alt={`Avatar de ${user?.username}`}
+                      className="object-cover rounded-full size-10 lg:size-12"
+                    />
+                  )}
                 </figure>
                 <h2 id="username" className="text-sm lg:text-base">
                   {event.user.username}
@@ -231,7 +239,11 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
             <section className="flex flex-col gap-3 lg:gap-0">
               {event.picture && (
                 <figure className="">
-                  <img src={event.picture} alt="" className="mb-4 rounded-md" />
+                  <img
+                    src={`${import.meta.env.VITE_API_URL}/${event.picture}`}
+                    alt=""
+                    className="mb-4 rounded-md"
+                  />
                 </figure>
               )}
               <article className="w-full space-y-3">

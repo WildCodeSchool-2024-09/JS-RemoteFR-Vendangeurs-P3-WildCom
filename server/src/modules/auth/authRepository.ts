@@ -26,9 +26,10 @@ class AuthRepository {
   async readById(userId: number) {
     const [rows] = await databaseClient.query<Rows>(
       `
-      SELECT id, avatar, CONCAT(firstname, " ", lastname) AS username, role
+      SELECT user.id, CONCAT(firstname, " ", lastname) AS username, role, avatar.path
       FROM user
-      WHERE id = ? 
+      LEFT JOIN avatar ON avatar.id = user.avatar_id
+      WHERE user.id = ? 
       `,
       [userId],
     );

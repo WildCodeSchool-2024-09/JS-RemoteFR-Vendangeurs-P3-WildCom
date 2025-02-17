@@ -122,4 +122,54 @@ router.put("/api/categories/:id", categoryActions.edit);
 router.post("/api/categories", categoryActions.add);
 router.delete("/api/categories/:id", categoryActions.destroy);
 
+/* ************************************************************************* */
+
+// Define uploads-related routes
+import {
+  adjustAvatarPath,
+  adjustPicturePath,
+  deleteImage,
+  uploadImage,
+} from "./middlewares/multerUpload.";
+import { verifyUser } from "./middlewares/verifyUser";
+import uploadActions from "./modules/upload/uploadActions";
+
+router.post(
+  "/api/uploads/avatars",
+  verifyUser,
+  uploadImage.single("avatar"),
+  adjustAvatarPath,
+  uploadActions.uploadAvatar,
+);
+
+router.post(
+  "/api/uploads/pictures/post",
+  verifyUser,
+  uploadImage.single("picture"),
+  adjustPicturePath,
+  uploadActions.uploadPicturePost,
+);
+
+router.delete(
+  "/api/uploads/pictures/post/:id",
+  verifyUser,
+  deleteImage,
+  uploadActions.deletePicture,
+);
+
+router.post(
+  "/api/uploads/pictures/event",
+  verifyUser,
+  uploadImage.single("picture"),
+  adjustPicturePath,
+  uploadActions.uploadPictureEvent,
+);
+
+router.delete(
+  "/api/uploads/pictures/event/:id",
+  verifyUser,
+  deleteImage,
+  uploadActions.deletePicture,
+);
+
 export default router;

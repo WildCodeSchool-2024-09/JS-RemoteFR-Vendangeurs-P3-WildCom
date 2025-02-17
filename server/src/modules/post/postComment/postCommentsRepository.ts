@@ -37,10 +37,12 @@ class PostCommentsRepository {
         comment.user_id,
         user.id AS user_id,
         CONCAT (user.firstname, ' ', user.lastname) AS username,
-        user.avatar
+        avatar.path AS avatar_path
       FROM comment
       JOIN user 
       ON comment.user_id = user.id
+      LEFT JOIN avatar
+      ON avatar.id = user.avatar_id
       WHERE comment.post_id = ?
       `,
       [postId],
@@ -53,7 +55,7 @@ class PostCommentsRepository {
       user: {
         id: row.user_id,
         username: row.username,
-        avatar: row.avatar,
+        avatar: row.avatar_path,
       },
     }));
 
