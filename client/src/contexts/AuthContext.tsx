@@ -12,7 +12,7 @@ type AuthProviderProps = {
 type User = {
   id: number;
   username: string;
-  avatar: string;
+  path: string;
   role: string;
 };
 
@@ -20,7 +20,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-
   const value = useMemo(() => ({ user, setUser }), [user]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

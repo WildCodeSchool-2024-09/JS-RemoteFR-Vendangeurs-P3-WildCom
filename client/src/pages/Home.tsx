@@ -36,7 +36,7 @@ function Home() {
     <section className="flex flex-col items-center flex-grow w-full gap-5 lg:gap-10">
       <div className="group lg:hidden">
         <ModalButton type={"post"}>
-          <IoMdAdd className="bg-accent-primary text-text-secondary rounded-full size-8" />
+          <IoMdAdd className="rounded-full bg-accent-primary text-text-secondary size-8" />
         </ModalButton>
       </div>
       <CardPost posts={posts} />

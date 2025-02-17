@@ -6,6 +6,7 @@ import { FiLogOut, FiMenu } from "react-icons/fi";
 import { RxCalendar, RxDashboard, RxHome } from "react-icons/rx";
 import { SlEqualizer } from "react-icons/sl";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import defaultProfilePicture from "../../assets/images/profil_neutral.webp";
 import { useAuth } from "../../contexts/AuthContext";
 import { RightNav } from "./RightNav";
 
@@ -47,11 +48,19 @@ const MobileNav = () => {
           className="flex items-center justify-center gap-4 m-2 group "
           to={`/user/profile/${user?.id}`}
         >
-          <img
-            src={user?.avatar}
-            alt={`Avatar de ${user?.username}`}
-            className="object-cover rounded-full size-8"
-          />
+          {user?.path ? (
+            <img
+              src={`${import.meta.env.VITE_API_URL}/${user?.path}`}
+              alt={`Avatar de ${user?.username}`}
+              className="object-cover rounded-full size-8"
+            />
+          ) : (
+            <img
+              src={defaultProfilePicture}
+              alt={`Avatar de ${user?.username}`}
+              className="object-cover rounded-full size-8"
+            />
+          )}
         </Link>
       </section>
 

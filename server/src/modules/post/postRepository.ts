@@ -42,28 +42,43 @@ class PostRepository {
       `
       SELECT 
         post.id AS post_id, 
-        category.name,
-        post.picture, 
         post.content, 
         post.created_at,
+
+        category.name,
+
         user.id AS user_id, 
         CONCAT (user.firstname,' ', user.lastname) AS username,
-        user.avatar,
+
+        avatar.path AS avatar_path,
+
+        post_picture.path AS picture_path,
+
         (
           SELECT COUNT(*)
           FROM comment
           WHERE comment.post_id = post.id
         ) AS total_comments,
+
         (
         SELECT COUNT(*)
         FROM post_like AS pl
         WHERE pl.post_id = post.id
         ) AS total_likes
+
       FROM post
       JOIN user 
         ON post.user_id = user.id
+
       JOIN category
         ON post.category_id = category.id
+
+      LEFT JOIN avatar
+        ON avatar.id = user.avatar_id
+
+      LEFT JOIN post_picture
+        On post_picture.id = post.picture_id
+
       ORDER BY
         post.created_at DESC;
       `,
@@ -72,7 +87,7 @@ class PostRepository {
     const formattedRows: PostWithUser[] = rows.map((row) => ({
       id: row.post_id,
       categoryName: row.name,
-      picture: row.picture,
+      picture: row.picture_path,
       content: row.content,
       totalComments: row.total_comments,
       totalLikes: row.total_likes,
@@ -80,7 +95,7 @@ class PostRepository {
       user: {
         id: row.user_id,
         username: row.username,
-        avatar: row.avatar,
+        avatar: row.avatar_path,
       },
     }));
 
@@ -91,20 +106,32 @@ class PostRepository {
     const [rows] = await databaseClient.query<Rows>(
       `
       SELECT 
-        post.id AS post_id, 
-        category.name AS category_name, 
-        category.id AS category_id,
-        post.picture, 
-        post.content, 
+        post.id AS post_id,
+        post.content,
         post.created_at,
-        user.id AS user_id, 
+
+        category.name AS category_name,
+        category.id AS category_id,
+
+        user.id AS user_id,
         CONCAT (user.firstname,' ', user.lastname) AS username,
-        user.avatar
+
+        avatar.path AS avatar_path,
+
+        post_picture.path AS picture_path
       FROM post
       JOIN user
         ON post.user_id = user.id
+
       JOIN category
         ON post.category_id = category.id
+
+      LEFT JOIN avatar
+        ON avatar.id = user.avatar_id
+
+      LEFT JOIN post_picture
+        On post_picture.id = post.picture_id
+
       WHERE post.id = ?
       `,
       [postId],
@@ -114,12 +141,12 @@ class PostRepository {
       id: row.post_id,
       categoryName: row.category_name,
       categoryId: row.category_id,
-      picture: row.picture,
+      picture: row.picture_path,
       content: row.content,
       user: {
         id: row.user_id,
         username: row.username,
-        avatar: row.avatar,
+        avatar: row.avatar_path,
       },
     }));
 

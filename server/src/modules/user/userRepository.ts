@@ -18,11 +18,13 @@ class userRepository {
     const [rows] = await databaseClient.query<Rows>(
       `
       SELECT 
-      id,
-      CONCAT (firstname, ' ' ,lastname) as username,
-      created_at,
-      avatar
+        user.id,
+        CONCAT (firstname, ' ' ,lastname) as username,
+        created_at,
+        avatar.path
       FROM user
+      JOIN avatar
+      ON avatar.id = user.avatar_id
       WHERE role = 'user'
       `,
     );
@@ -30,7 +32,7 @@ class userRepository {
     const fomrattedRows = rows.map((row) => ({
       id: row.id,
       username: row.username,
-      avatar: row.avatar,
+      avatar: row.path,
       createdAt: formattedDate(row.created_at),
     }));
 
@@ -41,15 +43,17 @@ class userRepository {
     const [rows] = await databaseClient.query<Rows>(
       `
       SELECT 
-      id,
+      user.id,
       CONCAT (firstname, ' ' ,lastname) as username,
-      avatar,
+      avatar.path,
       github,
       linkedin,
       site,
       biography 
       FROM user 
-      WHERE id = ?`,
+      JOIN avatar
+      ON avatar.id = user.avatar_id
+      WHERE user.id = ?`,
       [id],
     );
     return rows as User[];
@@ -61,13 +65,15 @@ class userRepository {
       SELECT 
       firstname,
       lastname,
-      avatar,
+      avatar.path,
       github,
       linkedin,
       site,
       biography 
       FROM user 
-      WHERE id = ?`,
+      JOIN avatar
+      ON avatar.user_id = user.id
+      WHERE user.id = ?`,
       [id],
     );
     return rows as User[];
