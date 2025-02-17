@@ -81,7 +81,7 @@ class PostRepository {
     const formattedRows: PostWithUser[] = rows.map((row) => ({
       id: row.post_id,
       categoryName: row.category_name,
-      categoryId: row.category_id,
+      category: row.category_id,
       picture: row.picture_path,
       pictureId: row.picture_id,
       content: row.content,

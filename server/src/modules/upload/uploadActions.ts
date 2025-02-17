@@ -65,8 +65,7 @@ const uploadPictureEvent: RequestHandler = async (
     return;
   }
   const { filename, path } = req.file;
-
-  const response = await uploadRepository.createPicturePost(filename, path);
+  const response = await uploadRepository.createPictureEvent(filename, path);
 
   res.status(200).json({
     message: "Photo mise à jour avec succès",
