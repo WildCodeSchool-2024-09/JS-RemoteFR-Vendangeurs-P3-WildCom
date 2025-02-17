@@ -15,10 +15,16 @@ interface PostModalProps {
 
 function AddPostModal({ closeModal }: PostModalProps) {
   const { user } = useAuth();
+  const [imageUploaded, setImageUploaded] = useState({
+    id: 0,
+    path: "",
+  });
+
   const [newPost, setNewPost] = useState({
     userId: user?.id as number | undefined,
     content: "",
     category: "",
+    pictureId: 0,
   });
 
   const { setUpdatePost } = useUpdate();
@@ -71,12 +77,6 @@ function AddPostModal({ closeModal }: PostModalProps) {
         toast.success(response.data.message);
       }
 
-      const postId = response.data.insertId;
-
-      if (image) {
-        await uploadImage(postId);
-      }
-
       setUpdatePost((prev) => prev + 1);
       closeModal();
     } catch (error) {
@@ -88,14 +88,13 @@ function AddPostModal({ closeModal }: PostModalProps) {
     }
   };
 
-  const uploadImage = async (postId: number) => {
+  const uploadImage = async (image: File) => {
     const formData = new FormData();
     formData.append("picture", image as File);
-    formData.append("type", "post");
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/uploads/pictures/${postId}`,
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/uploads/pictures/post`,
         formData,
         {
           headers: {
@@ -104,8 +103,29 @@ function AddPostModal({ closeModal }: PostModalProps) {
           withCredentials: true,
         },
       );
+
+      if (response.status === 200) {
+        const pictureId = response.data.id;
+        setImageUploaded(response.data);
+
+        setNewPost({
+          ...newPost,
+          pictureId: pictureId,
+        });
+      }
     } catch (error) {
       console.error("Erreur lors de l'envoi de l'image", error);
+    }
+  };
+
+  const handleDeleteImage = async () => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/uploads/pictures/post/${imageUploaded?.id}`,
+        { data: { path: imageUploaded?.path }, withCredentials: true },
+      );
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'image", error);
     }
   };
 
@@ -114,6 +134,7 @@ function AddPostModal({ closeModal }: PostModalProps) {
     if (file) {
       setImage(file);
       setImagePreview(URL.createObjectURL(file));
+      await uploadImage(file);
     }
   };
 
@@ -162,6 +183,7 @@ function AddPostModal({ closeModal }: PostModalProps) {
                   onClick={() => {
                     setImage(null);
                     setImagePreview(null);
+                    handleDeleteImage();
                   }}
                   type="button"
                   className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-2 right-2 bg-bg-primary"

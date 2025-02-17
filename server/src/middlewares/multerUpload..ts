@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import path from "node:path";
 import type { NextFunction, Request, Response } from "express";
 import multer, { type StorageEngine } from "multer";
@@ -8,6 +9,7 @@ const serverAvatarPath: string = path.join(
   "../../public",
   AvatarPath,
 );
+
 const PicturePath = "assets/uploads/pictures";
 const serverPicturePath: string = path.join(
   __dirname,
@@ -69,9 +71,24 @@ const adjustPicturePath = (req: Request, res: Response, next: NextFunction) => {
   if (!req.file) {
     return next();
   }
-
   req.file.path = `${PicturePath}/${req.file.filename}`;
   next();
 };
 
-export { adjustAvatarPath, adjustPicturePath, uploadImage };
+const deleteImage = (req: Request, res: Response, next: NextFunction) => {
+  const filePath = req.body.path;
+  const completeFilePath = path.join(__dirname, "../../public", filePath);
+  fs.unlink(completeFilePath, (err) => {
+    if (err) {
+      console.error(
+        `Erreur lors de la suppression du fichier : ${filePath}`,
+        err,
+      );
+    } else {
+      console.info(`Fichier supprimé : ${filePath}`);
+      next();
+    }
+  });
+};
+
+export { adjustAvatarPath, adjustPicturePath, deleteImage, uploadImage };

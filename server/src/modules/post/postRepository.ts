@@ -25,13 +25,18 @@ type PostWithUser = Omit<Post, "userId"> & {
 };
 
 class PostRepository {
-  async create(content: string, category: string, userId: number) {
+  async create(
+    content: string,
+    category: string,
+    userId: number,
+    pictureId: number,
+  ) {
     const [result] = await databaseClient.query<Result>(
       `
-      INSERT INTO post (content, category_id, user_id)
-      VALUES (?, ?, ?)
+      INSERT INTO post (content, category_id, user_id, picture_id)
+      VALUES (?, ?, ?, ?)
       `,
-      [content, category, userId],
+      [content, category, userId, pictureId],
     );
 
     return result.insertId;

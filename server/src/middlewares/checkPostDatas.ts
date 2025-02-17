@@ -16,6 +16,7 @@ const validatePost = (
       "any.required": "La catégorie est obligatoire",
     }),
     userId: Joi.number().required(),
+    pictureId: Joi.number().allow(null),
   });
 
   const updateSchema = Joi.object({

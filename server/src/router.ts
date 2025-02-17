@@ -128,6 +128,7 @@ router.delete("/api/categories/:id", categoryActions.destroy);
 import {
   adjustAvatarPath,
   adjustPicturePath,
+  deleteImage,
   uploadImage,
 } from "./middlewares/multerUpload.";
 import { verifyUser } from "./middlewares/verifyUser";
@@ -140,12 +141,28 @@ router.post(
   adjustAvatarPath,
   uploadActions.uploadAvatar,
 );
+
 router.post(
-  "/api/uploads/pictures/:id",
+  "/api/uploads/pictures/post",
   verifyUser,
   uploadImage.single("picture"),
   adjustPicturePath,
-  uploadActions.uploadPicture,
+  uploadActions.uploadPicturePost,
 );
+
+router.delete(
+  "/api/uploads/pictures/post/:id",
+  verifyUser,
+  deleteImage,
+  uploadActions.deletePicture,
+);
+
+// router.post(
+//   "/api/uploads/pictures/event",
+//   verifyUser,
+//   uploadImage.single("picture"),
+//   adjustPicturePath,
+//   uploadActions.uploadPicture,
+// );
 
 export default router;
