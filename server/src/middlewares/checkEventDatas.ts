@@ -36,6 +36,7 @@ const validateEvent = (
     id: Joi.optional(),
     categoryName: Joi.optional(),
     picture: Joi.optional(),
+    pictureId: Joi.number().allow(null),
     created_at: Joi.optional(),
     user: Joi.optional(),
   });

@@ -10,7 +10,7 @@ import type { Result, Rows } from "../../../database/client";
 type Event = {
   id: number;
   content: string;
-  picture: string;
+  picture?: string;
   created_at?: Date;
   title: string;
   place: string;
@@ -19,6 +19,7 @@ type Event = {
   userId?: number;
   categoryId?: number;
   categoryName?: string;
+  pictureId?: number;
 };
 
 type User = {
@@ -34,8 +35,8 @@ type EventWithUser = Omit<Event, "user_id"> & {
 class EventRepository {
   async create(event: Omit<Event, "id">) {
     const [result] = await databaseClient.query<Result>(
-      `INSERT INTO event (content, category_id, title, place, calendar, time, user_id) 
-      VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO event (content, category_id, title, place, calendar, time, user_id, picture_id) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         event.content,
         event.categoryId,
@@ -44,6 +45,7 @@ class EventRepository {
         event.calendar,
         event.time,
         event.userId,
+        event.pictureId,
       ],
     );
 
@@ -71,6 +73,7 @@ class EventRepository {
         avatar.path AS avatar_path,
 
         event_picture.path AS picture_path
+        event_picture.id AS picture_id
       FROM event
 
       JOIN user
@@ -96,6 +99,7 @@ class EventRepository {
       categoryName: row.category_name,
       categoryId: row.category_id,
       picture: row.picture_path,
+      pictureId: row.picture_id,
       created_at: row.created_at,
       title: row.title,
       place: row.place,

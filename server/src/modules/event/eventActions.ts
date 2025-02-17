@@ -1,5 +1,4 @@
 import type { RequestHandler } from "express";
-
 import eventRepository from "./eventRepository";
 
 const browse: RequestHandler = async (req, res, next) => {
@@ -48,7 +47,7 @@ const add: RequestHandler = async (req, res, next) => {
     const newEvent = {
       content: req.body.newEvent.content,
       categoryId: req.body.newEvent.category,
-      picture: req.body.newEvent.picture,
+      pictureId: req.body.newEvent.pictureId,
       title: req.body.newEvent.title,
       place: req.body.newEvent.place,
       calendar: req.body.newEvent.calendar,

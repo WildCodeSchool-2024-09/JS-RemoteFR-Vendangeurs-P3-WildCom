@@ -51,6 +51,30 @@ const uploadPicturePost: RequestHandler = async (
   });
 };
 
+const uploadPictureEvent: RequestHandler = async (
+  req: AuthenticatedRequest,
+  res,
+) => {
+  if (!req.file) {
+    res.status(400).json({ message: "Échec de l'envoi du fichier" });
+    return;
+  }
+
+  if (!req.user) {
+    res.status(401).json({ message: "Veuillez vous authentifier" });
+    return;
+  }
+  const { filename, path } = req.file;
+
+  const response = await uploadRepository.createPicturePost(filename, path);
+
+  res.status(200).json({
+    message: "Photo mise à jour avec succès",
+    path: path,
+    id: response.id,
+  });
+};
+
 const deletePicture: RequestHandler = async (
   req: AuthenticatedRequest,
   res,
@@ -64,27 +88,9 @@ const deletePicture: RequestHandler = async (
   }
 };
 
-// const uploadPictureEvent: RequestHandler = async (
-//   req: AuthenticatedRequest,
-//   res,
-// ) => {
-//   if (!req.file) {
-//     res.status(400).json({ message: "Échec de l'envoi du fichier" });
-//     return;
-//   }
-
-//   if (!req.user) {
-//     res.status(401).json({ message: "Veuillez vous authentifier" });
-//     return;
-//   }
-//   const { filename, path } = req.file;
-//   const { userId } = req.user;
-
-//   await uploadRepository.createPicture(filename, path);
-
-//   res
-//     .status(200)
-//     .json({ message: "Photo mise à jour avec succès", profilePicPath: path });
-// };
-
-export default { uploadAvatar, uploadPicturePost, deletePicture };
+export default {
+  uploadAvatar,
+  uploadPicturePost,
+  uploadPictureEvent,
+  deletePicture,
+};

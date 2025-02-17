@@ -29,7 +29,7 @@ class PostRepository {
     content: string,
     category: string,
     userId: number,
-    pictureId: number,
+    pictureId?: number,
   ) {
     const [result] = await databaseClient.query<Result>(
       `
@@ -40,6 +40,59 @@ class PostRepository {
     );
 
     return result.insertId;
+  }
+  async read(postId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `
+      SELECT 
+        post.id AS post_id,
+        post.content,
+        post.created_at,
+
+        category.name AS category_name,
+        category.id AS category_id,
+
+        user.id AS user_id,
+        CONCAT (user.firstname,' ', user.lastname) AS username,
+
+        avatar.path AS avatar_path,
+
+        post_picture.path AS picture_path,
+        post_picture.id AS picture_id
+      FROM post
+
+      JOIN user
+        ON post.user_id = user.id
+
+      JOIN category
+        ON post.category_id = category.id
+
+      LEFT JOIN avatar
+        ON avatar.id = user.avatar_id
+
+      LEFT JOIN post_picture
+        On post_picture.id = post.picture_id
+
+      WHERE post.id = ?
+      `,
+      [postId],
+    );
+
+    const formattedRows: PostWithUser[] = rows.map((row) => ({
+      id: row.post_id,
+      categoryName: row.category_name,
+      categoryId: row.category_id,
+      picture: row.picture_path,
+      pictureId: row.picture_id,
+      content: row.content,
+      user: {
+        id: row.user_id,
+        username: row.username,
+        avatar: row.avatar_path,
+      },
+    }));
+
+    return formattedRows;
   }
 
   async readAll() {
@@ -72,6 +125,7 @@ class PostRepository {
         ) AS total_likes
 
       FROM post
+
       JOIN user 
         ON post.user_id = user.id
 
@@ -107,55 +161,27 @@ class PostRepository {
     return formattedRows;
   }
 
-  async read(postId: number) {
-    const [rows] = await databaseClient.query<Rows>(
+  async update(updatedPost: {
+    content: string;
+    categoryId: number;
+    postId: number;
+    pictureId?: number;
+  }) {
+    const [result] = await databaseClient.query<Result>(
       `
-      SELECT 
-        post.id AS post_id,
-        post.content,
-        post.created_at,
-
-        category.name AS category_name,
-        category.id AS category_id,
-
-        user.id AS user_id,
-        CONCAT (user.firstname,' ', user.lastname) AS username,
-
-        avatar.path AS avatar_path,
-
-        post_picture.path AS picture_path
-      FROM post
-      JOIN user
-        ON post.user_id = user.id
-
-      JOIN category
-        ON post.category_id = category.id
-
-      LEFT JOIN avatar
-        ON avatar.id = user.avatar_id
-
-      LEFT JOIN post_picture
-        On post_picture.id = post.picture_id
-
-      WHERE post.id = ?
+      UPDATE post
+      SET content = ?, category_id = ?, picture_id = ?
+      WHERE id = ?
       `,
-      [postId],
+      [
+        updatedPost.content,
+        updatedPost.categoryId,
+        updatedPost.pictureId,
+        updatedPost.postId,
+      ],
     );
 
-    const formattedRows: PostWithUser[] = rows.map((row) => ({
-      id: row.post_id,
-      categoryName: row.category_name,
-      categoryId: row.category_id,
-      picture: row.picture_path,
-      content: row.content,
-      user: {
-        id: row.user_id,
-        username: row.username,
-        avatar: row.avatar_path,
-      },
-    }));
-
-    return formattedRows;
+    return result.affectedRows;
   }
 
   async delete(id: number) {
@@ -164,23 +190,6 @@ class PostRepository {
 
       [id],
     );
-    return result.affectedRows;
-  }
-
-  async update(updatedPost: {
-    content: string;
-    categoryId: number;
-    postId: number;
-  }) {
-    const [result] = await databaseClient.query<Result>(
-      `
-      UPDATE post
-      SET content = ?, category_id = ?
-      WHERE id = ?
-      `,
-      [updatedPost.content, updatedPost.categoryId, updatedPost.postId],
-    );
-
     return result.affectedRows;
   }
 }

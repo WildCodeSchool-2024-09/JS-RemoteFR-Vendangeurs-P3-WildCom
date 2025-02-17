@@ -31,6 +31,7 @@ const validatePost = (
     id: Joi.number().allow(null),
     categoryName: Joi.optional(),
     picture: Joi.optional(),
+    pictureId: Joi.number().allow(null),
     user: Joi.optional(),
   });
 

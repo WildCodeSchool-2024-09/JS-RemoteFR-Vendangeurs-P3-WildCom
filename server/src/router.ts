@@ -157,12 +157,19 @@ router.delete(
   uploadActions.deletePicture,
 );
 
-// router.post(
-//   "/api/uploads/pictures/event",
-//   verifyUser,
-//   uploadImage.single("picture"),
-//   adjustPicturePath,
-//   uploadActions.uploadPicture,
-// );
+router.post(
+  "/api/uploads/pictures/event",
+  verifyUser,
+  uploadImage.single("picture"),
+  adjustPicturePath,
+  uploadActions.uploadPictureEvent,
+);
+
+router.delete(
+  "/api/uploads/pictures/event/:id",
+  verifyUser,
+  deleteImage,
+  uploadActions.deletePicture,
+);
 
 export default router;

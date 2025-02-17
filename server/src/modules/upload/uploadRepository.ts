@@ -32,6 +32,21 @@ class UploadRepository {
     return { id: result[0].insertId };
   }
 
+  async createPictureEvent(filename: string, path: string) {
+    const result = await databaseClient.query<Result>(
+      `
+      INSERT INTO event_picture (filename, path)
+      VALUES (?, ?)
+      ON DUPLICATE KEY UPDATE
+      filename = ?,
+      path = ?
+      `,
+      [filename, path, filename, path],
+    );
+
+    return { id: result[0].insertId };
+  }
+
   async deletePicture(pictureId: number) {
     const [result] = await databaseClient.query<Result>(
       "DELETE FROM post_picture WHERE id = ?",
@@ -40,20 +55,5 @@ class UploadRepository {
     return result.affectedRows;
   }
 }
-//   async createPictureEvent(filename: string, path: string) {
-//     const result = await databaseClient.query<Result>(
-//       `
-//       INSERT INTO post_picture (filename, path)
-//       VALUES (?, ?)
-//       ON DUPLICATE KEY UPDATE
-//       filename = ?,
-//       path = ?
-//       `,
-//       [filename, path, filename, path],
-//     );
-
-//     return { id: result[0].insertId };
-//   }
-// }
 
 export default new UploadRepository();

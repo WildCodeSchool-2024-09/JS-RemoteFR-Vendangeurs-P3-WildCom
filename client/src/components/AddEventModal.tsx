@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { BiImageAdd } from "react-icons/bi";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "react-toastify";
 import defaultProfilePicture from "../assets/images/profil_neutral.webp";
@@ -14,7 +16,10 @@ interface EventModalProps {
 function AddEventModal({ closeModal }: EventModalProps) {
   const { user } = useAuth();
   const { setUpdateEvent } = useUpdate();
-
+  const [imageUploaded, setImageUploaded] = useState({
+    id: 0,
+    path: "",
+  });
   const [categories, setCategories] = useState<Category[]>([]);
   const [newEvent, setNewEvent] = useState({
     userId: user?.id as number | undefined,
@@ -24,7 +29,10 @@ function AddEventModal({ closeModal }: EventModalProps) {
     place: "",
     calendar: "",
     time: "",
+    pictureId: 0,
   });
+  const [image, setImage] = useState<string | ArrayBuffer | File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -82,6 +90,56 @@ function AddEventModal({ closeModal }: EventModalProps) {
     }
   };
 
+  const uploadImage = async (image: File) => {
+    const formData = new FormData();
+    formData.append("picture", image as File);
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/uploads/pictures/event`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        },
+      );
+
+      if (response.status === 200) {
+        const pictureId = response.data.id;
+        setImageUploaded(response.data);
+
+        setNewEvent({
+          ...newEvent,
+          pictureId: pictureId,
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de l'image", error);
+    }
+  };
+
+  const handleDeleteImage = async () => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/uploads/pictures/event/${imageUploaded?.id}`,
+        { data: { path: imageUploaded?.path }, withCredentials: true },
+      );
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'image", error);
+    }
+  };
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+      await uploadImage(file);
+    }
+  };
+
   return (
     <>
       <div
@@ -110,6 +168,49 @@ function AddEventModal({ closeModal }: EventModalProps) {
             )}
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
+          <form className="relative flex gap-3" encType="multipart/form-data">
+            {image !== null && (
+              <>
+                <figure className="object-cover w-full h-72 rounded-xl">
+                  <img
+                    src={imagePreview || ""}
+                    alt="Aperçu de l'image"
+                    className="object-cover w-full h-full rounded-xl"
+                  />
+                </figure>
+
+                <button
+                  onClick={() => {
+                    setImage(null);
+                    setImagePreview(null);
+                    handleDeleteImage();
+                  }}
+                  type="button"
+                  className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-2 right-2 bg-bg-primary"
+                >
+                  <RiDeleteBin6Line />
+                </button>
+              </>
+            )}
+            {image === null && (
+              <>
+                <label
+                  className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
+                  htmlFor="picture"
+                >
+                  <BiImageAdd />
+                </label>
+                <input
+                  onChange={(e) => handleChange(e)}
+                  className="hidden"
+                  id="picture"
+                  name="picture"
+                  type="file"
+                  accept="image/*"
+                />
+              </>
+            )}
+          </form>
         </header>
         <form className="flex flex-col gap-4" action="">
           <input
