@@ -36,30 +36,44 @@ class UserEventRepository {
         event.id AS event_id,
         event.content,
         category.name,
-        event.picture,
+        event_picture.path AS picture,
         event.created_at,
         event.calendar,
         event.time,
         event.title,
         event.place,
+
         user.id AS user_id,
         CONCAT (user.firstname, ' ', user.lastname) AS username,
-        user.avatar,
+
+        avatar.path AS avatar_path,
+
         (
           SELECT COUNT(*)
           FROM comment
           WHERE comment.event_id = event.id
         ) AS total_comments,
+
         (
         SELECT COUNT(*)
         FROM event_participation AS ep
         WHERE ep.event_id = event.id
         ) AS total_participations
+
       FROM event
+
       JOIN user
       ON event.user_id = user.id
+
       JOIN category
         ON event.category_id = category.id
+
+      LEFT JOIN event_picture
+        ON event.picture_id = event_picture.id
+
+      JOIN avatar
+        ON user.avatar_id = avatar.id
+
       WHERE user.id = ?
       ORDER BY
         event.created_at DESC;
@@ -82,7 +96,7 @@ class UserEventRepository {
       user: {
         id: row.user_id,
         username: row.username,
-        avatar: row.avatar,
+        avatar: row.avatar_path,
       },
     }));
 

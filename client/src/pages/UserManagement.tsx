@@ -85,7 +85,7 @@ export const UserManagement = () => {
               className="flex items-center justify-center gap-4"
             >
               <img
-                src={user.avatar}
+                src={`${import.meta.env.VITE_API_URL}/${user.avatar}`}
                 alt={`Avatar de ${user.username}`}
                 className="object-cover rounded-full size-12"
               />

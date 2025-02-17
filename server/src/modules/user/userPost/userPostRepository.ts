@@ -26,36 +26,47 @@ type PostWithUser = Omit<Post, "user_id"> & {
 class UserPostRepository {
   async readAll(userId: number) {
     const [rows] = await databaseClient.query<Rows>(
-      `SELECT post.id AS post_id, category.name, post_picture.path, post.content, post.created_at,
-      (
-      SELECT count (*) 
-      FROM comment
-      WHERE comment.post_id = post.id
-      ) AS total_comments,
+      `
+      SELECT
+        post.id AS post_id,
+        post_picture.path AS picture,
+        post.content,
+        post.created_at,
 
-      (
-        SELECT COUNT(*)
-        FROM post_like AS pl
-        WHERE pl.post_id = post.id
-      ) AS total_likes,
+        category.name,
 
-      user.id AS user_id, user.avatar, 
-      CONCAT(user.firstname, ' ', user.lastname) AS username
+        (
+        SELECT count (*)
+        FROM comment
+        WHERE comment.post_id = post.id
+        ) AS total_comments,
+
+        (
+          SELECT COUNT(*)
+          FROM post_like AS pl
+          WHERE pl.post_id = post.id
+        ) AS total_likes,
+
+        user.id AS user_id,
+        CONCAT(user.firstname, ' ', user.lastname) AS username,
+
+        avatar.path AS avatar_path
 
       FROM post
-      JOIN post_picture 
-      ON post.picture_id = post_picture.id
 
-      JOIN user 
+      JOIN user
       ON post.user_id = user.id
 
-      JOIN category 
+      JOIN category
       ON post.category_id = category.id
+
+      LEFT JOIN post_picture
+      ON post_picture.id = post.picture_id
 
       JOIN avatar
       ON avatar.id = user.avatar_id
 
-      WHERE user.id = ? 
+      WHERE user.id = ?
 
       `,
       [userId],
