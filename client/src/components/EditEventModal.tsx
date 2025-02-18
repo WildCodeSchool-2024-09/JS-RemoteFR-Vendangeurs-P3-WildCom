@@ -91,7 +91,6 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
 
       if (newImage) {
         const pictureId = await uploadImage();
-
         if (pictureId) {
           updatedDataEvent = {
             ...updatedDataEvent,
@@ -121,6 +120,7 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
       }
     }
   };
+
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -168,7 +168,6 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // setCurrentImage(file);
       setImagePreview(URL.createObjectURL(file));
       setNewImage(file);
     }

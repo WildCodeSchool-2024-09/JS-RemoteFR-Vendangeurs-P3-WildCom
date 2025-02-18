@@ -11,7 +11,7 @@ const validatePost = (
       "string.empty": "Le contenu est obligatoire",
       "any.required": "Le contenu est obligatoire",
     }),
-    category: Joi.number().required().messages({
+    categoryId: Joi.number().required().messages({
       "number.base": "La catégorie est obligatoire",
       "any.required": "La catégorie est obligatoire",
     }),

@@ -133,6 +133,7 @@ class EventRepository {
         avatar.path AS avatar_path,
 
         event_picture.path AS picture_path,
+        event_picture.id AS picture_id,
 
         (
           SELECT COUNT(*)
@@ -169,6 +170,7 @@ class EventRepository {
       categoryId: row.category_id,
       categoryName: row.name,
       picture: row.picture_path,
+      pictureId: row.picture_id,
       title: row.title,
       place: row.place,
       totalComments: row.total_comments,
@@ -189,7 +191,7 @@ class EventRepository {
   async update(event: Event) {
     const [result] = await databaseClient.query<Result>(
       `UPDATE event
-      SET content = ?, category_id = ?, title = ?, place = ?, calendar = ?, time = ? 
+      SET content = ?, category_id = ?, title = ?, place = ?, calendar = ?, time = ?, picture_id = ?
       WHERE id = ?`,
       [
         event.content,
@@ -198,6 +200,7 @@ class EventRepository {
         event.place,
         event.calendar,
         event.time,
+        event.pictureId,
         event.id,
       ],
     );

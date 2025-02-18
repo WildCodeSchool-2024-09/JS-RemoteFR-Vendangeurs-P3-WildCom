@@ -11,7 +11,6 @@ import type { Event } from "../types/type";
 function Events() {
   const [events, setEvents] = useState([] as Event[]);
   const { updateComment, updateEvent, updateParticipation } = useUpdate();
-
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -36,7 +35,7 @@ function Events() {
     <section className="flex flex-col items-center flex-grow w-full gap-5 lg:gap-10">
       <div className="group lg:hidden">
         <ModalButton type={"event"}>
-          <IoMdAdd className="bg-accent-primary text-text-secondary rounded-full size-8" />
+          <IoMdAdd className="rounded-full bg-accent-primary text-text-secondary size-8" />
         </ModalButton>
       </div>
       <CardEvent events={events} />
