@@ -10,14 +10,13 @@ import type { Result, Rows } from "../../../database/client";
 type Event = {
   id: number;
   content: string;
-  picture?: string;
   created_at?: Date;
   title: string;
   place: string;
   calendar: string;
   time: string;
   userId?: number;
-  categoryId?: number;
+  categoryId: number;
   categoryName?: string;
   pictureId?: number;
 };
@@ -96,8 +95,8 @@ class EventRepository {
     const formattedRows: EventWithUser[] = rows.map((row) => ({
       id: row.event_id,
       content: row.content,
-      categoryName: row.category_name,
       categoryId: row.category_id,
+      categoryName: row.category_name,
       picture: row.picture_path,
       pictureId: row.picture_id,
       created_at: row.created_at,
@@ -167,6 +166,7 @@ class EventRepository {
     const formattedRows: EventWithUser[] = rows.map((row) => ({
       id: row.event_id,
       content: row.content,
+      categoryId: row.category_id,
       categoryName: row.name,
       picture: row.picture_path,
       title: row.title,
