@@ -166,7 +166,7 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
         onKeyUp={(e) => e.key === "Enter" && closeModal()}
         className="fixed inset-0 z-10 bg-bg_opacity-secondary backdrop-blur-sm"
       />
-      <div className="fixed z-20 flex flex-col w-full h-auto gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
+      <div className="fixed z-20 flex flex-col w-full max-h-[800px] overflow-y-auto gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
         <h2 className="flex justify-center text-xl text-text-primary font-title">
           Modifier une publication
         </h2>
@@ -194,17 +194,15 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
             <div className="flex justify-center w-full ">
               {imagePreview || currentImage ? (
                 <div className="relative">
-                  <figure className="flex lg:h-96">
-                    <img
-                      src={
-                        imagePreview
-                          ? `${imagePreview}`
-                          : `${import.meta.env.VITE_API_URL}/${currentImage}`
-                      }
-                      alt="Aperçu de l'image"
-                      className="object-contain rounded-xl"
-                    />
-                  </figure>
+                  <img
+                    src={
+                      imagePreview
+                        ? `${imagePreview}`
+                        : `${import.meta.env.VITE_API_URL}/${currentImage}`
+                    }
+                    alt="Aperçu de l'image"
+                    className="object-contain rounded-xl"
+                  />
 
                   <button
                     onClick={() => {

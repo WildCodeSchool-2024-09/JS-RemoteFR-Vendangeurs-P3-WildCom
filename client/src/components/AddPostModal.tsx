@@ -24,7 +24,7 @@ function AddPostModal({ closeModal }: PostModalProps) {
     userId: user?.id as number | undefined,
     content: "",
     category: "",
-    pictureId: 0,
+    pictureId: null,
   });
 
   const { setUpdatePost } = useUpdate();
@@ -145,7 +145,7 @@ function AddPostModal({ closeModal }: PostModalProps) {
         onKeyUp={(e) => e.key === "Enter" && closeModal()}
         className="fixed inset-0 z-10 bg-bg_opacity-secondary backdrop-blur-sm"
       />
-      <div className="fixed z-20 flex flex-col w-full h-auto gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
+      <div className="fixed z-20 flex flex-col w-full max-h-[800px] gap-3 p-10 space-y-3 overflow-y-auto -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
         <h2 className="flex justify-center text-xl text-text-primary font-title">
           Créer une publication
         </h2>
@@ -171,13 +171,11 @@ function AddPostModal({ closeModal }: PostModalProps) {
           <form className="relative flex gap-3" encType="multipart/form-data">
             {image !== null && (
               <>
-                <figure className="object-cover w-full h-72 rounded-xl">
-                  <img
-                    src={imagePreview || ""}
-                    alt="Aperçu de l'image"
-                    className="object-cover w-full h-full rounded-xl"
-                  />
-                </figure>
+                <img
+                  src={imagePreview || ""}
+                  alt="Aperçu de l'image"
+                  className="object-cover w-full h-full rounded-xl"
+                />
 
                 <button
                   onClick={() => {

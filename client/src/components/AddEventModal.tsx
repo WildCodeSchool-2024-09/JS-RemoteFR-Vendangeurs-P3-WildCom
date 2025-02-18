@@ -147,7 +147,7 @@ function AddEventModal({ closeModal }: EventModalProps) {
         onKeyUp={(e) => e.key === "Enter" && closeModal()}
         className="fixed inset-0 z-10 bg-bg_opacity-secondary backdrop-blur-sm"
       />
-      <div className="fixed z-20 flex flex-col w-full h-auto gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
+      <div className="fixed z-20 flex flex-col w-full overflow-y-auto max-h-[800px] gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
         <h2 className="flex justify-center text-xl text-text-primary font-title">
           Créer un événement
         </h2>
@@ -168,50 +168,52 @@ function AddEventModal({ closeModal }: EventModalProps) {
             )}
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
-          <form className="relative flex gap-3" encType="multipart/form-data">
-            {image !== null && (
-              <>
-                <figure className="object-cover w-full h-72 rounded-xl">
-                  <img
-                    src={imagePreview || ""}
-                    alt="Aperçu de l'image"
-                    className="object-cover w-full h-full rounded-xl"
-                  />
-                </figure>
-
-                <button
-                  onClick={() => {
-                    setImage(null);
-                    setImagePreview(null);
-                    handleDeleteImage();
-                  }}
-                  type="button"
-                  className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-2 right-2 bg-bg-primary"
-                >
-                  <RiDeleteBin6Line />
-                </button>
-              </>
-            )}
-            {image === null && (
-              <>
-                <label
-                  className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
-                  htmlFor="picture"
-                >
-                  <BiImageAdd />
-                </label>
-                <input
-                  onChange={(e) => handleChange(e)}
-                  className="hidden"
-                  id="picture"
-                  name="picture"
-                  type="file"
-                  accept="image/*"
-                />
-              </>
-            )}
-          </form>
         </header>
+        <form
+          className="relative flex self-end gap-3"
+          encType="multipart/form-data"
+        >
+          {image !== null && (
+            <>
+              <img
+                src={imagePreview || ""}
+                alt="Aperçu de l'image"
+                className="object-cover rounded-xl"
+              />
+
+              <button
+                onClick={() => {
+                  setImage(null);
+                  setImagePreview(null);
+                  handleDeleteImage();
+                }}
+                type="button"
+                className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-2 right-2 bg-bg-primary"
+              >
+                <RiDeleteBin6Line />
+              </button>
+            </>
+          )}
+          {image === null && (
+            <>
+              <label
+                className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
+                htmlFor="picture"
+              >
+                <BiImageAdd />
+              </label>
+              <input
+                onChange={(e) => handleChange(e)}
+                className="hidden"
+                id="picture"
+                name="picture"
+                type="file"
+                accept="image/*"
+              />
+            </>
+          )}
+        </form>
+
         <form className="flex flex-col gap-4" action="">
           <input
             type="text"

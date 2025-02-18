@@ -72,7 +72,7 @@ class EventRepository {
 
         avatar.path AS avatar_path,
 
-        event_picture.path AS picture_path
+        event_picture.path AS picture_path,
         event_picture.id AS picture_id
       FROM event
 

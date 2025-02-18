@@ -238,13 +238,11 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
           <main className="flex flex-col ">
             <section className="flex flex-col gap-3 lg:gap-0">
               {event.picture && (
-                <figure className="">
-                  <img
-                    src={`${import.meta.env.VITE_API_URL}/${event.picture}`}
-                    alt=""
-                    className="mb-4 rounded-md"
-                  />
-                </figure>
+                <img
+                  src={`${import.meta.env.VITE_API_URL}/${event.picture}`}
+                  alt=""
+                  className="mb-4 rounded-md"
+                />
               )}
               <article className="w-full space-y-3">
                 <h2 className="text-xl font-semibold font-title">
