@@ -152,7 +152,7 @@ function AddPostModal({ closeModal }: PostModalProps) {
         <header
           className={`${imagePreview ? "flex-col" : ""} flex items-start justify-between gap-4`}
         >
-          <section className="flex items-center gap-2">
+          <section className="flex items-center w-2/3 gap-2">
             {user?.path ? (
               <img
                 src={`${import.meta.env.VITE_API_URL}/${user?.path}`}
@@ -168,46 +168,48 @@ function AddPostModal({ closeModal }: PostModalProps) {
             )}
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
-          <form className="relative flex gap-3" encType="multipart/form-data">
-            {image !== null && (
-              <>
-                <img
-                  src={imagePreview || ""}
-                  alt="Aperçu de l'image"
-                  className="object-cover w-full h-full rounded-xl"
-                />
+          <form className="flex w-full gap-3 " encType="multipart/form-data">
+            <div className="flex justify-center w-full">
+              {image !== null && (
+                <div className="relative">
+                  <img
+                    src={imagePreview || ""}
+                    alt="Aperçu de l'image"
+                    className="object-cover w-full max-h-96 rounded-xl"
+                  />
 
-                <button
-                  onClick={() => {
-                    setImage(null);
-                    setImagePreview(null);
-                    handleDeleteImage();
-                  }}
-                  type="button"
-                  className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-2 right-2 bg-bg-primary"
-                >
-                  <RiDeleteBin6Line />
-                </button>
-              </>
-            )}
-            {image === null && (
-              <>
-                <label
-                  className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
-                  htmlFor="picture"
-                >
-                  <BiImageAdd />
-                </label>
-                <input
-                  onChange={(e) => handleChange(e)}
-                  className="hidden"
-                  id="picture"
-                  name="picture"
-                  type="file"
-                  accept="image/*"
-                />
-              </>
-            )}
+                  <button
+                    onClick={() => {
+                      setImage(null);
+                      setImagePreview(null);
+                      handleDeleteImage();
+                    }}
+                    type="button"
+                    className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-4 right-2 bg-bg-primary"
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </div>
+              )}
+              {image === null && (
+                <div className="flex justify-end w-full">
+                  <label
+                    className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
+                    htmlFor="picture"
+                  >
+                    <BiImageAdd />
+                  </label>
+                  <input
+                    onChange={(e) => handleChange(e)}
+                    className="hidden"
+                    id="picture"
+                    name="picture"
+                    type="file"
+                    accept="image/*"
+                  />
+                </div>
+              )}
+            </div>
           </form>
         </header>
         <form className="flex flex-col gap-4" action="">

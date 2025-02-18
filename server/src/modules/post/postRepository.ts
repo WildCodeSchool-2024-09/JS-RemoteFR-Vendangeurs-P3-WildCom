@@ -111,7 +111,7 @@ class PostRepository {
         avatar.path AS avatar_path,
 
         post_picture.path AS picture_path,
-        post_picutre.id AS picture_id,
+        post_picture.id AS picture_id,
 
         (
           SELECT COUNT(*)

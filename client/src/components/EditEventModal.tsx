@@ -180,12 +180,14 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
         onKeyUp={(e) => e.key === "Enter" && closeModal()}
         className="fixed inset-0 z-10 bg-bg_opacity-secondary backdrop-blur-sm"
       />
-      <div className="fixed z-20 flex flex-col w-full gap-3 p-10 space-y-3  -translate-x-1/2 -translate-y-1/2 overflow-y-auto max-h-[800px] top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
+      <div className="fixed z-20 flex flex-col w-full gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 overflow-y-auto max-h-[800px] top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
         <h2 className="flex justify-center text-xl text-text-primary font-title">
           Modifier un événement
         </h2>
-        <header className="flex items-center justify-between">
-          <section className="flex items-center gap-2">
+        <header
+          className={`${imagePreview || currentImage ? "flex-col" : ""} flex items-start justify-between gap-4`}
+        >
+          <section className="flex items-center w-2/3 gap-2">
             {user?.path ? (
               <img
                 src={`${import.meta.env.VITE_API_URL}/${user?.path}`}
@@ -201,52 +203,54 @@ function EditEventModal({ closeModal, eventId }: EventModalProps) {
             )}
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
-        </header>
-        <form className="flex w-full gap-3 " encType="multipart/form-data">
-          <div className="flex justify-center w-full">
-            {imagePreview || currentImage ? (
-              <div className="relative">
-                <img
-                  src={
-                    imagePreview
-                      ? `${imagePreview}`
-                      : `${import.meta.env.VITE_API_URL}/${currentImage}`
-                  }
-                  alt="Aperçu de l'image"
-                  className="object-cover w-full max-h-96 rounded-xl"
-                />
 
-                <button
-                  onClick={() => {
-                    setCurrentImage(null);
-                    setImagePreview(null);
-                  }}
-                  type="button"
-                  className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-4 right-2 bg-bg-primary"
-                >
-                  <RiDeleteBin6Line />
-                </button>
-              </div>
-            ) : (
-              <div className="flex justify-end w-full">
-                <label
-                  className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
-                  htmlFor="picture"
-                >
-                  <BiImageAdd />
-                </label>
-                <input
-                  onChange={(e) => handleChange(e)}
-                  className="hidden"
-                  id="picture"
-                  name="picture"
-                  type="file"
-                  accept="image/*"
-                />
-              </div>
-            )}
-          </div>
-        </form>
+          <form className="flex w-full gap-3" encType="multipart/form-data">
+            <div className="flex justify-center w-full">
+              {imagePreview || currentImage ? (
+                <div className="relative">
+                  <img
+                    src={
+                      imagePreview
+                        ? `${imagePreview}`
+                        : `${import.meta.env.VITE_API_URL}/${currentImage}`
+                    }
+                    alt="Aperçu de l'image"
+                    className="object-cover w-full max-h-96 rounded-xl"
+                  />
+
+                  <button
+                    onClick={() => {
+                      setCurrentImage(null);
+                      setImagePreview(null);
+                    }}
+                    type="button"
+                    className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-4 right-2 bg-bg-primary"
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex justify-end w-full">
+                  <label
+                    className="self-end text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
+                    htmlFor="picture"
+                  >
+                    <BiImageAdd />
+                  </label>
+                  <input
+                    onChange={(e) => handleChange(e)}
+                    className="hidden"
+                    id="picture"
+                    name="picture"
+                    type="file"
+                    accept="image/*"
+                  />
+                </div>
+              )}
+            </div>
+          </form>
+        </header>
+
         <input
           type="text"
           id="title"

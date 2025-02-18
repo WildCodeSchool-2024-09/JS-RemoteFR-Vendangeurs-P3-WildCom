@@ -190,7 +190,7 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
 
-          <form className="flex w-full gap-3 " encType="multipart/form-data">
+          <form className="flex w-full gap-3" encType="multipart/form-data">
             <div className="flex justify-center w-full ">
               {imagePreview || currentImage ? (
                 <div className="relative">
@@ -201,7 +201,7 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
                         : `${import.meta.env.VITE_API_URL}/${currentImage}`
                     }
                     alt="Aperçu de l'image"
-                    className="object-contain rounded-xl"
+                    className="object-cover w-full max-h-96 rounded-xl"
                   />
 
                   <button
