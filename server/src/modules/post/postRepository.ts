@@ -27,7 +27,7 @@ type PostWithUser = Omit<Post, "userId"> & {
 class PostRepository {
   async create(
     content: string,
-    category: string,
+    categoryId: string,
     userId: number,
     pictureId?: number,
   ) {
@@ -36,7 +36,7 @@ class PostRepository {
       INSERT INTO post (content, category_id, user_id, picture_id)
       VALUES (?, ?, ?, ?)
       `,
-      [content, category, userId, pictureId],
+      [content, categoryId, userId, pictureId],
     );
 
     return result.insertId;

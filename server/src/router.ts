@@ -47,7 +47,7 @@ router.get("/api/posts", postActions.browse);
 router.get("/api/post/:id", postActions.read);
 router.post("/api/posts", validatePost, postActions.add);
 router.put("/api/posts/:id", validatePost, postActions.edit);
-router.delete("/api/posts/:id", postActions.destroy);
+router.delete("/api/posts/:id", deleteImage, postActions.destroy);
 
 import postCommentsActions from "./modules/post/postComment/postCommentsActions";
 
@@ -80,7 +80,7 @@ router.get("/api/events", eventActions.browse);
 router.get("/api/events/:id", eventActions.read);
 router.put("/api/events/:id", validateEvent, eventActions.edit);
 router.post("/api/events", validateEvent, eventActions.add);
-router.delete("/api/events/:id", eventActions.destroy);
+router.delete("/api/events/:id", deleteImage, eventActions.destroy);
 
 import { validateComment } from "./middlewares/checkCommentDatas";
 import eventCommentActions from "./modules/event/eventComment/eventCommentActions";

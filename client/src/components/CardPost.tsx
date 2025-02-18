@@ -71,7 +71,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
         `${import.meta.env.VITE_API_URL}/api/posts/${postId}`,
         {
           data: {
-            userId: user?.id,
+            path: posts.find((post) => post.id === postId)?.picture,
           },
           withCredentials: true,
         },

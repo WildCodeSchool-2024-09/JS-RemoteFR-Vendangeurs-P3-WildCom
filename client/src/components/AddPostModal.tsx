@@ -23,7 +23,7 @@ function AddPostModal({ closeModal }: PostModalProps) {
   const [newPost, setNewPost] = useState({
     userId: user?.id as number | undefined,
     content: "",
-    category: "",
+    categoryId: "",
     pictureId: null,
   });
 
@@ -58,7 +58,7 @@ function AddPostModal({ closeModal }: PostModalProps) {
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setNewPost({ ...newPost, category: e.target.value });
+    setNewPost({ ...newPost, categoryId: e.target.value });
   };
 
   const handlePublish = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -168,6 +168,7 @@ function AddPostModal({ closeModal }: PostModalProps) {
             )}
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
+
           <form className="flex w-full gap-3 " encType="multipart/form-data">
             <div className="flex justify-center w-full">
               {image !== null && (

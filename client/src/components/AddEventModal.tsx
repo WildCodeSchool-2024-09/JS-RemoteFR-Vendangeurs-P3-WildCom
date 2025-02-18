@@ -157,8 +157,10 @@ function AddEventModal({ closeModal }: EventModalProps) {
         <h2 className="flex justify-center text-xl text-text-primary font-title">
           Créer un événement
         </h2>
-        <header className="flex items-center justify-between">
-          <section className="flex items-center gap-2">
+        <header
+          className={`${imagePreview ? "flex-col" : ""} flex items-start justify-between gap-4`}
+        >
+          <section className="flex items-center w-2/3 gap-2">
             {user?.path ? (
               <img
                 src={`${import.meta.env.VITE_API_URL}/${user?.path}`}
@@ -174,50 +176,51 @@ function AddEventModal({ closeModal }: EventModalProps) {
             )}
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
-        </header>
-        <form className="flex gap-3 " encType="multipart/form-data">
-          <div className="flex justify-center w-full">
-            {image !== null && (
-              <div className="relative">
-                <img
-                  src={imagePreview || ""}
-                  alt="Aperçu de l'image"
-                  className="object-cover max-h-96 rounded-xl"
-                />
 
-                <button
-                  onClick={() => {
-                    setImage(null);
-                    setImagePreview(null);
-                    handleDeleteImage();
-                  }}
-                  type="button"
-                  className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-4 right-2 bg-bg-primary"
-                >
-                  <RiDeleteBin6Line />
-                </button>
-              </div>
-            )}
-            {image === null && (
-              <div className="flex justify-end w-full">
-                <label
-                  className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
-                  htmlFor="picture"
-                >
-                  <BiImageAdd />
-                </label>
-                <input
-                  onChange={(e) => handleChange(e)}
-                  className="hidden"
-                  id="picture"
-                  name="picture"
-                  type="file"
-                  accept="image/*"
-                />
-              </div>
-            )}
-          </div>
-        </form>
+          <form className="flex w-full gap-3 " encType="multipart/form-data">
+            <div className="flex justify-center w-full">
+              {image !== null && (
+                <div className="relative">
+                  <img
+                    src={imagePreview || ""}
+                    alt="Aperçu de l'image"
+                    className="object-cover max-h-96 rounded-xl"
+                  />
+
+                  <button
+                    onClick={() => {
+                      setImage(null);
+                      setImagePreview(null);
+                      handleDeleteImage();
+                    }}
+                    type="button"
+                    className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-4 right-2 bg-bg-primary"
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </div>
+              )}
+              {image === null && (
+                <div className="flex justify-end w-full">
+                  <label
+                    className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
+                    htmlFor="picture"
+                  >
+                    <BiImageAdd />
+                  </label>
+                  <input
+                    onChange={(e) => handleChange(e)}
+                    className="hidden"
+                    id="picture"
+                    name="picture"
+                    type="file"
+                    accept="image/*"
+                  />
+                </div>
+              )}
+            </div>
+          </form>
+        </header>
 
         <form className="flex flex-col gap-4" action="">
           <input

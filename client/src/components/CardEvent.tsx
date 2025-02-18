@@ -110,7 +110,12 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
     try {
       const response = await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/events/${eventId}`,
-        { withCredentials: true },
+        {
+          data: {
+            path: events.find((event) => event.id === eventId)?.picture,
+          },
+          withCredentials: true,
+        },
       );
 
       if (response.status === 200) {
