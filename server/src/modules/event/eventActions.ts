@@ -46,7 +46,7 @@ const add: RequestHandler = async (req, res, next) => {
   try {
     const newEvent = {
       content: req.body.newEvent.content,
-      categoryId: req.body.newEvent.category,
+      categoryId: Number.parseInt(req.body.newEvent.categoryId),
       pictureId: req.body.newEvent.pictureId,
       title: req.body.newEvent.title,
       place: req.body.newEvent.place,

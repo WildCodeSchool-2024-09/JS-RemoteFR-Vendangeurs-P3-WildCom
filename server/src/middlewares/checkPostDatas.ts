@@ -40,6 +40,7 @@ const validatePost = (
     req.method === "POST"
       ? req.body.newPost
       : { ...req.body, id: req.params.id };
+
   const { error } = schema.validate(dataToValidate, { abortEarly: false });
 
   if (error) {

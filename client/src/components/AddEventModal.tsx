@@ -24,12 +24,12 @@ function AddEventModal({ closeModal }: EventModalProps) {
   const [newEvent, setNewEvent] = useState({
     userId: user?.id as number | undefined,
     content: "",
-    category: "",
+    categoryId: "",
     title: "",
     place: "",
     calendar: "",
     time: "",
-    pictureId: 0,
+    pictureId: null,
   });
   const [image, setImage] = useState<string | ArrayBuffer | File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -77,9 +77,9 @@ function AddEventModal({ closeModal }: EventModalProps) {
 
       if (response.status === 201) {
         toast.success(response.data.message);
-        setUpdateEvent((prev) => prev + 1);
       }
 
+      setUpdateEvent((prev) => prev + 1);
       closeModal();
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -126,6 +126,12 @@ function AddEventModal({ closeModal }: EventModalProps) {
         `${import.meta.env.VITE_API_URL}/api/uploads/pictures/event/${imageUploaded?.id}`,
         { data: { path: imageUploaded?.path }, withCredentials: true },
       );
+      // setImage(null);
+      // setImagePreview(null);
+      // setNewEvent((prev) => ({
+      //   ...prev,
+      //   pictureId: 0,
+      // }));
     } catch (error) {
       console.error("Erreur lors de la suppression de l'image", error);
     }
@@ -260,7 +266,7 @@ function AddEventModal({ closeModal }: EventModalProps) {
           />
 
           <select
-            name="category"
+            name="categoryId"
             id="category"
             className={"px-3 py-2 rounded-xl"}
             onChange={handleInputsChange}
