@@ -58,6 +58,7 @@ const edit: RequestHandler = async (req, res, next) => {
       postId: Number.parseInt(req.params.id),
       content: req.body.content,
       categoryId: Number.parseInt(req.body.categoryId),
+      pictureId: Number.parseInt(req.body.pictureId),
     };
 
     await postRepository.update(updatedPost);
