@@ -4,7 +4,7 @@ import { BiImageAdd } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "react-toastify";
-import defaultProfilePicture from "../assets/images/profil_neutral.webp";
+import defaultProfilePicture from "../assets/images/default-avatar.png";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Category } from "../types/type";

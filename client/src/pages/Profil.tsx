@@ -7,7 +7,7 @@ import { CardPost } from "../components/CardPost";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Event, Post } from "../types/type";
 
-import defaultProfilePicture from "../assets/images/profil_neutral.webp";
+import defaultProfilePicture from "../assets/images/default-avatar.png";
 
 type User = {
   id: number;

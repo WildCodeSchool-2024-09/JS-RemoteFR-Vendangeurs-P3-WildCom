@@ -7,7 +7,7 @@ import { MdDeleteOutline, MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import defaultProfilePicture from "../assets/images/profil_neutral.webp";
+import defaultProfilePicture from "../assets/images/default-avatar.png";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Event } from "../types/type";

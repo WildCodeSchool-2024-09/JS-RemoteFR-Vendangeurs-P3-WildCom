@@ -5,7 +5,7 @@ import { FaHeart, FaPen, FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import defaultProfilePicture from "../assets/images/profil_neutral.webp";
+import defaultProfilePicture from "../assets/images/default-avatar.png";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Post } from "../types/type";

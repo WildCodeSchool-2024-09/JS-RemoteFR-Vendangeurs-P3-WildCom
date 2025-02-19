@@ -6,7 +6,7 @@ import { LeftNav } from "../Navigation/LeftNav";
 
 import { useEffect } from "react";
 import { FiLogOut } from "react-icons/fi";
-import defaultProfilePicture from "../../assets/images/profil_neutral.webp";
+import defaultProfilePicture from "../../assets/images/default-avatar.png";
 import { useUpdate } from "../../contexts/UpdateContext";
 import { Logo } from "../Logo";
 import MobileNav from "../Navigation/MobileNav";
