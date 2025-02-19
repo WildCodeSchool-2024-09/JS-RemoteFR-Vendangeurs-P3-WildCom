@@ -9,7 +9,7 @@ import { SlOptions } from "react-icons/sl";
 import { Link } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "react-toastify";
-import defaultProfilePicture from "../assets/images/profil_neutral.webp";
+import defaultProfilePicture from "../assets/images/default-avatar.png";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Comment } from "../types/type";
@@ -240,8 +240,6 @@ export const CommentEvent: React.FC<CommentEventProps> = ({ eventId }) => {
                           setEditedCommentContent(e.target.value)
                         }
                         value={editedCommentContent}
-                        name="content"
-                        id="content"
                         autoFocus
                       />
 

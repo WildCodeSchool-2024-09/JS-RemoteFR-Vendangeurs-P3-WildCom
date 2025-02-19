@@ -7,7 +7,8 @@ import { CardPost } from "../components/CardPost";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Event, Post } from "../types/type";
 
-import defaultProfilePicture from "../assets/images/profil_neutral.webp";
+import defaultProfilePicture from "../assets/images/default-avatar.png";
+import { checkUrl } from "../helpers/checkUrl";
 
 type User = {
   id: number;
@@ -16,7 +17,8 @@ type User = {
   linkedin: string | null;
   site: string | null;
   biography: string | null;
-  path: string | null;
+  avatarPath: string | null;
+  avatarId: number;
 };
 
 function Profil() {
@@ -38,6 +40,9 @@ function Profil() {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/user/${id}`,
+          {
+            withCredentials: true,
+          },
         );
 
         setUser(response.data[0]);
@@ -100,10 +105,10 @@ function Profil() {
       >
         <div className="flex flex-col gap-6 mx-4 md:flex-row">
           <figure className="self-center w-52">
-            {user?.path ? (
+            {user?.avatarPath ? (
               <img
                 className="object-cover w-48 h-48 rounded-full"
-                src={`${import.meta.env.VITE_API_URL}/${user.path}`}
+                src={`${import.meta.env.VITE_API_URL}/${user.avatarPath}`}
                 alt={`Avatar de ${user?.username}`}
               />
             ) : (
@@ -131,7 +136,7 @@ function Profil() {
                   Github :{" "}
                   <a
                     className="font-extralight hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
-                    href={user?.github}
+                    href={checkUrl(user?.github)}
                     rel="noopener noreferrer"
                     target="_blank"
                   >
@@ -144,7 +149,7 @@ function Profil() {
                   Linkedin :{" "}
                   <a
                     className="font-extralight hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
-                    href={user?.linkedin}
+                    href={checkUrl(user?.linkedin)}
                     rel="noopener noreferrer"
                     target="_blank"
                   >
@@ -157,7 +162,7 @@ function Profil() {
                   Site :{" "}
                   <a
                     className="font-extralight hover:text-accent-primary hover:drop-shadow-[0_2px_5px_rgba(65,242,77,0.75)]"
-                    href={user?.site}
+                    href={checkUrl(user?.site)}
                     rel="noopener noreferrer"
                     target="_blank"
                   >
@@ -199,7 +204,9 @@ function Profil() {
         </header>
         {activeTab === "posts" && <CardPost posts={posts} />}
         {posts.length === 0 && activeTab === "posts" && (
-          <p className="text-text-primary">Aucune publication à afficher</p>
+          <p className="mt-8 text-text-primary">
+            Aucune publication à afficher
+          </p>
         )}
         {activeTab === "events" && <CardEvent events={events} />}
         {events.length === 0 && activeTab === "events" && (

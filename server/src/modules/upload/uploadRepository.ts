@@ -2,16 +2,16 @@ import type { Result } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
 class UploadRepository {
-  async createAvatar(filename: string, path: string, userId: number) {
+  async createAvatar(filename: string, path: string) {
     const result = await databaseClient.query<Result>(
       `
-      INSERT INTO avatar (filename, path, user_id)
-      VALUES (?, ?, ?)
+      INSERT INTO avatar (filename, path)
+      VALUES (?, ?)
       ON DUPLICATE KEY UPDATE
       filename = ?,
       path = ?
       `,
-      [filename, path, userId, filename, path],
+      [filename, path, filename, path],
     );
 
     return { id: result[0].insertId };

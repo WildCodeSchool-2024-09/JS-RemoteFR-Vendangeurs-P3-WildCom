@@ -7,7 +7,7 @@ import { MdDeleteOutline, MdWhereToVote } from "react-icons/md";
 import { RxCalendar } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import defaultProfilePicture from "../assets/images/profil_neutral.webp";
+import defaultProfilePicture from "../assets/images/default-avatar.png";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Event } from "../types/type";
@@ -147,7 +147,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
         >
           <header className="flex items-center justify-between py-2">
             <Link to={`/user/profile/${event.user.id}`}>
-              <section className="flex items-center gap-2">
+              <section className="flex items-center gap-4">
                 <figure>
                   {event.user.avatar ? (
                     <img
@@ -246,7 +246,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                 <img
                   src={`${import.meta.env.VITE_API_URL}/${event.picture}`}
                   alt=""
-                  className="mb-4 rounded-md"
+                  className="mb-4 rounded-xl"
                 />
               )}
               <article className="w-full space-y-3">

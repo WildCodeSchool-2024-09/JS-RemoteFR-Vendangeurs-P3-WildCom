@@ -63,7 +63,7 @@ class UserPostRepository {
       LEFT JOIN post_picture
       ON post_picture.id = post.picture_id
 
-      JOIN avatar
+      LEFT JOIN avatar
       ON avatar.id = user.avatar_id
 
       WHERE user.id = ?

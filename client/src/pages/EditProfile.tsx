@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { FaPen } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "react-toastify";
+import defaultProfilePicture from "../assets/images/default-avatar.png";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 
@@ -11,7 +13,8 @@ type User = {
   username?: string;
   firstname: string;
   lastname: string;
-  avatar: string;
+  avatarPath: string;
+  avatarId: number;
   github: string;
   linkedin: string;
   site: string;
@@ -24,6 +27,13 @@ function EditProfile() {
   const navigate = useNavigate();
   const [dataUser, setDataUser] = useState<User | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [currentImage, setCurrentImage] = useState<
+    string | ArrayBuffer | File | null
+  >(null);
+  const [newImage, setNewImage] = useState<string | ArrayBuffer | File | null>(
+    null,
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -49,6 +59,7 @@ function EditProfile() {
           { withCredentials: true },
         );
         setDataUser(response.data[0]);
+        setCurrentImage(response.data[0].avatarPath);
       } catch (error) {
         console.error("Erreur lors du chargement de l'utilisateur", error);
       }
@@ -59,9 +70,22 @@ function EditProfile() {
 
   const handleSave = async () => {
     try {
+      let updateDataUser = { ...dataUser };
+
+      if (newImage) {
+        const avatarId = await uploadImage();
+
+        if (avatarId) {
+          updateDataUser = {
+            ...updateDataUser,
+            avatarId,
+          };
+        }
+      }
+
       const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/user/${user?.id}`,
-        dataUser,
+        updateDataUser,
         { withCredentials: true },
       );
 
@@ -97,6 +121,39 @@ function EditProfile() {
     }
   };
 
+  const uploadImage = async () => {
+    const formData = new FormData();
+    formData.append("avatar", newImage as File);
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/uploads/avatars`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        },
+      );
+
+      if (response.status === 200) {
+        return response.data.id;
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'envoi de l'avatar", error);
+    }
+  };
+
+  const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const file = e.target.files?.[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+      setNewImage(file);
+    }
+  };
+
   if (!user) {
     return <p>Chargement...</p>;
   }
@@ -104,7 +161,44 @@ function EditProfile() {
   return (
     <>
       <section className="relative z-50 lg:mx-auto flex flex-col w-screen p-7 font-light border-2 lg:w-2/3 bg-bg_opacity-primary rounded-xl border-bg_opacity-secondary font-text text-text-secondary shadow-[0px_4px_40px_1px_rgba(0,0,0,0.75)]">
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center justify-center w-full">
+          <form encType="multipart/form-data">
+            <div className="w-full text-center">
+              <div className="relative self-center group">
+                {currentImage || previewImage ? (
+                  <img
+                    src={
+                      previewImage
+                        ? previewImage
+                        : `${import.meta.env.VITE_API_URL}/${currentImage}`
+                    }
+                    alt={`Profil de ${dataUser?.username}`}
+                    className="object-cover w-48 h-48 mx-auto rounded-full"
+                  />
+                ) : (
+                  <img
+                    src={defaultProfilePicture}
+                    alt={`Profil de ${dataUser?.username}`}
+                    className="w-48 h-48 mx-auto rounded-full"
+                  />
+                )}
+                <label
+                  htmlFor="avatar"
+                  className="absolute top-0 items-center justify-center hidden w-48 h-48 rounded-full cursor-pointer bg-bg_opacity-secondary group-hover:flex"
+                >
+                  <FaPen className=" size-6 text-accent-primary" />
+                </label>
+                <input
+                  type="file"
+                  className="hidden"
+                  name="avatar"
+                  id="avatar"
+                  onChange={(e) => handleChangeImage(e)}
+                />
+              </div>
+            </div>
+          </form>
+
           <form className="w-full max-w-md space-y-8 text-sm font-text">
             <div className="">
               <label

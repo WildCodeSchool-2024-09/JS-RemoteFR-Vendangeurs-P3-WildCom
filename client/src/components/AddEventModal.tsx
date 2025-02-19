@@ -4,7 +4,7 @@ import { BiImageAdd } from "react-icons/bi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "react-toastify";
-import defaultProfilePicture from "../assets/images/profil_neutral.webp";
+import defaultProfilePicture from "../assets/images/default-avatar.png";
 import { useAuth } from "../contexts/AuthContext";
 import { useUpdate } from "../contexts/UpdateContext";
 import type { Category } from "../types/type";
@@ -126,12 +126,6 @@ function AddEventModal({ closeModal }: EventModalProps) {
         `${import.meta.env.VITE_API_URL}/api/uploads/pictures/event/${imageUploaded?.id}`,
         { data: { path: imageUploaded?.path }, withCredentials: true },
       );
-      // setImage(null);
-      // setImagePreview(null);
-      // setNewEvent((prev) => ({
-      //   ...prev,
-      //   pictureId: 0,
-      // }));
     } catch (error) {
       console.error("Erreur lors de la suppression de l'image", error);
     }

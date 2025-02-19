@@ -18,13 +18,14 @@ const uploadAvatar: RequestHandler = async (req: AuthenticatedRequest, res) => {
     return;
   }
   const { filename, path } = req.file;
-  const { userId } = req.user;
 
-  await uploadRepository.createAvatar(filename, path, userId);
+  const response = await uploadRepository.createAvatar(filename, path);
 
-  res
-    .status(200)
-    .json({ message: "Photo mise à jour avec succès", profilePicPath: path });
+  res.status(200).json({
+    message: "Photo mise à jour avec succès",
+    path: path,
+    id: response.id,
+  });
 };
 
 const uploadPicturePost: RequestHandler = async (
