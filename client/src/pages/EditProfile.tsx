@@ -14,7 +14,7 @@ type User = {
   firstname: string;
   lastname: string;
   avatarPath: string;
-  avatarId: number;
+  avatarId: number | null;
   github: string;
   linkedin: string;
   site: string;

@@ -101,7 +101,7 @@ class userRepository {
       id: number;
       firstname: string;
       lastname: string;
-      avatarId: number;
+      avatarId: number | null;
       github: string;
       linkedin: string;
       site: string;

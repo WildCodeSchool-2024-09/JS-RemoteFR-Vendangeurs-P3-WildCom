@@ -51,7 +51,7 @@ const update: RequestHandler = async (req, res, next) => {
       id: Number.parseInt(req.body.id),
       firstname: req.body.firstname,
       lastname: req.body.lastname,
-      avatarId: Number.parseInt(req.body.avatarId),
+      avatarId: Number.parseInt(req.body.avatarId) || null,
       github: req.body.github,
       linkedin: req.body.linkedin,
       site: req.body.site,
