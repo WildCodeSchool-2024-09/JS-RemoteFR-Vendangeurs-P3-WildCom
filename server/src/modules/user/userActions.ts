@@ -18,7 +18,6 @@ const read: RequestHandler = async (req, res, next) => {
     const parsedId = Number.parseInt(req.params.id);
 
     const user = await userRepository.read(parsedId);
-
     if (user == null) {
       res.sendStatus(404);
     } else {
@@ -48,8 +47,18 @@ const readUserInfos: RequestHandler = async (req, res, next) => {
 const update: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const userData = {
+      id: Number.parseInt(req.body.id),
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      avatarId: Number.parseInt(req.body.avatarId),
+      github: req.body.github,
+      linkedin: req.body.linkedin,
+      site: req.body.site,
+      biography: req.body.biography,
+    };
 
-    const updatedUser = await userRepository.update(id, req.body);
+    const updatedUser = await userRepository.update(id, userData);
 
     res.status(200).json({ updatedUser, message: "Utilisateur mis à jour" });
   } catch (err) {

@@ -7,7 +7,6 @@ interface CustomRequest extends Request {
 
 const verifyUser: RequestHandler = (req: CustomRequest, res, next) => {
   const token = req.cookies.token;
-
   if (!token) {
     res.status(401).json({ message: "Veuillez vous authentifier" });
     return;

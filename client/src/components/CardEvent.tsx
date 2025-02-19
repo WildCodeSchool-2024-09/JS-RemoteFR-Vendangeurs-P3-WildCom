@@ -147,7 +147,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
         >
           <header className="flex items-center justify-between py-2">
             <Link to={`/user/profile/${event.user.id}`}>
-              <section className="flex items-center gap-2">
+              <section className="flex items-center gap-4">
                 <figure>
                   {event.user.avatar ? (
                     <img
@@ -246,7 +246,7 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
                 <img
                   src={`${import.meta.env.VITE_API_URL}/${event.picture}`}
                   alt=""
-                  className="mb-4 rounded-md"
+                  className="mb-4 rounded-xl"
                 />
               )}
               <article className="w-full space-y-3">

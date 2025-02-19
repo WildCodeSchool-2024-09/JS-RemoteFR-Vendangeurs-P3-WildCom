@@ -71,7 +71,7 @@ class UserEventRepository {
       LEFT JOIN event_picture
         ON event.picture_id = event_picture.id
 
-      JOIN avatar
+      LEFT JOIN avatar
         ON user.avatar_id = avatar.id
 
       WHERE user.id = ?

@@ -153,7 +153,6 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // setCurrentImage(file);
       setImagePreview(URL.createObjectURL(file));
       setNewImage(file);
     }

@@ -5,6 +5,7 @@ import { IoSearch } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import defaultProfilePicture from "../assets/images/default-avatar.png";
 import { AdminMobileNav } from "../components/Navigation/AdminMobileNav";
 
 type User = {
@@ -84,11 +85,20 @@ export const UserManagement = () => {
               to={`/user/profile/${user.id}`}
               className="flex items-center justify-center gap-4"
             >
-              <img
-                src={`${import.meta.env.VITE_API_URL}/${user.avatar}`}
-                alt={`Avatar de ${user.username}`}
-                className="object-cover rounded-full size-12"
-              />
+              {user.avatar ? (
+                <img
+                  src={`${import.meta.env.VITE_API_URL}/${user.avatar}`}
+                  alt={`Avatar de ${user.username}`}
+                  className="object-cover rounded-full size-12"
+                />
+              ) : (
+                <img
+                  src={defaultProfilePicture}
+                  alt={`Avatar de ${user.username}`}
+                  className="object-cover rounded-full size-12"
+                />
+              )}
+
               <p>{user.username}</p>
             </Link>
 

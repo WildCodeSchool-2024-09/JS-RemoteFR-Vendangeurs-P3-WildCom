@@ -126,12 +126,6 @@ function AddEventModal({ closeModal }: EventModalProps) {
         `${import.meta.env.VITE_API_URL}/api/uploads/pictures/event/${imageUploaded?.id}`,
         { data: { path: imageUploaded?.path }, withCredentials: true },
       );
-      // setImage(null);
-      // setImagePreview(null);
-      // setNewEvent((prev) => ({
-      //   ...prev,
-      //   pictureId: 0,
-      // }));
     } catch (error) {
       console.error("Erreur lors de la suppression de l'image", error);
     }
