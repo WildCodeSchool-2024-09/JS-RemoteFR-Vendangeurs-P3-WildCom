@@ -110,7 +110,12 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
     try {
       const response = await axios.delete(
         `${import.meta.env.VITE_API_URL}/api/events/${eventId}`,
-        { withCredentials: true },
+        {
+          data: {
+            path: events.find((event) => event.id === eventId)?.picture,
+          },
+          withCredentials: true,
+        },
       );
 
       if (response.status === 200) {
@@ -238,13 +243,11 @@ export const CardEvent: React.FC<CardEventProps> = ({ events }) => {
           <main className="flex flex-col ">
             <section className="flex flex-col gap-3 lg:gap-0">
               {event.picture && (
-                <figure className="">
-                  <img
-                    src={`${import.meta.env.VITE_API_URL}/${event.picture}`}
-                    alt=""
-                    className="mb-4 rounded-md"
-                  />
-                </figure>
+                <img
+                  src={`${import.meta.env.VITE_API_URL}/${event.picture}`}
+                  alt=""
+                  className="mb-4 rounded-md"
+                />
               )}
               <article className="w-full space-y-3">
                 <h2 className="text-xl font-semibold font-title">

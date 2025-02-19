@@ -71,7 +71,7 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
         `${import.meta.env.VITE_API_URL}/api/posts/${postId}`,
         {
           data: {
-            userId: user?.id,
+            path: posts.find((post) => post.id === postId)?.picture,
           },
           withCredentials: true,
         },
@@ -236,13 +236,11 @@ export const CardPost: React.FC<CardPostProps> = ({ posts }) => {
 
           <main className="flex flex-col">
             {post.picture && (
-              <figure className="flex justify-center lg:h-96">
-                <img
-                  src={`${import.meta.env.VITE_API_URL}/${post.picture}`}
-                  alt=""
-                  className="object-contain rounded-xl"
-                />
-              </figure>
+              <img
+                src={`${import.meta.env.VITE_API_URL}/${post.picture}`}
+                alt=""
+                className="object-contain rounded-xl"
+              />
             )}
             <div>
               <p className="mt-6 text-sm break-words whitespace-pre-line">

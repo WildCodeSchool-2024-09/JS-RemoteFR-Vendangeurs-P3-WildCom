@@ -23,8 +23,8 @@ function AddPostModal({ closeModal }: PostModalProps) {
   const [newPost, setNewPost] = useState({
     userId: user?.id as number | undefined,
     content: "",
-    category: "",
-    pictureId: 0,
+    categoryId: "",
+    pictureId: null,
   });
 
   const { setUpdatePost } = useUpdate();
@@ -58,7 +58,7 @@ function AddPostModal({ closeModal }: PostModalProps) {
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setNewPost({ ...newPost, category: e.target.value });
+    setNewPost({ ...newPost, categoryId: e.target.value });
   };
 
   const handlePublish = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -145,14 +145,14 @@ function AddPostModal({ closeModal }: PostModalProps) {
         onKeyUp={(e) => e.key === "Enter" && closeModal()}
         className="fixed inset-0 z-10 bg-bg_opacity-secondary backdrop-blur-sm"
       />
-      <div className="fixed z-20 flex flex-col w-full h-auto gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
+      <div className="fixed z-20 flex flex-col w-full max-h-[800px] gap-3 p-10 space-y-3 overflow-y-auto -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
         <h2 className="flex justify-center text-xl text-text-primary font-title">
           Créer une publication
         </h2>
         <header
           className={`${imagePreview ? "flex-col" : ""} flex items-start justify-between gap-4`}
         >
-          <section className="flex items-center gap-2">
+          <section className="flex items-center w-2/3 gap-2">
             {user?.path ? (
               <img
                 src={`${import.meta.env.VITE_API_URL}/${user?.path}`}
@@ -168,48 +168,49 @@ function AddPostModal({ closeModal }: PostModalProps) {
             )}
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
-          <form className="relative flex gap-3" encType="multipart/form-data">
-            {image !== null && (
-              <>
-                <figure className="object-cover w-full h-72 rounded-xl">
+
+          <form className="flex w-full gap-3 " encType="multipart/form-data">
+            <div className="flex justify-center w-full">
+              {image !== null && (
+                <div className="relative">
                   <img
                     src={imagePreview || ""}
                     alt="Aperçu de l'image"
-                    className="object-cover w-full h-full rounded-xl"
+                    className="object-cover w-full max-h-96 rounded-xl"
                   />
-                </figure>
 
-                <button
-                  onClick={() => {
-                    setImage(null);
-                    setImagePreview(null);
-                    handleDeleteImage();
-                  }}
-                  type="button"
-                  className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-2 right-2 bg-bg-primary"
-                >
-                  <RiDeleteBin6Line />
-                </button>
-              </>
-            )}
-            {image === null && (
-              <>
-                <label
-                  className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
-                  htmlFor="picture"
-                >
-                  <BiImageAdd />
-                </label>
-                <input
-                  onChange={(e) => handleChange(e)}
-                  className="hidden"
-                  id="picture"
-                  name="picture"
-                  type="file"
-                  accept="image/*"
-                />
-              </>
-            )}
+                  <button
+                    onClick={() => {
+                      setImage(null);
+                      setImagePreview(null);
+                      handleDeleteImage();
+                    }}
+                    type="button"
+                    className="absolute p-2 text-xl rounded-full cursor-pointer text-text-primary hover:text-accent-primary top-4 right-2 bg-bg-primary"
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </div>
+              )}
+              {image === null && (
+                <div className="flex justify-end w-full">
+                  <label
+                    className="text-4xl cursor-pointer text-text-primary hover:text-accent-primary"
+                    htmlFor="picture"
+                  >
+                    <BiImageAdd />
+                  </label>
+                  <input
+                    onChange={(e) => handleChange(e)}
+                    className="hidden"
+                    id="picture"
+                    name="picture"
+                    type="file"
+                    accept="image/*"
+                  />
+                </div>
+              )}
+            </div>
           </form>
         </header>
         <form className="flex flex-col gap-4" action="">

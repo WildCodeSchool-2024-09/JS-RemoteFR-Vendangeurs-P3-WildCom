@@ -77,6 +77,9 @@ const adjustPicturePath = (req: Request, res: Response, next: NextFunction) => {
 
 const deleteImage = (req: Request, res: Response, next: NextFunction) => {
   const filePath = req.body.path;
+  if (!filePath) {
+    return next();
+  }
   const completeFilePath = path.join(__dirname, "../../public", filePath);
   fs.unlink(completeFilePath, (err) => {
     if (err) {

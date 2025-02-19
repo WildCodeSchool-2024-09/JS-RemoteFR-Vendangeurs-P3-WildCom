@@ -25,11 +25,11 @@ const read: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
-    const { content, category, userId, pictureId } = req.body.newPost;
+    const { content, categoryId, userId, pictureId } = req.body.newPost;
 
     const insertId = await postRepository.create(
       content,
-      category,
+      categoryId,
       userId,
       pictureId,
     );
@@ -58,6 +58,7 @@ const edit: RequestHandler = async (req, res, next) => {
       postId: Number.parseInt(req.params.id),
       content: req.body.content,
       categoryId: Number.parseInt(req.body.categoryId),
+      pictureId: Number.parseInt(req.body.pictureId),
     };
 
     await postRepository.update(updatedPost);

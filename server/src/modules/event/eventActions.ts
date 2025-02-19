@@ -17,6 +17,7 @@ const edit: RequestHandler = async (req, res, next) => {
       content: req.body.content,
       categoryId: req.body.categoryId,
       picture: req.body.picture,
+      pictureId: Number.parseInt(req.body.pictureId),
       title: req.body.title,
       place: req.body.place,
       calendar: req.body.calendar,

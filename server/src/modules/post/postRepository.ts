@@ -27,7 +27,7 @@ type PostWithUser = Omit<Post, "userId"> & {
 class PostRepository {
   async create(
     content: string,
-    category: string,
+    categoryId: string,
     userId: number,
     pictureId?: number,
   ) {
@@ -36,7 +36,7 @@ class PostRepository {
       INSERT INTO post (content, category_id, user_id, picture_id)
       VALUES (?, ?, ?, ?)
       `,
-      [content, category, userId, pictureId],
+      [content, categoryId, userId, pictureId],
     );
 
     return result.insertId;
@@ -81,7 +81,7 @@ class PostRepository {
     const formattedRows: PostWithUser[] = rows.map((row) => ({
       id: row.post_id,
       categoryName: row.category_name,
-      category: row.category_id,
+      categoryId: row.category_id,
       picture: row.picture_path,
       pictureId: row.picture_id,
       content: row.content,
@@ -111,6 +111,7 @@ class PostRepository {
         avatar.path AS avatar_path,
 
         post_picture.path AS picture_path,
+        post_picture.id AS picture_id,
 
         (
           SELECT COUNT(*)
@@ -147,6 +148,7 @@ class PostRepository {
       id: row.post_id,
       categoryName: row.name,
       picture: row.picture_path,
+      pictureId: row.picture_id,
       content: row.content,
       totalComments: row.total_comments,
       totalLikes: row.total_likes,

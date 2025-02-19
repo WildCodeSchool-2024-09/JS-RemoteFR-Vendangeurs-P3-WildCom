@@ -20,16 +20,21 @@ interface DataPost {
   categoryId?: number;
   categoryName?: string;
   picture?: string;
+  pictureId?: number;
 }
 
 function EditPostModal({ closeModal, postId }: PostModalProps) {
   const { user } = useAuth();
   const { setUpdatePost } = useUpdate();
-
   const [categories, setCategories] = useState<Category[]>([]);
-  const [dataPost, setDataPost] = useState<DataPost | null>(null);
-  const [image, setImage] = useState<string | ArrayBuffer | File | null>(null);
+  const [dataPost, setDataPost] = useState<DataPost>();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [currentImage, setCurrentImage] = useState<
+    string | ArrayBuffer | File | null
+  >(null);
+  const [newImage, setNewImage] = useState<string | ArrayBuffer | File | null>(
+    null,
+  );
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -52,7 +57,7 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
 
         if (response.data.length !== 0) {
           setDataPost(response.data[0]);
-          setImage(response.data[0]?.picture);
+          setCurrentImage(response.data[0]?.picture);
         }
       } catch (error) {
         console.error(
@@ -66,24 +71,26 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
     fetchPost();
   }, [postId]);
 
-  const handleInputsChange = (
-    e: React.ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-
-    setDataPost((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
+      let updatedDataPost = { ...dataPost };
+
+      if (newImage) {
+        const pictureId = await uploadImage();
+
+        if (pictureId) {
+          updatedDataPost = {
+            ...updatedDataPost,
+            pictureId,
+          };
+        }
+      }
+
       const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/posts/${postId}`,
-        dataPost,
+        updatedDataPost,
         {
           withCredentials: true,
         },
@@ -91,9 +98,6 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
 
       if (response.status === 201) {
         toast.success(response.data.message);
-        if (image !== null) {
-          await uploadImage(postId);
-        }
       }
 
       setUpdatePost((prev) => prev + 1);
@@ -107,18 +111,28 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
     }
   };
 
+  const handleInputsChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+
+    setDataPost((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const sortedCategories = categories.sort((a, b) =>
     a.id === dataPost?.categoryId ? -1 : b.id === dataPost?.categoryId ? 1 : 0,
   );
 
-  const uploadImage = async (postId: number) => {
+  const uploadImage = async () => {
     const formData = new FormData();
-    formData.append("picture", image as File);
-    formData.append("type", "post");
+    formData.append("picture", newImage as File);
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/uploads/pictures/${postId}`,
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/uploads/pictures/post`,
         formData,
         {
           headers: {
@@ -127,6 +141,10 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
           withCredentials: true,
         },
       );
+
+      if (response.status === 200) {
+        return response.data.id;
+      }
     } catch (error) {
       console.error("Erreur lors de l'envoi de l'image", error);
     }
@@ -135,8 +153,9 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(file);
+      // setCurrentImage(file);
       setImagePreview(URL.createObjectURL(file));
+      setNewImage(file);
     }
   };
 
@@ -147,12 +166,12 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
         onKeyUp={(e) => e.key === "Enter" && closeModal()}
         className="fixed inset-0 z-10 bg-bg_opacity-secondary backdrop-blur-sm"
       />
-      <div className="fixed z-20 flex flex-col w-full h-auto gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
+      <div className="fixed z-20 flex flex-col w-full max-h-[800px] overflow-y-auto gap-3 p-10 space-y-3 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 rounded-xl bg-bg-primary md:w-2/3 lg:w-1/3">
         <h2 className="flex justify-center text-xl text-text-primary font-title">
           Modifier une publication
         </h2>
         <header
-          className={`${imagePreview || image ? "flex-col" : ""} flex items-start justify-between gap-4`}
+          className={`${imagePreview || currentImage ? "flex-col" : ""} flex items-start justify-between gap-4`}
         >
           <section className="flex items-center w-2/3 gap-2">
             {user?.path ? (
@@ -171,25 +190,23 @@ function EditPostModal({ closeModal, postId }: PostModalProps) {
             <p className="text-base text-text-primary">{user?.username}</p>
           </section>
 
-          <form className="flex w-full gap-3 " encType="multipart/form-data">
+          <form className="flex w-full gap-3" encType="multipart/form-data">
             <div className="flex justify-center w-full ">
-              {imagePreview || image ? (
+              {imagePreview || currentImage ? (
                 <div className="relative">
-                  <figure className="flex lg:h-96">
-                    <img
-                      src={
-                        imagePreview
-                          ? `${imagePreview}`
-                          : `${import.meta.env.VITE_API_URL}/${image}`
-                      }
-                      alt="Aperçu de l'image"
-                      className="object-contain rounded-xl"
-                    />
-                  </figure>
+                  <img
+                    src={
+                      imagePreview
+                        ? `${imagePreview}`
+                        : `${import.meta.env.VITE_API_URL}/${currentImage}`
+                    }
+                    alt="Aperçu de l'image"
+                    className="object-cover w-full max-h-96 rounded-xl"
+                  />
 
                   <button
                     onClick={() => {
-                      setImage(null);
+                      setCurrentImage(null);
                       setImagePreview(null);
                     }}
                     type="button"
